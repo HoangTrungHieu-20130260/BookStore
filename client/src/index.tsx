@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Cart from "./pages/CartScreen/cart";
+import Cart from "./pages/cartScreen/Cart";
+import Checkout from "./pages/checkoutScreen/Checkout";
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,7 +13,8 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     {/*<App />*/}
-      <Cart />
+    {/*  <Cart />*/}
+      <Checkout />
   </React.StrictMode>
 );
 
