@@ -7,6 +7,7 @@ import Cart from "./pages/cartScreen/Cart";
 import Checkout from "./pages/checkoutScreen/Checkout";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
+import Forgot from "./pages/forgot/Forgot";
 
 
 const root = ReactDOM.createRoot(
@@ -14,7 +15,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <Register />
+    <Forgot />
   </React.StrictMode>
 );
 
