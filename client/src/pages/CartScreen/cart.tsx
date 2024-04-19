@@ -4,7 +4,6 @@ import './cart.css'
 import ProductCart from "../../images/Product Images/book17.png";
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaTrashCan } from "react-icons/fa6";
-
 function Cart() {
     return (
         <div className="Cart_container">

@@ -4,6 +4,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Cart from "./pages/CartScreen/cart";
+import {Header} from "./components/header/Header";
+import 'bootstrap/dist/css/bootstrap.min.css'
+// import 'jquery/dist/jquery.min.js'
+import 'bootstrap/dist/js/bootstrap.min.js'
+import {Home} from "./pages/homeScreen/Home";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,7 +16,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     {/*<App />*/}
-      <Cart />
+      <Home/>
   </React.StrictMode>
 );
 
