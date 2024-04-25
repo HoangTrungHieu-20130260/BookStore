@@ -13,6 +13,8 @@ import Checkout from "./pages/checkoutScreen/Checkout";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import Forgot from "./pages/forgot/Forgot";
+import {Category} from "./pages/category/Category";
+import Cart from "./pages/cartScreen/Cart";
 
 
 const root = ReactDOM.createRoot(
@@ -21,7 +23,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     {/*<App />*/}
-      <Home/>
+      <Category/>
   </React.StrictMode>
 );
 
