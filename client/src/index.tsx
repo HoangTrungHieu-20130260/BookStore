@@ -13,6 +13,7 @@ import Checkout from "./pages/checkoutScreen/Checkout";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import Forgot from "./pages/forgot/Forgot";
+import About from "./pages/aboutUs/About";
 
 
 const root = ReactDOM.createRoot(
@@ -20,8 +21,10 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
+
     {/*<App />*/}
       <Home/>
+
   </React.StrictMode>
 );
 
