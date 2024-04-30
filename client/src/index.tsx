@@ -3,7 +3,12 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Cart from "./pages/cartScreen/Cart";
+import {Header} from "./components/header/Header";
+import 'bootstrap/dist/css/bootstrap.min.css'
+// import 'jquery/dist/jquery.min.js'
+import 'bootstrap/dist/js/bootstrap.min.js'
+import {Home} from "./pages/homeScreen/Home";
+// import Cart from "./pages/cartScreen/Cart";
 import Checkout from "./pages/checkoutScreen/Checkout";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
@@ -16,7 +21,10 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <About />
+
+    {/*<App />*/}
+      <Home/>
+
   </React.StrictMode>
 );
 
