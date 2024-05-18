@@ -1,0 +1,27 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.product-view-image {
+    padding: 5px 20px;
+}
+.product-view-image img {
+    width: 100%;
+}
+
+.custom-quantity {
+    border: 1px solid #c1c1c1;
+    display: inline-block;
+}
+.custom-quantity button {
+    padding: 0 15px;
+    border: none;
+    outline: none;
+}
+.custom-quantity input {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    border: none;
+    outline: none;
+}
