@@ -16,6 +16,7 @@ import Forgot from "./pages/forgot/Forgot";
 import {Category} from "./pages/category/Category";
 import Cart from "./pages/cartScreen/Cart";
 import {Detail} from "./pages/detailScreen/Detail";
+import About from "./pages/aboutUs/About";
 
 
 const root = ReactDOM.createRoot(
@@ -23,8 +24,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
+
     {/*<App />*/}
-      <Detail/>
+      <Home/>
   </React.StrictMode>
 );
 
