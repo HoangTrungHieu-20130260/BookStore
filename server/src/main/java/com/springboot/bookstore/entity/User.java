@@ -25,13 +25,10 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     @Column(name = "status")
     private boolean status;
-
-
 }
