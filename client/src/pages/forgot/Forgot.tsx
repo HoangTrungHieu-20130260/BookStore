@@ -1,9 +1,13 @@
 import React from "react";
 import "./Forgot.css";
+import {Header} from "../../components/header/Header";
+import {Footer} from "../../components/footer/Footer";
 
 function Forgot() {
     return (
-        <div className={"container"}>
+        <>
+            <Header />
+        <div className={"contain"}>
             <div className={"login_label"}>
                 <div className={"login_title"}>
                     <h2 className={"title"}>Quên mật khẩu</h2>
@@ -36,6 +40,8 @@ function Forgot() {
                 </div>
             </div>
         </div>
+            <Footer />
+        </>
     )
 }
 

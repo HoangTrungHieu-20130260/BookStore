@@ -1,4 +1,4 @@
-.container {
+.contain {
     background-color: #20d275;
 }
 
@@ -31,7 +31,7 @@
 
 .content {
     width: 30%;
-    height: 800px;
+    height: 500px;
     margin: 10px auto;
 }
 

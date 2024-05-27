@@ -17,6 +17,8 @@ import {Category} from "./pages/category/Category";
 import Cart from "./pages/cartScreen/Cart";
 import {Detail} from "./pages/detailScreen/Detail";
 import About from "./pages/aboutUs/About";
+import Contact from "./pages/contact/Contact";
+
 
 
 const root = ReactDOM.createRoot(

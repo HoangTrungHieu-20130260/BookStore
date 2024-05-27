@@ -1,9 +1,13 @@
 import React from "react";
 import "./Register.css";
+import {Header} from "../../components/header/Header";
+import {Footer} from "../../components/footer/Footer";
 
 function Register() {
     return (
-        <div className={"container"}>
+        <>
+            <Header />
+        <div className={"contain"}>
             <div className={"login_label"}>
                 <div className={"login_title"}>
                     <h2 className={"title"}>Đăng kí</h2>
@@ -44,6 +48,8 @@ function Register() {
                 </div>
             </div>
         </div>
+            <Footer />
+        </>
     )
 }
 
