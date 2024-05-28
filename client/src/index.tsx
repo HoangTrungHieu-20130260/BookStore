@@ -17,6 +17,7 @@ import {Category} from "./pages/category/Category";
 import Cart from "./pages/cartScreen/Cart";
 import {Detail} from "./pages/detailScreen/Detail";
 import About from "./pages/aboutUs/About";
+import {Manager} from "./admin/Admin";
 
 
 const root = ReactDOM.createRoot(
@@ -26,7 +27,7 @@ root.render(
   <React.StrictMode>
 
     {/*<App />*/}
-      <Home/>
+      <Manager/>
   </React.StrictMode>
 );
 
