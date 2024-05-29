@@ -1,10 +1,15 @@
 import React from "react";
 import "./Login.css";
 // import { Link } from "react-router-dom";
+import {Header} from "../../components/header/Header";
+import {Footer} from "../../components/footer/Footer";
 
 function Login() {
     return (
-        <div className={"container"}>
+        <>
+            <Header />
+            <div className={"wrapper"}>
+        <div className={"contain"}>
             <div className={"login_label"}>
                 <div className={"login_title"}>
                     <h2 className={"title"}>Đăng nhập</h2>
@@ -41,6 +46,9 @@ function Login() {
                 </div>
             </div>
         </div>
+            </div>
+            <Footer />
+        </>
     )
 }
 

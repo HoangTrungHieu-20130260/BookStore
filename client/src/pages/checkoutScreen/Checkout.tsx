@@ -2,9 +2,13 @@ import React from "react";
 import "./Checkout.css";
 import ProductCart from "../../images/Product Images/book17.png";
 import {FaCircleCheck} from "react-icons/fa6";
+import {Header} from "../../components/header/Header";
+import {Footer} from "../../components/footer/Footer";
 
 function Checkout() {
     return (
+        <>
+            <Header />
         <div className={"checkout_container"}>
             <div className={"checkout_label"}>
                 <div className={"checkout_title"}>
@@ -121,6 +125,8 @@ function Checkout() {
                 </div>
             </div>
         </div>
+            <Footer />
+</>
     );
 }
 

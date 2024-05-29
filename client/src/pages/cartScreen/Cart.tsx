@@ -4,8 +4,12 @@ import './Cart.css'
 import ProductCart from "../../images/Product Images/book17.png";
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaTrashCan } from "react-icons/fa6";
+import {Header} from "../../components/header/Header";
+import {Footer} from "../../components/footer/Footer";
 function Cart() {
     return (
+        <>
+            <Header />
         <div className="Cart_container">
             <div className={"cart_label"}>
                 <div className={"cart_title"}>
@@ -106,6 +110,8 @@ function Cart() {
 
 
         </div>
+            <Footer />
+        </>
     );
 }
 
