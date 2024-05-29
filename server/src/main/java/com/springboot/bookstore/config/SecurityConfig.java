@@ -40,6 +40,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize->authorize
                         .requestMatchers("/api/v1/user/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/category/**").permitAll()
+                        .requestMatchers("/api/v1/product/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors().configurationSource(new CorsConfigurationSource() {

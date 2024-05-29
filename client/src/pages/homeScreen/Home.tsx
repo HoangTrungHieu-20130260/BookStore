@@ -56,7 +56,6 @@ export const Home= ()=> {
     }
     return (
         <>
-            <Header/>
             <SlideShow/>
             <div className="main container">
                 <div className="row home-category pt-5 pb-5">
@@ -441,7 +440,6 @@ export const Home= ()=> {
                     </div>
                 </div>
             </div>
-            <Footer/>
         </>
     )
 }

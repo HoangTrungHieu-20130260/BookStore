@@ -17,6 +17,9 @@ import {Category} from "./pages/category/Category";
 import Cart from "./pages/cartScreen/Cart";
 import {Detail} from "./pages/detailScreen/Detail";
 import About from "./pages/aboutUs/About";
+import {Manager} from "./admin/Admin";
+import {BrowserRouter} from "react-router-dom";
+
 import Contact from "./pages/contact/Contact";
 
 
@@ -28,7 +31,9 @@ root.render(
   <React.StrictMode>
 
     {/*<App />*/}
-      <Home/>
+      <BrowserRouter>
+          <App/>
+      </BrowserRouter>
   </React.StrictMode>
 );
 

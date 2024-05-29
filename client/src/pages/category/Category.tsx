@@ -8,7 +8,6 @@ import {Footer} from "../../components/footer/Footer";
 export const Category = () => {
     return (
         <>
-            <Header/>
             <div className="page-header text-center">
                 <div className="container">
                     <h1>Romance</h1>
@@ -348,7 +347,6 @@ export const Category = () => {
                     </div>
                 </div>
             </div>
-            <Footer/>
         </>
     )
 }
