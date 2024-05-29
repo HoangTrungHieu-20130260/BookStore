@@ -1,8 +1,26 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import './Header.css'
 import { FaMapMarkerAlt, FaSearch, FaShoppingCart   } from "react-icons/fa";
 import { IoMdPhonePortrait } from "react-icons/io";
+import axios from "axios";
+import {CategoryResponse} from "../../models";
+import { Link } from "react-router-dom";
 export const Header =()=> {
+
+    const [categories, setCategories] = useState<CategoryResponse[]>([])
+    useEffect(()=> {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get<CategoryResponse[]>("http://localhost:8080/api/v1/category/get-all")
+                setCategories(response.data)
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        fetchData()
+
+    }, [])
     return (
         <>
             <div className="top-bar">
@@ -52,9 +70,28 @@ export const Header =()=> {
             </header>
             <nav className="main-menu">
                 <div className="container">
-                    <ul className="menu">
+                    <ul className="menu drop-down">
                         <li className="menu-item">Trang chủ</li>
-                        <li className="menu-item">Thể loại</li>
+                        <li className="menu-item show-drop-down">
+                            <p>Thể loại</p>
+                            <div className="drop-down-content">
+                                {categories.map(cat =>
+                                    <div className="category">
+                                        <h3 className="parent-cat">{cat.category.name}</h3>
+                                        <div className="sub-cat-container">
+                                            <ul className="sub-cat">
+                                                {cat.categories.map(subCat =>
+                                                    <li className="sub-cat-item">
+                                                        <Link to={`/category/${subCat.id}`}>{subCat.name}</Link>
+                                                    </li>
+                                                )}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                        </li>
                         <li className="menu-item">Tiểu thuyết</li>
                         <li className="menu-item">Kinh doanh</li>
                         <li className="menu-item">Sức khỏe  </li>

@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
@@ -27,5 +29,10 @@ public class ProductServiceImpl implements ProductService {
         Sort sortPa = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page, size, sortPa);
         return productRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Product> findByCategoryId(int id) {
+        return productRepository.findByCategoryId(id);
     }
 }
