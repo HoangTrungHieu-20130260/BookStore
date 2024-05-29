@@ -4,10 +4,9 @@ import com.springboot.bookstore.entity.Product;
 import com.springboot.bookstore.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -24,5 +23,9 @@ public class ProductController {
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir) {
         return productService.findAll(page, size, sortBy,sortDir);
+    }
+    @GetMapping("/products-by-category/{id}")
+    public List<Product> findByCategoryId(@PathVariable int id) {
+        return productService.findByCategoryId(id);
     }
 }

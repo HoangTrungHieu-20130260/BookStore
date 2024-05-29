@@ -1,5 +1,6 @@
 package com.springboot.bookstore.repository;
 
+import com.springboot.bookstore.dto.CategoryDto;
 import com.springboot.bookstore.entity.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

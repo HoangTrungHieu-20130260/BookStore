@@ -1,5 +1,6 @@
 package com.springboot.bookstore.service;
 
+import com.springboot.bookstore.dto.CategoryDto;
 import com.springboot.bookstore.entity.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -12,5 +13,6 @@ public interface CategoryService {
     List<Category> findByParentCategoryIsNull();
     List<Category> findByParentCategoryIsNotNull();
     List<Category> findByParentCategoryId(int id);
+    List<CategoryDto> getCategoryAndSubCategory();
 
 }

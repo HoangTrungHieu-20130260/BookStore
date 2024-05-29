@@ -1,5 +1,6 @@
 package com.springboot.bookstore.controller;
 
+import com.springboot.bookstore.dto.CategoryDto;
 import com.springboot.bookstore.entity.Category;
 import com.springboot.bookstore.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,10 @@ public class CategoryController {
     @GetMapping("/{id}")
     public List<Category> getSubCategory(@PathVariable int id) {
         return categoryService.findByParentCategoryId(id);
+    }
+    @GetMapping("/get-all")
+    public List<CategoryDto> getCategoryAndSubCategory() {
+        return categoryService.getCategoryAndSubCategory();
     }
 
 }

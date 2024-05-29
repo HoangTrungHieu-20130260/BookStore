@@ -50,7 +50,55 @@
 .main-menu .menu {
     display: flex;
     justify-content: space-around;
+    margin-bottom: 0;
 }
 .main-menu .menu .menu-item {
     padding: 10px 10px;
+}
+.drop-down {
+    position: relative;
+    display: inline-block;
+}
+.drop-down p {
+    display: block;
+    height: content-box;
+    margin-bottom: 0;
+}
+.drop-down-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1;
+    color: #262626;
+    background-color: white;
+    padding: 30px 45px;
+}
+.show-drop-down:hover .drop-down-content {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    grid-gap: 30px;
+}
+.parent-cat {
+    padding: 5px 20px;
+    font-size: 15px;
+    background: transparent;
+    color: #323232;
+    font-weight: 400;
+    letter-spacing: 1px;
+    line-height: normal;
+    text-transform: uppercase;
+    display: inline-block;
+    border: 1px solid #27ae61;
+    vertical-align: top;
+}
+.sub-cat {
+    list-style: none;
+    padding-left: 0;
+}
+.sub-cat .sub-cat-item {
+    line-height: 40px;
+    border-bottom: 1px solid #e5e5e5;
 }
