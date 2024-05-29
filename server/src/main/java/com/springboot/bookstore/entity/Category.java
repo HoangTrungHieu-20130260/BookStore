@@ -1,5 +1,7 @@
 package com.springboot.bookstore.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,6 +40,7 @@ public class Category {
     private Boolean active;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
+    @JsonManagedReference
     private List<Product> products;
 
 }

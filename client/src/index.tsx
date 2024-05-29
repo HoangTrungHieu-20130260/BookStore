@@ -18,6 +18,7 @@ import Cart from "./pages/cartScreen/Cart";
 import {Detail} from "./pages/detailScreen/Detail";
 import About from "./pages/aboutUs/About";
 import {Manager} from "./admin/Admin";
+import {BrowserRouter} from "react-router-dom";
 
 
 const root = ReactDOM.createRoot(
@@ -27,7 +28,9 @@ root.render(
   <React.StrictMode>
 
     {/*<App />*/}
-      <Manager/>
+      <BrowserRouter>
+          <App/>
+      </BrowserRouter>
   </React.StrictMode>
 );
 

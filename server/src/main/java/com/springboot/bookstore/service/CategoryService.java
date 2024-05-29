@@ -1,0 +1,16 @@
+package com.springboot.bookstore.service;
+
+import com.springboot.bookstore.entity.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+
+public interface CategoryService {
+
+    List<Category> findByParentCategoryIsNull();
+    List<Category> findByParentCategoryIsNotNull();
+    List<Category> findByParentCategoryId(int id);
+
+}

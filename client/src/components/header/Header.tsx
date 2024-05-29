@@ -54,7 +54,7 @@ export const Header =()=> {
                 <div className="container">
                     <ul className="menu">
                         <li className="menu-item">Trang chủ</li>
-                        <li className="menu-item">Học tập</li>
+                        <li className="menu-item">Thể loại</li>
                         <li className="menu-item">Tiểu thuyết</li>
                         <li className="menu-item">Kinh doanh</li>
                         <li className="menu-item">Sức khỏe  </li>

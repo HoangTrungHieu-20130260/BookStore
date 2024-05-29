@@ -7,7 +7,6 @@ import {Footer} from "../../components/footer/Footer";
 export const  Detail = () => {
     return (
         <>
-            <Header/>
             <div className="page-header text-center">
                 <div className="container">
                     <h1>Romance</h1>
@@ -52,7 +51,6 @@ export const  Detail = () => {
                     </div>
                 </div>
             </div>
-            <Footer/>
         </>
     )
 }
