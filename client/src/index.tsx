@@ -20,6 +20,9 @@ import About from "./pages/aboutUs/About";
 import {Manager} from "./admin/Admin";
 import {BrowserRouter} from "react-router-dom";
 
+import Contact from "./pages/contact/Contact";
+
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

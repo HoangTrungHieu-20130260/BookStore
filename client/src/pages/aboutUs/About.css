@@ -1,4 +1,4 @@
-.container {
+.contain {
     background-color: white;
 }
 
@@ -31,8 +31,8 @@
 
 .content{
     display: flex;
-    margin: 0 20%;
-    height: 350px;
+    margin: 0 10%;
+    height: 450px;
 }
 
 .info {
