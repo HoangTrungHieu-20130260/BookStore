@@ -76,7 +76,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(int id) {
         User user = userRepository.findById(id).orElse(null);
-        System.out.println(user);
         if (user != null) {
             userRepository.deleteById(id);
         }

@@ -3,6 +3,7 @@ import "./Login.css";
 // import { Link } from "react-router-dom";
 import {Header} from "../../components/header/Header";
 import {Footer} from "../../components/footer/Footer";
+import '../../common/Common.css'
 
 function Login() {
     return (
@@ -10,13 +11,20 @@ function Login() {
             <Header />
             <div className={"wrapper"}>
         <div className={"contain"}>
-            <div className={"login_label"}>
-                <div className={"login_title"}>
-                    <h2 className={"title"}>Đăng nhập</h2>
-                </div>
-                <div className={"login_page"}>
-                    <a><h6 className={"login_home"}>Trang chủ /</h6></a>
-                    <h5 className={"login_name"}>Đăng nhập</h5>
+            <div className="page-header text-center">
+                <div className="container">
+                    <h1>Đăng nhập</h1>
+                    <ul className="breadcrumb clearfix">
+                        <li className="bc-item">
+                            <a className="bc-home" href="" >Home</a>
+                        </li>
+                        <li className="bc-item">
+                            <a className="bc-category" href="">Đăng nhập</a>
+                        </li>
+                        {/*<li className="bc-item">*/}
+                        {/*    <strong className="bc-category">{categoryData?.category.name}</strong>*/}
+                        {/*</li>*/}
+                    </ul>
                 </div>
             </div>
             <div className={"content"}>

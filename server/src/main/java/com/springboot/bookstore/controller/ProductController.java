@@ -4,6 +4,7 @@ import com.springboot.bookstore.entity.Product;
 import com.springboot.bookstore.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +25,13 @@ public class ProductController {
             @RequestParam(defaultValue = "asc") String sortDir) {
         return productService.findAll(page, size, sortBy,sortDir);
     }
-    @GetMapping("/products-by-category/{id}")
-    public List<Product> findByCategoryId(@PathVariable int id) {
-        return productService.findByCategoryId(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(@PathVariable int id) {
+        return ResponseEntity.ok(productService.findById(id));
+
+    }
+    @DeleteMapping("/{id}")
+    public void deleteProduct(@PathVariable int id) {
+        productService.deleteProduct(id);
     }
 }

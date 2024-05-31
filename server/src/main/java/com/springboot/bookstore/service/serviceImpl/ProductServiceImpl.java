@@ -32,7 +32,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findByCategoryId(int id) {
-        return productRepository.findByCategoryId(id);
+    public Product findById(int id) {
+        return productRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void deleteProduct(int id) {
+        productRepository.deleteById(id);
     }
 }

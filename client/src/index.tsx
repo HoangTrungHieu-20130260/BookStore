@@ -11,6 +11,7 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 import {BrowserRouter} from "react-router-dom";
 
 import Contact from "./pages/contact/Contact";
+import {Manager} from "./admin/Admin";
 
 
 
@@ -24,6 +25,7 @@ root.render(
       <BrowserRouter>
           <App/>
       </BrowserRouter>
+    {/*  <Manager/>*/}
   </React.StrictMode>
 );
 
