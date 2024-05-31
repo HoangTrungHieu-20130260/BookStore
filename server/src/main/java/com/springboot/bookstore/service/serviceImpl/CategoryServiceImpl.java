@@ -10,6 +10,7 @@ import com.springboot.bookstore.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,28 @@ public class CategoryServiceImpl implements CategoryService {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
     }
+
+    @Override
+    public Page<Category> findAll(int page, int size, String sortBy, String sortDir) {
+        Sort.Direction direction = Sort.Direction.ASC;
+        if (sortDir.equalsIgnoreCase("desc")) {
+            direction = Sort.Direction.DESC;
+        }
+        Sort sortPa = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sortPa);
+        return categoryRepository.findAll(pageable);
+    }
+
+    @Override
+    public Category findById(int id) {
+        return categoryRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void deleteCategory(int id) {
+        categoryRepository.deleteById(id);
+    }
+
     @Override
     public List<Category> findByParentCategoryIsNull() {
         return categoryRepository.findByParentCategoryIsNull();

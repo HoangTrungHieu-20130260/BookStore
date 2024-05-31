@@ -30,4 +30,14 @@ public class ProductServiceImpl implements ProductService {
         Pageable pageable = PageRequest.of(page, size, sortPa);
         return productRepository.findAll(pageable);
     }
+
+    @Override
+    public Product findById(int id) {
+        return productRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void deleteProduct(int id) {
+        productRepository.deleteById(id);
+    }
 }

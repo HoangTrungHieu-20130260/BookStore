@@ -35,9 +35,9 @@ export const Header =()=> {
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-6 text-end">
                             <ul className="menu mb-0">
-                                <li className="menu-item"><a href="">Yêu thích</a></li>
-                                <li className="menu-item"><a href="">Tài khoản của tôi</a></li>
-                                <li className="menu-item"><a href="">Thanh toán</a></li>
+                                <li className="menu-item"><a href="#">Yêu thích</a></li>
+                                <li className="menu-item"><a href="#">Tài khoản của tôi</a></li>
+                                <li className="menu-item"><a href="#">Thanh toán</a></li>
                             </ul>
                         </div>
                     </div>
@@ -93,9 +93,9 @@ export const Header =()=> {
                             </div>
 
                         </li>
-                        <li className="menu-item">Tiểu thuyết</li>
-                        <li className="menu-item">Kinh doanh</li>
-                        <li className="menu-item">Sức khỏe  </li>
+                        <li className="menu-item">Về chúng tôi</li>
+                        {/*<li className="menu-item">Kinh doanh</li>*/}
+                        {/*<li className="menu-item">Sức khỏe  </li>*/}
                     </ul>
                 </div>
             </nav>
