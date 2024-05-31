@@ -32,7 +32,7 @@ root.render(
 
     {/*<App />*/}
       <BrowserRouter>
-          <App/>
+          <Checkout/>
       </BrowserRouter>
   </React.StrictMode>
 );
