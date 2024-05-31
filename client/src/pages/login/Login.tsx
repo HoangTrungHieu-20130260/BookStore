@@ -8,7 +8,6 @@ import '../../common/Common.css'
 function Login() {
     return (
         <>
-            <Header />
             <div className={"wrapper"}>
         <div className={"contain"}>
             <div className="page-header text-center">
@@ -55,7 +54,6 @@ function Login() {
             </div>
         </div>
             </div>
-            <Footer />
         </>
     )
 }
