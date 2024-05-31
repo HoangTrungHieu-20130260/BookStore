@@ -1,25 +1,43 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./Catgory.css";
 import "../homeScreen/Home.css"
-import {Header} from "../../components/header/Header";
 import {FaBook, FaCartPlus, FaRegHeart,FaChevronRight} from "react-icons/fa";
-import {Footer} from "../../components/footer/Footer";
+import {CategoryResponse, ProductsWithCategoryResponse} from "../../models";
+import axios from "axios";
+import {useParams} from "react-router-dom";
 
 export const Category = () => {
+    const {id} = useParams<{id: string}>()
+    const [categoryData, setCategoryData] = useState<ProductsWithCategoryResponse>()
+    const [page, setPage] = useState(0)
+    useEffect(()=> {
+    const fetchData = async () => {
+            try {
+                const response = await axios.get<ProductsWithCategoryResponse>(`http://localhost:8080/api/v1/category/${id}`)
+                setCategoryData(response.data)
+                console.log(response.data)
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        fetchData()
+
+    }, [])
     return (
         <>
             <div className="page-header text-center">
                 <div className="container">
-                    <h1>Romance</h1>
+                    <h1>{categoryData?.category.name}</h1>
                     <ul className="breadcrumb clearfix">
                         <li className="bc-item">
                             <a className="bc-home" href="" >Home</a>
                         </li>
                         <li className="bc-item">
-                            <a className="bc-category" href="">Products</a>
+                            <a className="bc-category" href="">{categoryData?.category.parentCategory?.name}</a>
                         </li>
                         <li className="bc-item">
-                            <strong className="bc-category">Romance</strong>
+                            <strong className="bc-category">{categoryData?.category.name}</strong>
                         </li>
                     </ul>
                 </div>
@@ -69,270 +87,39 @@ export const Category = () => {
                                 </select>
                             </div>
                             <div className="products">
-                                <div className="product-wrap">
-                                    <div className="product-img">
-                                        <a href="">
-                                            <img src="https://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/02/book17-216x265.png" alt=""/>
-                                        </a>
-                                        <div className="product-buttons d-flex justify-content-evenly">
-                                            <FaCartPlus className={"product-btn-icon"}/>
-                                            <FaRegHeart className={"product-btn-icon"}/>
+                                {categoryData?.products.content.map(i =>
+                                    <div className="product-wrap">
+                                        <div className="product-img">
+                                            <a href="">
+                                                {i.image && <img src={i.image} alt=""/>}
+                                            </a>
+                                            <div className="product-buttons d-flex justify-content-evenly">
+                                                <FaCartPlus className={"product-btn-icon"}/>
+                                                <FaRegHeart className={"product-btn-icon"}/>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="product-content">
-                                        <h4 className="product-title">
-                                            <a href="">Colorless Tsukur 1</a>
-                                        </h4>
-                                        <span className="price">
-                                        100.000
+                                        <div className="product-content">
+                                            <h4 className="product-title">
+                                                <a href="">{i.title}</a>
+                                            </h4>
+                                            <span className="price">
+                                        {i.currentPrice}
                                         <span className="currency-symbol">
                                             &nbsp;VNĐ
                                         </span>
                                     </span>
-                                    </div>
-                                </div>
-                                <div className="product-wrap">
-                                    <div className="product-img">
-                                        <a href="">
-                                            <img src="https://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/02/book17-216x265.png" alt=""/>
-                                        </a>
-                                        <div className="product-buttons d-flex justify-content-evenly">
-                                            <FaCartPlus className={"product-btn-icon"}/>
-                                            <FaRegHeart className={"product-btn-icon"}/>
+                                            <div>
+                                                <s>{i.oldPrice}
+                                                    <span className="currency-symbol">
+                                            &nbsp;VNĐ
+
+                                                    </span>
+                                                </s>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="product-content">
-                                        <h4 className="product-title">
-                                            <a href="">Colorless Tsukur 1</a>
-                                        </h4>
-                                        <span className="price">
-                                        100.000
-                                        <span className="currency-symbol">
-                                            &nbsp;VNĐ
-                                        </span>
-                                    </span>
-                                    </div>
-                                </div>
-                                <div className="product-wrap">
-                                    <div className="product-img">
-                                        <a href="">
-                                            <img src="https://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/02/book17-216x265.png" alt=""/>
-                                        </a>
-                                        <div className="product-buttons d-flex justify-content-evenly">
-                                            <FaCartPlus className={"product-btn-icon"}/>
-                                            <FaRegHeart className={"product-btn-icon"}/>
-                                        </div>
-                                    </div>
-                                    <div className="product-content">
-                                        <h4 className="product-title">
-                                            <a href="">Colorless Tsukur 1</a>
-                                        </h4>
-                                        <span className="price">
-                                        100.000
-                                        <span className="currency-symbol">
-                                            &nbsp;VNĐ
-                                        </span>
-                                    </span>
-                                    </div>
-                                </div>
-                                <div className="product-wrap">
-                                    <div className="product-img">
-                                        <a href="">
-                                            <img src="https://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/02/book17-216x265.png" alt=""/>
-                                        </a>
-                                        <div className="product-buttons d-flex justify-content-evenly">
-                                            <FaCartPlus className={"product-btn-icon"}/>
-                                            <FaRegHeart className={"product-btn-icon"}/>
-                                        </div>
-                                    </div>
-                                    <div className="product-content">
-                                        <h4 className="product-title">
-                                            <a href="">Colorless Tsukur 1</a>
-                                        </h4>
-                                        <span className="price">
-                                        100.000
-                                        <span className="currency-symbol">
-                                            &nbsp;VNĐ
-                                        </span>
-                                    </span>
-                                    </div>
-                                </div>
-                                <div className="product-wrap">
-                                    <div className="product-img">
-                                        <a href="">
-                                            <img src="https://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/02/book17-216x265.png" alt=""/>
-                                        </a>
-                                        <div className="product-buttons d-flex justify-content-evenly">
-                                            <FaCartPlus className={"product-btn-icon"}/>
-                                            <FaRegHeart className={"product-btn-icon"}/>
-                                        </div>
-                                    </div>
-                                    <div className="product-content">
-                                        <h4 className="product-title">
-                                            <a href="">Colorless Tsukur 1</a>
-                                        </h4>
-                                        <span className="price">
-                                        100.000
-                                        <span className="currency-symbol">
-                                            &nbsp;VNĐ
-                                        </span>
-                                    </span>
-                                    </div>
-                                </div>
-                                <div className="product-wrap">
-                                    <div className="product-img">
-                                        <a href="">
-                                            <img src="https://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/02/book17-216x265.png" alt=""/>
-                                        </a>
-                                        <div className="product-buttons d-flex justify-content-evenly">
-                                            <FaCartPlus className={"product-btn-icon"}/>
-                                            <FaRegHeart className={"product-btn-icon"}/>
-                                        </div>
-                                    </div>
-                                    <div className="product-content">
-                                        <h4 className="product-title">
-                                            <a href="">Colorless Tsukur 1</a>
-                                        </h4>
-                                        <span className="price">
-                                        100.000
-                                        <span className="currency-symbol">
-                                            &nbsp;VNĐ
-                                        </span>
-                                    </span>
-                                    </div>
-                                </div>
-                                <div className="product-wrap">
-                                    <div className="product-img">
-                                        <a href="">
-                                            <img src="https://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/02/book17-216x265.png" alt=""/>
-                                        </a>
-                                        <div className="product-buttons d-flex justify-content-evenly">
-                                            <FaCartPlus className={"product-btn-icon"}/>
-                                            <FaRegHeart className={"product-btn-icon"}/>
-                                        </div>
-                                    </div>
-                                    <div className="product-content">
-                                        <h4 className="product-title">
-                                            <a href="">Colorless Tsukur 1</a>
-                                        </h4>
-                                        <span className="price">
-                                        100.000
-                                        <span className="currency-symbol">
-                                            &nbsp;VNĐ
-                                        </span>
-                                    </span>
-                                    </div>
-                                </div>
-                                <div className="product-wrap">
-                                    <div className="product-img">
-                                        <a href="">
-                                            <img src="https://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/02/book17-216x265.png" alt=""/>
-                                        </a>
-                                        <div className="product-buttons d-flex justify-content-evenly">
-                                            <FaCartPlus className={"product-btn-icon"}/>
-                                            <FaRegHeart className={"product-btn-icon"}/>
-                                        </div>
-                                    </div>
-                                    <div className="product-content">
-                                        <h4 className="product-title">
-                                            <a href="">Colorless Tsukur 1</a>
-                                        </h4>
-                                        <span className="price">
-                                        100.000
-                                        <span className="currency-symbol">
-                                            &nbsp;VNĐ
-                                        </span>
-                                    </span>
-                                    </div>
-                                </div>
-                                <div className="product-wrap">
-                                    <div className="product-img">
-                                        <a href="">
-                                            <img src="https://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/02/book17-216x265.png" alt=""/>
-                                        </a>
-                                        <div className="product-buttons d-flex justify-content-evenly">
-                                            <FaCartPlus className={"product-btn-icon"}/>
-                                            <FaRegHeart className={"product-btn-icon"}/>
-                                        </div>
-                                    </div>
-                                    <div className="product-content">
-                                        <h4 className="product-title">
-                                            <a href="">Colorless Tsukur 1</a>
-                                        </h4>
-                                        <span className="price">
-                                        100.000
-                                        <span className="currency-symbol">
-                                            &nbsp;VNĐ
-                                        </span>
-                                    </span>
-                                    </div>
-                                </div>
-                                <div className="product-wrap">
-                                    <div className="product-img">
-                                        <a href="">
-                                            <img src="https://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/02/book17-216x265.png" alt=""/>
-                                        </a>
-                                        <div className="product-buttons d-flex justify-content-evenly">
-                                            <FaCartPlus className={"product-btn-icon"}/>
-                                            <FaRegHeart className={"product-btn-icon"}/>
-                                        </div>
-                                    </div>
-                                    <div className="product-content">
-                                        <h4 className="product-title">
-                                            <a href="">Colorless Tsukur 1</a>
-                                        </h4>
-                                        <span className="price">
-                                        100.000
-                                        <span className="currency-symbol">
-                                            &nbsp;VNĐ
-                                        </span>
-                                    </span>
-                                    </div>
-                                </div>
-                                <div className="product-wrap">
-                                    <div className="product-img">
-                                        <a href="">
-                                            <img src="https://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/02/book17-216x265.png" alt=""/>
-                                        </a>
-                                        <div className="product-buttons d-flex justify-content-evenly">
-                                            <FaCartPlus className={"product-btn-icon"}/>
-                                            <FaRegHeart className={"product-btn-icon"}/>
-                                        </div>
-                                    </div>
-                                    <div className="product-content">
-                                        <h4 className="product-title">
-                                            <a href="">Colorless Tsukur 1</a>
-                                        </h4>
-                                        <span className="price">
-                                        100.000
-                                        <span className="currency-symbol">
-                                            &nbsp;VNĐ
-                                        </span>
-                                    </span>
-                                    </div>
-                                </div>
-                                <div className="product-wrap">
-                                    <div className="product-img">
-                                        <a href="">
-                                            <img src="https://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/02/book17-216x265.png" alt=""/>
-                                        </a>
-                                        <div className="product-buttons d-flex justify-content-evenly">
-                                            <FaCartPlus className={"product-btn-icon"}/>
-                                            <FaRegHeart className={"product-btn-icon"}/>
-                                        </div>
-                                    </div>
-                                    <div className="product-content">
-                                        <h4 className="product-title">
-                                            <a href="">Colorless Tsukur 1</a>
-                                        </h4>
-                                        <span className="price">
-                                        100.000
-                                        <span className="currency-symbol">
-                                            &nbsp;VNĐ
-                                        </span>
-                                    </span>
-                                    </div>
-                                </div>
+                                )}
+
                             </div>
                             <div className="pagination d-flex justify-content-center mt-5 mb-5">
                                 <ul className="pagination-list">

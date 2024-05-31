@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import {Outlet, Route, Routes} from "react-router-dom";
 import {Header} from "./components/header/Header";
@@ -10,6 +9,7 @@ import Register from "./pages/register/Register";
 import {Category} from "./pages/category/Category";
 import {Detail} from "./pages/detailScreen/Detail";
 import Cart from "./pages/cartScreen/Cart";
+import {Manager} from "./admin/Admin";
 
 function App() {
     return (
@@ -19,10 +19,12 @@ function App() {
                 <Route path={"home"} element={<Home/>}/>
                 <Route path={"sign-in"} element={<Login/>}/>
                 <Route path={"sign-up"} element={<Register/>}/>
-                <Route path={"category"} element={<Category/>}/>
-                <Route path={"detail:id"} element={<Detail/>}/>
+                <Route path={"category/:id"} element={<Category/>}/>
+                <Route path={"detail/:id"} element={<Detail/>}/>
                 <Route path={"cart"} element={<Cart/>}/>
-
+                {/*<Route path={"admin/**"} element={<Manager/>}/>*/}
+            </Route>
+            <Route path={"/admin/*"} element={<Manager/>}>
             </Route>
         </Routes>
     );

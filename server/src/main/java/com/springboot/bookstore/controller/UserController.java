@@ -25,7 +25,7 @@ public class UserController {
     }
     @GetMapping("")
     public Page<User> findAll(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir) {
         return userService.findAll(page,size,sortBy,sortDir);

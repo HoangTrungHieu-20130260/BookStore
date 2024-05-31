@@ -23,7 +23,6 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @JsonBackReference
     private Category category;
 
     @Column(name = "title")
@@ -62,5 +61,22 @@ public class Product {
     @Column(name = "active",nullable = false)
     private Boolean active;
 
-
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", image='" + image + '\'' +
+                ", oldPrice=" + oldPrice +
+                ", currentPrice=" + currentPrice +
+                ", quantity=" + quantity +
+                ", description='" + description + '\'' +
+                ", author='" + author + '\'' +
+                ", publisher='" + publisher + '\'' +
+                ", publishYear=" + publishYear +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", active=" + active +
+                '}';
+    }
 }

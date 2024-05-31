@@ -7,20 +7,11 @@ import {Header} from "./components/header/Header";
 import 'bootstrap/dist/css/bootstrap.min.css'
 // import 'jquery/dist/jquery.min.js'
 import 'bootstrap/dist/js/bootstrap.min.js'
-import {Home} from "./pages/homeScreen/Home";
-// import Cart from "./pages/cartScreen/Cart";
-import Checkout from "./pages/checkoutScreen/Checkout";
-import Login from "./pages/login/Login";
-import Register from "./pages/register/Register";
-import Forgot from "./pages/forgot/Forgot";
-import {Category} from "./pages/category/Category";
-import Cart from "./pages/cartScreen/Cart";
-import {Detail} from "./pages/detailScreen/Detail";
-import About from "./pages/aboutUs/About";
-import {Manager} from "./admin/Admin";
+
 import {BrowserRouter} from "react-router-dom";
 
 import Contact from "./pages/contact/Contact";
+import {Manager} from "./admin/Admin";
 
 
 
@@ -34,6 +25,7 @@ root.render(
       <BrowserRouter>
           <Checkout/>
       </BrowserRouter>
+    {/*  <Manager/>*/}
   </React.StrictMode>
 );
 
