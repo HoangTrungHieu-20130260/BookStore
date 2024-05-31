@@ -1,13 +1,11 @@
 package com.springboot.bookstore.controller;
 
 import com.springboot.bookstore.dto.CategoryDto;
+import com.springboot.bookstore.dto.CategoryWithProductPageDto;
 import com.springboot.bookstore.entity.Category;
 import com.springboot.bookstore.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,8 +28,13 @@ public class CategoryController {
         return categoryService.findByParentCategoryIsNotNull();
     }
     @GetMapping("/{id}")
-    public List<Category> getSubCategory(@PathVariable int id) {
-        return categoryService.findByParentCategoryId(id);
+    public CategoryWithProductPageDto findProductsByCategoryId(
+            @PathVariable int id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir) {
+        return categoryService.findProductsByCategoryId(id, page,size,sortBy,sortDir);
     }
     @GetMapping("/get-all")
     public List<CategoryDto> getCategoryAndSubCategory() {

@@ -5,6 +5,7 @@ import { IoMdPhonePortrait } from "react-icons/io";
 import axios from "axios";
 import {CategoryResponse} from "../../models";
 import { Link } from "react-router-dom";
+import '../../common/Common.css'
 export const Header =()=> {
 
     const [categories, setCategories] = useState<CategoryResponse[]>([])

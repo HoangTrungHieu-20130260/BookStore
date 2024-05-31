@@ -24,8 +24,8 @@ public class ProductController {
             @RequestParam(defaultValue = "asc") String sortDir) {
         return productService.findAll(page, size, sortBy,sortDir);
     }
-    @GetMapping("/products-by-category/{id}")
-    public List<Product> findByCategoryId(@PathVariable int id) {
-        return productService.findByCategoryId(id);
-    }
+//    @GetMapping("/products-by-category/{id}")
+////    public List<Product> findByCategoryId(@PathVariable int id) {
+////        return productService.findByCategoryId(id);
+////    }
 }
