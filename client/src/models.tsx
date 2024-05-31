@@ -63,3 +63,8 @@ export interface ProductsWithCategoryResponse {
     category: Category;
     products: ProductsPage;
 }
+export interface RegisterDto {
+    username: string;
+    password: string;
+    email: string;
+}
