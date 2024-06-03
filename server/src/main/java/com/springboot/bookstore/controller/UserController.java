@@ -52,6 +52,7 @@ public class UserController {
     public ResponseEntity<?> fecthDataUser (@RequestParam String token){
         return userService.getDataUser(token);
     }
+
 //    public Page<User> getAll(
 //            @RequestParam(defaultValue = "1") int page,
 //            @RequestParam(defaultValue = "5") int perPage,

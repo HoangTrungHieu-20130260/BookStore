@@ -70,7 +70,6 @@ public class AuthController {
         User user = new User();
         user.setUsername(registerDto.getUsername());
         user.setPassword(encoder.encode(registerDto.getPassword()));
-//        user.setConfirm_password(encoder.encode(registerDto.getConfirm_password()));
         user.setEmail(registerDto.getEmail());
         user.setPhone(registerDto.getPhone());
         user.setStatus(true);
