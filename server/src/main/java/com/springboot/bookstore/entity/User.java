@@ -26,6 +26,15 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "confirm_password")
+    private String confirm_password;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone")
+    private String phone;
+
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
