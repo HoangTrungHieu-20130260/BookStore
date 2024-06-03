@@ -1,5 +1,6 @@
 package com.springboot.bookstore.controller;
 
+import com.springboot.bookstore.dto.UserDTO;
 import com.springboot.bookstore.entity.User;
 import com.springboot.bookstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,18 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
+    }
+
+    @PostMapping("/user-details/change-password")
+    public ResponseEntity<?> changePassword(
+            @RequestBody UserDTO userDTO
+    ) {
+        return userService.changePassword(userDTO);
+    }
+
+    @GetMapping("/get-data-user")
+    public ResponseEntity<?> fecthDataUser (@RequestParam String token){
+        return userService.getDataUser(token);
     }
 //    public Page<User> getAll(
 //            @RequestParam(defaultValue = "1") int page,
