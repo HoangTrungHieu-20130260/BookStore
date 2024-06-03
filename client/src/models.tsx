@@ -68,3 +68,12 @@ export interface RegisterDto {
     password: string;
     email: string;
 }
+
+export interface LoginDto{
+    username: string;
+    password: string;
+}
+
+export interface ForgotDto{
+    email: string;
+}

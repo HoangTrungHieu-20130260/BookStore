@@ -3,10 +3,7 @@
 /*    background-color: #20d275;*/
 /*}*/
 
-.contain {
-    width: 100%;
-    background-color: #20d275;
-}
+
 
 .login_label {
     background: url("../../images/Label Images/cart label.jpg");
@@ -18,7 +15,6 @@
     font-size: 30px;
     text-align: center;
 }
-
 
 .login_page {
     display: flex;
@@ -38,12 +34,11 @@
 
 .content {
     width: 30%;
-    height: 500px;
+    height: 600px;
     margin: 10px auto;
 }
 
 .form{
-    /*height: 70%;*/
     background-color: white;
     padding: 40px 20px;
     border-radius: 10px;
@@ -84,7 +79,7 @@
 }
 
 .user_input{
-    width: 60%;
+    width: 100%;
     height: 40px;
     border-radius: 3px;
     border: 1px solid rgba(0, 0, 0, .3);
@@ -126,7 +121,7 @@
 }
 
 .password_input{
-    width: 60%;
+    width: 100%;
     height: 40px;
     border-radius: 3px;
     border: 1px solid rgba(0, 0, 0, .3);
@@ -150,13 +145,37 @@
     background-color: #fff;
 }
 
-
-.remember{
-    display: flex;
-    margin-left: 15px;
+.confirm_password {
+    margin-left: 10px;
+    margin-bottom: 15px;
+    position: relative;
 }
 
-.login_button {
+.confirm_password_input{
+    width: 100%;
+    height: 40px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, .3);
+    background-color: white;
+    box-sizing: border-box;
+    outline: none;
+    padding-left: 5px;
+}
+
+.confirm_password_input:focus,
+.confirm_password_input:not(:placeholder-shown).confirm_password_input:not(:focus){
+    border: 1px solid #27ae61;
+}
+
+.confirm_password_input:focus + .label_password,
+.confirm_password_input:not(:placeholder-shown).confirm_password_input:not(:focus) + .label_password
+{
+    top: -10px;
+    color: #27ae61;
+    background-color: #fff;
+}
+
+.register_button {
     background-color: #27ae61;
     color: white;
     text-transform: uppercase;
@@ -164,33 +183,11 @@
     border-radius: 3px;
     border: none;
     cursor: pointer;
-    width: 120px;
     height: 30px;
     margin-left: 10px;
     text-align: center;
 }
-
-.forgot{
-    margin-left: 10px;
-    width: 30%;
-}
-
-.link_forgot{
-    cursor: pointer;
-}
-
-.link_forgot:hover{
-    text-decoration: underline;
-    color: dodgerblue;
-}
-
-.remember_title{
-    margin-top: 15px;
-    margin-left: 8px;
-}
-
-.error_message{
-    color: red;
-    margin-left: 20px;
-    font-size: 16px;
+.to-login {
+    margin-top: 10px;
+    text-align: center;
 }

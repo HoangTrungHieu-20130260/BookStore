@@ -36,8 +36,8 @@ export const Header =()=> {
                         <div className="col-xs-12 col-sm-6 col-md-6 text-end">
                             <ul className="menu mb-0">
                                 <li className="menu-item"><a href="#">Yêu thích</a></li>
-                                <li className="menu-item"><a href="#">Tài khoản của tôi</a></li>
-                                <li className="menu-item"><a href="#">Thanh toán</a></li>
+                                <li className="menu-item"><Link to="/sign-in">Tài khoản của tôi</Link></li>
+                                <li className="menu-item"><Link to="/checkout">Thanh toán</Link></li>
                             </ul>
                         </div>
                     </div>
@@ -47,9 +47,9 @@ export const Header =()=> {
                 <div className="container">
                     <div className="row">
                         <div className="col-xs-12 col-sm-6 col-lg-8 col-md-6 logo">
-                            <a href="">
+                            <Link to="/home">
                                 <img src="http://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/01/logo_green.png" alt=""/>
-                            </a>
+                            </Link>
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-6 col-lg-4 bks-cart-widget ">
                             <nav className="navbar ">

@@ -12,6 +12,9 @@ import {BrowserRouter} from "react-router-dom";
 
 import Contact from "./pages/contact/Contact";
 import {Manager} from "./admin/Admin";
+import Forgot from "./pages/forgot/Forgot";
+import ForgotConfirm from "./pages/forgotConfirm/ForgotConfirm";
+import Register from "./pages/register/Register";
 
 
 
@@ -23,7 +26,7 @@ root.render(
 
     {/*<App />*/}
       <BrowserRouter>
-          <Checkout/>
+          <App />
       </BrowserRouter>
     {/*  <Manager/>*/}
   </React.StrictMode>
