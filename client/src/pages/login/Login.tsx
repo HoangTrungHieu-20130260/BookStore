@@ -1,8 +1,6 @@
 import React from "react";
 import "./Login.css";
 // import { Link } from "react-router-dom";
-import {Header} from "../../components/header/Header";
-import {Footer} from "../../components/footer/Footer";
 import '../../common/Common.css'
 
 function Login() {

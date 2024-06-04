@@ -2,18 +2,24 @@ import React, {useEffect, useState} from "react";
 import "./Catgory.css";
 import "../homeScreen/Home.css"
 import {FaBook, FaCartPlus, FaRegHeart,FaChevronRight} from "react-icons/fa";
-import {CategoryResponse, ProductsWithCategoryResponse} from "../../models";
+import {CategoryResponse, Product, ProductsWithCategoryResponse} from "../../models";
 import axios from "axios";
 import {useParams} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {addToCart} from "../../redux/reducer/CartReducer";
 
 export const Category = () => {
+    const dispatch = useDispatch();
     const {id} = useParams<{id: string}>()
     const [categoryData, setCategoryData] = useState<ProductsWithCategoryResponse>()
     const [page, setPage] = useState(0)
+    const handleAddToCart = (product: Product) => {
+        dispatch(addToCart(product))
+    }
     useEffect(()=> {
     const fetchData = async () => {
             try {
-                const response = await axios.get<ProductsWithCategoryResponse>(`http://localhost:8080/api/v1/category/${id}`)
+                const response = await axios.get<ProductsWithCategoryResponse>(`http://localhost:8080/api/v1/category/products/${id}`)
                 setCategoryData(response.data)
                 console.log(response.data)
 
@@ -94,7 +100,10 @@ export const Category = () => {
                                                 {i.image && <img src={i.image} alt=""/>}
                                             </a>
                                             <div className="product-buttons d-flex justify-content-evenly">
-                                                <FaCartPlus className={"product-btn-icon"}/>
+                                                <FaCartPlus
+                                                    className={"product-btn-icon"}
+                                                    onClick={() => handleAddToCart(i)}
+                                                />
                                                 <FaRegHeart className={"product-btn-icon"}/>
                                             </div>
                                         </div>

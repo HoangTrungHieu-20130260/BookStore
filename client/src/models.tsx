@@ -1,3 +1,9 @@
+export interface CartState{
+    cartItems : Product[];
+    cartTotalQuantity: number;
+    cartTotalAmount: number;
+
+}
 export interface Product {
     id: number;
     title: string;
@@ -12,6 +18,7 @@ export interface Product {
     createdAt: string;
     updatedAt: string | null;
     active: boolean;
+    cartTotal: number;
 }
 
 export interface Category {
