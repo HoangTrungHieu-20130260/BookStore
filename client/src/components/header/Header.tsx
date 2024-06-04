@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from "react";
 import './Header.css'
-import { FaMapMarkerAlt, FaSearch, FaShoppingCart   } from "react-icons/fa";
-import { IoMdPhonePortrait } from "react-icons/io";
+import {FaMapMarkerAlt, FaSearch, FaShoppingCart} from "react-icons/fa";
+import {IoMdPhonePortrait} from "react-icons/io";
 import axios from "axios";
 import {CategoryResponse} from "../../models";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import '../../common/Common.css'
-export const Header =()=> {
+
+export const Header = () => {
 
     const [categories, setCategories] = useState<CategoryResponse[]>([])
-    useEffect(()=> {
+    useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get<CategoryResponse[]>("http://localhost:8080/api/v1/category/get-all")
@@ -30,7 +31,7 @@ export const Header =()=> {
                         <div className="col-xs-12 col-sm-6 col-md-6 text-start">
                             <FaMapMarkerAlt className="top-bar-icon"/>
                             Đại học Nông Lâm Thành phố Hồ Chí Minh
-                            <IoMdPhonePortrait  className="top-bar-icon"/>
+                            <IoMdPhonePortrait className="top-bar-icon"/>
                             0000000000
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-6 text-end">
@@ -48,22 +49,20 @@ export const Header =()=> {
                     <div className="row">
                         <div className="col-xs-12 col-sm-6 col-lg-8 col-md-6 logo">
                             <a href="">
-                                <img src="http://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/01/logo_green.png" alt=""/>
+                                <img src="http://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/01/logo_green.png"
+                                     alt=""/>
                             </a>
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-6 col-lg-4 bks-cart-widget ">
-                            <nav className="navbar ">
-                                <div className="container-fluid d-flex align-items-center">
-                                    <form className="d-flex" role="search">
-                                        <input className="form-control me-2" type="search" placeholder="Search"
-                                               aria-label="Search"/>
-                                            <button className="btn " type="submit"><FaSearch/></button>
-                                    </form>
-                                    <div className="mini-cart">
-                                        <FaShoppingCart />
-                                    </div>
+                            <div className="d-flex justify-content-center align-items-center">
+                                <div className="search w-100">
+                                    <FaSearch className="icon-search"/>
+                                    <input type="text" className="form-control"
+                                           placeholder="Tìm kiếm..."/>
+                                    <button className="btn btn-primary">Search</button>
                                 </div>
-                            </nav>
+                                <FaShoppingCart className="ms-3 icon-cart"/>
+                            </div>
 
                         </div>
                     </div>

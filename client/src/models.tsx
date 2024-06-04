@@ -6,6 +6,7 @@ export interface CartState{
 }
 export interface Product {
     id: number;
+    category: Category;
     title: string;
     image: string | null;
     oldPrice: number;

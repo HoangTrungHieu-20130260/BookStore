@@ -1,9 +1,27 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./Detail.css";
 import "../category/Catgory.css"
 import {FaStar, FaStarHalf, FaMinus, FaPlus } from "react-icons/fa";
+import {useParams} from "react-router-dom";
+import axios from "axios";
+import {Product} from "../../models";
 
 export const Detail = () => {
+    const {id} = useParams<{id: string}>()
+    const [product, setProduct] = useState<Product>()
+    useEffect(()=> {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get<Product>(`http://localhost:8080/api/v1/product/${id}`)
+                setProduct(response.data)
+                console.log(response.data)
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        fetchData()
+    },[])
     return (
         <>
             <section className="py-5">
@@ -14,18 +32,17 @@ export const Detail = () => {
                                 <a data-fslightbox="mygalley" className="product-view-image rounded-4" target="_blank"
                                    data-type="image"
                                    href="https://mdbcdn.b-cdn.net/img/bootstrap-ecommerce/items/detail1/big.webp">
-                                    <img
-                                        // style="max-width: 100%; max-height: 100vh; margin: auto;"
+                                    {product?.image && <img
                                         className="rounded-4 fit"
-                                        src="https://mdbcdn.b-cdn.net/img/bootstrap-ecommerce/items/detail1/big.webp"/>
+                                        src={product.image}/>}
+
                                 </a>
                             </div>
                         </aside>
                         <main className="col-lg-6">
                             <div className="ps-lg-3">
                                 <h4 className="title text-dark">
-                                    Quality Men's Hoodie for Winter, Men's Fashion <br/>
-                                    Casual Hoodie
+                                    {product?.title}
                                 </h4>
                                 <div className="d-flex flex-row my-3">
                                     <div className="text-warning mb-1 me-2">
@@ -47,16 +64,16 @@ export const Detail = () => {
                                 </div>
                                 <div className="row">
                                     <dt className="col-3">Tác giả:</dt>
-                                    <dd className="col-9">Regular</dd>
+                                    <dd className="col-9">{product?.author}</dd>
 
                                     <dt className="col-3">Nhà cung cấp:</dt>
-                                    <dd className="col-9">Brown</dd>
+                                    <dd className="col-9">{product?.publisher}</dd>
 
                                     <dt className="col-3">Nhà xuất bản:</dt>
-                                    <dd className="col-9">Cotton, Jeans</dd>
+                                    <dd className="col-9">{product?.publisher}</dd>
 
-                                    <dt className="col-3">Brand</dt>
-                                    <dd className="col-9">Reebook</dd>
+                                    <dt className="col-3">Thể loại:</dt>
+                                    <dd className="col-9">{product?.category.name}</dd>
                                 </div>
                                 <hr/>
                                 <div className="quantity-control mb-4 df">
@@ -99,26 +116,20 @@ export const Detail = () => {
                                     <div className="tab-pane fade show active" id="ex1-pills-1" role="tabpanel"
                                          aria-labelledby="ex1-tab-1">
                                         <p>
-                                            With supporting text below as a natural lead-in to additional content. Lorem
-                                            ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                            incididunt ut labore et dolore magna aliqua. Ut
-                                            enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                                            aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                                            voluptate velit esse cillum dolore eu fugiat nulla
-                                            pariatur.
+                                            {product?.description}
                                         </p>
                                         <table className="table mt-3 mb-2">
                                             <tr>
-                                                <th className="py-2">Display:</th>
-                                                <td className="py-2">13.3-inch LED-backlit display with IPS</td>
+                                                <th className="py-2">Tên nhà cung cấp:</th>
+                                                <td className="py-2">{product?.publisher}</td>
                                             </tr>
                                             <tr>
-                                                <th className="py-2">Processor capacity:</th>
-                                                <td className="py-2">2.3GHz dual-core Intel Core i5</td>
+                                                <th className="py-2">Tác giả:</th>
+                                                <td className="py-2">{product?.author}</td>
                                             </tr>
                                             <tr>
-                                                <th className="py-2">Camera quality:</th>
-                                                <td className="py-2">720p FaceTime HD camera</td>
+                                                <th className="py-2">Năm xuất bản:</th>
+                                                <td className="py-2">{product?.publishYear}</td>
                                             </tr>
                                             <tr>
                                                 <th className="py-2">Memory</th>
