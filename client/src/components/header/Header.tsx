@@ -6,9 +6,12 @@ import axios from "axios";
 import {CategoryResponse} from "../../models";
 import {Link} from "react-router-dom";
 import '../../common/Common.css'
+import {useSelector} from "react-redux";
+import {RootState} from "../../redux/store";
 
 export const Header = () => {
-
+    const cart = useSelector( (state: RootState)=> state.carts)
+    console.log(cart)
     const [categories, setCategories] = useState<CategoryResponse[]>([])
     useEffect(() => {
         const fetchData = async () => {
@@ -61,7 +64,10 @@ export const Header = () => {
                                            placeholder="Tìm kiếm..."/>
                                     <button className="btn btn-primary">Search</button>
                                 </div>
-                                <FaShoppingCart className="ms-3 icon-cart"/>
+                                <div className="icon-cart" data-count={cart.cartTotalQuantity}>
+                                    <FaShoppingCart className="ms-3"/>
+                                </div>
+
                             </div>
 
                         </div>
