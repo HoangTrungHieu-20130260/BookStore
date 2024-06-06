@@ -1,11 +1,9 @@
 import React, {useState} from "react";
 import './Home.css'
-import {Header} from "../../components/header/Header";
 import { FaLongArrowAltRight, FaCartPlus,FaRegHeart  } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import {Footer} from "../../components/footer/Footer";
 
 export const SlideShow =()=> {
 
