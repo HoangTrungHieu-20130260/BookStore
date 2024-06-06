@@ -10,6 +10,14 @@ import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import {store} from "./redux/store";
 
+import Contact from "./pages/contact/Contact";
+import {Manager} from "./admin/Admin";
+import Forgot from "./pages/forgot/Forgot";
+import ForgotConfirm from "./pages/forgotConfirm/ForgotConfirm";
+import Register from "./pages/register/Register";
+import AccountDetailsScreen from "./pages/accountDetail/AccountDetailsScreen";
+import {Home} from "./pages/homeScreen/Home";
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
