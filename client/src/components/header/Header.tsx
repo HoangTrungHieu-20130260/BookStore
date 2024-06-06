@@ -1,17 +1,22 @@
 import React, {useEffect, useState} from "react";
 import './Header.css'
-import { FaMapMarkerAlt, FaSearch, FaShoppingCart   } from "react-icons/fa";
-import { IoMdPhonePortrait } from "react-icons/io";
+import {FaMapMarkerAlt, FaSearch, FaShoppingCart} from "react-icons/fa";
+import {IoMdPhonePortrait} from "react-icons/io";
 import axios from "axios";
 import {CategoryResponse} from "../../models";
+import {useSelector} from "react-redux";
+import {RootState} from "../../redux/store";
+    
 import {Link, useNavigate} from "react-router-dom";
 import '../../common/Common.css'
 export const Header =()=> {
+  const cart = useSelector( (state: RootState)=> state.carts)
+    console.log(cart)
     const getToken = localStorage.getItem("token")
     const navigate = useNavigate()
     // const [isLogin, setIsLogin]
     const [categories, setCategories] = useState<CategoryResponse[]>([])
-    useEffect(()=> {
+    useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get<CategoryResponse[]>("http://localhost:8080/api/v1/category/get-all")
@@ -45,7 +50,7 @@ export const Header =()=> {
                         <div className="col-xs-12 col-sm-6 col-md-6 text-start">
                             <FaMapMarkerAlt className="top-bar-icon"/>
                             Đại học Nông Lâm Thành phố Hồ Chí Minh
-                            <IoMdPhonePortrait  className="top-bar-icon"/>
+                            <IoMdPhonePortrait className="top-bar-icon"/>
                             0000000000
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-6 text-end">
@@ -79,18 +84,18 @@ export const Header =()=> {
                             </Link>
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-6 col-lg-4 bks-cart-widget ">
-                            <nav className="navbar ">
-                                <div className="container-fluid d-flex align-items-center">
-                                    <form className="d-flex" role="search">
-                                        <input className="form-control me-2" type="search" placeholder="Search"
-                                               aria-label="Search"/>
-                                            <button className="btn " type="submit"><FaSearch/></button>
-                                    </form>
-                                    <div className="mini-cart">
-                                        <FaShoppingCart />
-                                    </div>
+                            <div className="d-flex justify-content-center align-items-center">
+                                <div className="search w-100">
+                                    <FaSearch className="icon-search"/>
+                                    <input type="text" className="form-control"
+                                           placeholder="Tìm kiếm..."/>
+                                    <button className="btn btn-primary">Search</button>
                                 </div>
-                            </nav>
+                                <div className="icon-cart" data-count={cart.cartTotalQuantity}>
+                                    <FaShoppingCart className="ms-3"/>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,116 +1,121 @@
-import React from "react";
-import logo from "../../logo.svg";
-import './Cart.css'
-import ProductCart from "../../images/Product Images/book17.png";
-import { FaCircleCheck } from "react-icons/fa6";
-import { FaTrashCan } from "react-icons/fa6";
-import {Header} from "../../components/header/Header";
-import {Footer} from "../../components/footer/Footer";
+import React, {useEffect} from "react";
+// import './Cart.css'
+import './Cart1.css'
+import '../../common/Common.css'
+import {Link} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState, store} from "../../redux/store";
+import { FaMinus, FaPlus, FaArrowLeft  } from "react-icons/fa";
+import {CartState, Product} from "../../models";
+import {addToCart, decreaseCart, getTotals, removeFromCart} from "../../redux/reducer/CartReducer";
 function Cart() {
+    const dispatch = useDispatch();
+    const cart = useSelector( (state: RootState)=> state.carts)
+    // const cartItems = useSelector( (state: RootState)=> state.carts.cartItems)
+    const handleRemoveFromCart = (cartItem: Product)=> {
+        dispatch(removeFromCart(cartItem))
+    }
+    const handleDecreaseCart = (cartItem : Product) =>{
+        dispatch(decreaseCart(cartItem))
+    }
+    const handleIncreaseCart = (cartItem: Product) => {
+        dispatch(addToCart(cartItem))
+    }
+    useEffect(()=> {
+        dispatch(getTotals())
+    },[cart])
     return (
         <>
-            <Header />
-        <div className="Cart_container">
-            <div className={"cart_label"}>
-                <div className={"cart_title"}>
-                    <h2 className={"title"}>Giỏ hàng</h2>
-                </div>
-                <div className={"cart_page"}>
-                    <a><h6 className={"cart_home"}>Trang chủ /</h6></a>
-                    <h5 className={"cart_name"}>Giỏ hàng</h5>
+        <div className="Cart_container pb-5">
+            <div className="page-header text-center">
+                <div className="container">
+                    <h1>Đăng nhập</h1>
+                    <ul className="breadcrumb clearfix">
+                        <li className="bc-item">
+                            <Link to={"/home"} className={"bc-home"}>Home</Link>
+                        </li>
+                        <li className="bc-item">
+                            <a className="bc-category" href="">Giỏ hàng</a>
+                        </li>
+                        {/*<li className="bc-item">*/}
+                        {/*    <strong className="bc-category">{categoryData?.category.name}</strong>*/}
+                        {/*</li>*/}
+                    </ul>
                 </div>
             </div>
-            <div className={"noti"}>
-                <FaCircleCheck className={"check-icon"}/>
-                <p>Cập nhật giỏ hàng thành công!</p>
-            </div>
-            <div className={"table_product"}>
-                <form>
-                    <div className={"table_products"}>
-                        <div>
-                            <div className={"table_head"}>
-                                <p className="product-thumbnail">&nbsp;</p>
-                                <p className="product-name">Tên sản phẩm</p>
-                                <p className="product-price">Giá tiền</p>
-                                <p className="product-quantity">Số lượng</p>
-                                <p className="product-subtotal">Tổng cộng</p>
+            <div className="card container mt-5">
+                <div className="row">
+                    <div className="col-md-8 cart">
+                        <div className="title">
+                            <div className="row">
+                                <div className="col"><h4><b>Shopping Cart</b></h4></div>
+                                <div className="col align-self-center text-right text-body-secondary">3 items</div>
                             </div>
                         </div>
-                        <div className={"body_table"}>
-                            <div className="cart_item">
-                                <div className="product-thumbnail">
-                                    <img className={"image"} src={ProductCart}/>
-                                </div>
-                                <div className="product-name">
-                                    <a href="">The Book Of Love </a>
-                                </div>
-                                <div className="product-price">
-                                <span className="amount"><span
-                                    className="currencySymbol">VND</span>300.000</span></div>
-                                <div className="product-quantity">
-                                    <div className="quantity">
-                                        <input className={"quantity_input"} type={"number"} step={1} min={1} size={4}
-                                               placeholder={"1"}/>
-                                    </div>
-                                    <div className={"delete"}>
-                                        <FaTrashCan className={"trashcan"}/>
-                                    </div>
-                                </div>
-                                <div className="product-subtotal">
-                                <span className="amount"><span
-                                    className="currencySymbol">VND</span>300.000</span></div>
+                        {cart.cartItems.map(item =>
+                            <div className="row border-top border-bottom">
+                                <div className="row main align-items-center">
+                                    <div className="col-2">
+                                        {item.image && <img className="img-fluid"
+                                                            src={item.image} alt=""/>}
 
-                            </div>
-                            <div>
-                                <div className="actions">
-                                    <div className="coupon">
-                                        <input type="text" name="coupon_code"
-                                               className="input-text"
-                                               id="coupon_code" value=""
-                                               placeholder="Mã giảm giá"/>
-                                        <input type="submit" className="button" name="apply_coupon"
-                                               value="Nhập mã giảm giá"/>
                                     </div>
-                                    <div className={"update_button"}>
-                                        <input type="submit" className="button" name="update_cart" value="Cập nhật"/>
+                                    <div className="col">
+                                        {/*<div className="row text-muted">{item.}</div>*/}
+                                        <div className="row">{item.title}</div>
+                                    </div>
+                                    <div className="col text-center">
+                                        {item.currentPrice}₫
+                                    </div>
+                                    <div className="col">
+                                        <FaMinus onClick={()=> handleDecreaseCart(item)}/>
+                                        <a href="#" className="border text-black text-decoration-none ms-3 me-3">
+                                            {item.cartTotal}
+                                        </a>
+                                        <FaPlus onClick={()=> handleIncreaseCart(item)}/>
+                                    </div>
+                                    <div className="col"> {item.cartTotal * item.currentPrice}₫
+                                        <span className="close float-end" onClick={()=> handleRemoveFromCart(item)}>
+                                            &#10005;
+                                        </span>
                                     </div>
                                 </div>
                             </div>
+                        )}
+                        <div className="back-to-shop">
+                            <Link to={"/home"} className="text-decoration-none text-body-secondary">
+                                <FaArrowLeft className="me-2"/>
+                                <span className="text-muted">Back to shop</span>
+                            </Link>
                         </div>
                     </div>
-                </form>
-            </div>
-            <div className={"total_table"}>
-                <h2 className={"total_title"}>Tổng tiền giỏ hàng</h2>
-                <div className={"cart_total"}>
-                    <div className="shop_table shop_table_responsive">
-                        <div className="total">
-                            <p>Tổng cộng</p>
-                            <div className={"total_price"} data-title="Subtotal"><span className="amount"><span
-                                className="currencySymbol">VND</span>300.000</span></div>
+                    <div className="col-md-4 summary">
+                        <div><h5><b>Summary</b></h5></div>
+
+                        <div className="row">
+                            <div className="col ps-0">ITEMS: {cart.cartTotalQuantity}</div>
+                            <div className="col text-right">{cart.cartTotalAmount}₫</div>
                         </div>
-                        <div className="order-total">
-                            <p>Thành tiền</p>
-                            <div className={"total_price"} data-title="Total"><strong><span className="amount">
-                                <span className="currencySymbol">VND</span>300.000</span></strong></div>
+                        <form>
+                            <p>SHIPPING</p>
+                            <select>
+                                <option className="text-muted">Standard-Delivery- &euro;5.00</option>
+                            </select>
+                            <p>GIVE CODE</p>
+                            <input id="code" placeholder="Enter your code"/>
+                        </form>
+                        <div className="row"
+                        >
+                            <div className="col">TOTAL PRICE</div>
+                            <div className="col text-right">&euro; 137.00</div>
                         </div>
+                        <button className="btn">CHECKOUT</button>
+
                     </div>
                 </div>
-                <div className="checkout">
-                    <div>
-                        <a href="https://wp.acmeedesign.com/bookstore/checkout/"
-                           className="checkout-button button alt wc-forward">Thanh toán</a>
-                    </div>
-                    <div>
-                        <a href="https://wp.acmeedesign.com/bookstore/shop/"
-                           className="button button-secondary continue_shoping">Tiếp tục mua sắm</a>
-                    </div>
-                </div>
+
             </div>
-
-
         </div>
-            <Footer />
         </>
     );
 }

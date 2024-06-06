@@ -102,3 +102,59 @@
     line-height: 40px;
     border-bottom: 1px solid #e5e5e5;
 }
+.icon-cart {
+    position: relative;
+    font-size: 25px;
+    width: max-content;
+}
+.icon-cart[data-count]:after {
+    content: attr(data-count);
+    position: absolute;
+    top: 5px; /* Điều chỉnh vị trí theo nhu cầu */
+    right: -10px; /* Điều chỉnh vị trí theo nhu cầu */
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    line-height: 1;
+    min-width: 18px; /* Đảm bảo hình tròn nếu là số đơn */
+    text-align: center;
+    display: inline-block;
+}
+.search{
+    position: relative;
+    box-shadow: 0 0 40px rgba(51, 51, 51, .1);
+
+}
+
+.search input{
+    padding: 10px 0;
+    text-indent: 30px;
+    border: 2px solid #d6d4d4;
+
+
+}
+.search input:focus{
+
+    box-shadow: none;
+    /*border: 2px solid blue;*/
+
+
+}
+.search .icon-search{
+    position: absolute;
+    top: 35%;
+    left: 10px;
+}
+.search button{
+
+    position: absolute;
+    top: 5px;
+    bottom: 5px;
+    right: 5px;
+    margin: 0px;
+    width: min-content;
+    background: #27ae61;
+
+}
