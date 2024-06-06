@@ -13,6 +13,7 @@ import {Manager} from "./admin/Admin";
 import Forgot from "./pages/forgot/Forgot";
 import ForgotConfirm from "./pages/forgotConfirm/ForgotConfirm";
 import AccountDetailScreen from "./pages/accountDetail/AccountDetailsScreen";
+import Checkout from "./pages/checkoutScreen/Checkout";
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
                 <Route path={"detail/:id"} element={<Detail/>}/>
                 <Route path={"cart"} element={<Cart/>}/>
                 <Route path={"forgot"} element={<Forgot/>}/>
+                <Route path={"checkout"} element={<Checkout />}></Route>
                 <Route path={"forgot-confirm"} element={<ForgotConfirm/>}/>
                 <Route path={"my-account"} element={<AccountDetailScreen/>}/>
                 <Route path={"admin/**"} element={<Manager/>}/>
