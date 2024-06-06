@@ -15,6 +15,8 @@ import {Manager} from "./admin/Admin";
 import Forgot from "./pages/forgot/Forgot";
 import ForgotConfirm from "./pages/forgotConfirm/ForgotConfirm";
 import Register from "./pages/register/Register";
+import AccountDetailsScreen from "./pages/accountDetail/AccountDetailsScreen";
+import {Home} from "./pages/homeScreen/Home";
 
 
 
