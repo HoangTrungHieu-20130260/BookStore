@@ -249,3 +249,11 @@
     margin-bottom: 20px;
 }
 
+.shipping_fee{
+    display: flex;
+}
+
+.shipping_fee p{
+    margin-left: 20px;
+    flex-basis: 50%;
+}
