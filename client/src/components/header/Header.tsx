@@ -3,16 +3,20 @@ import './Header.css'
 import {FaMapMarkerAlt, FaSearch, FaShoppingCart} from "react-icons/fa";
 import {IoMdPhonePortrait} from "react-icons/io";
 import axios from "axios";
+
 import {CategoryResponse, Product} from "../../models";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import '../../common/Common.css'
 import {useSelector} from "react-redux";
 import {RootState} from "../../redux/store";
-
-export const Header = () => {
+export const Header =()=> {
     const [showResults, setShowResults] = useState(false);
     const [search, setSearch] = useState("")
-    const cart = useSelector((state: RootState) => state.carts)
+  const cart = useSelector( (state: RootState)=> state.carts)
+    console.log(cart)
+    const getToken = localStorage.getItem("token")
+    const navigate = useNavigate()
+    // const [isLogin, setIsLogin]
     const [categories, setCategories] = useState<CategoryResponse[]>([])
     const [products, setProducts] = useState<Product[]>([])
     const filteredProducts = products.filter(product =>
@@ -35,6 +39,18 @@ export const Header = () => {
         fetchData()
 
     }, [cart])
+    useEffect(() => {
+        if (getToken === null){
+            // navigate("/sign-in")
+        }
+        // localStorage.removeItem("token")
+        console.log(getToken)
+    }, [getToken]);
+
+    const Logout = (e: any) => {
+        e.preventDefault();
+        localStorage.removeItem("token")
+    }
     return (
         <>
             <div className="top-bar">
@@ -49,8 +65,20 @@ export const Header = () => {
                         <div className="col-xs-12 col-sm-6 col-md-6 text-end">
                             <ul className="menu mb-0">
                                 <li className="menu-item"><a href="#">Yêu thích</a></li>
-                                <li className="menu-item"><a href="#">Tài khoản của tôi</a></li>
-                                <li className="menu-item"><a href="#">Thanh toán</a></li>
+                                <li className="menu-item">
+                                    {
+                                        getToken === null ?
+                                            <Link to="/sign-in">Đăng nhập</Link> :
+                                            <Link to="/my-account">Tài khoản của tôi</Link>
+                                    }
+                                </li>
+                                <li className="menu-item"><Link to="/checkout">Thanh toán</Link></li>
+                                {
+                                    getToken !== null &&
+                                        <li className="menu-item">
+                                            <button onClick={e => Logout(e)}>Đăng xuất</button>
+                                        </li>
+                                }
                             </ul>
                         </div>
                     </div>
@@ -59,11 +87,10 @@ export const Header = () => {
             <header className="header">
                 <div className="container">
                     <div className="row">
-                        <div className="col-xs-12 col-sm-6 col-md-6 col-lg-7 logo">
-                            <a href="">
-                                <img src="http://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/01/logo_green.png"
-                                     alt=""/>
-                            </a>
+                        <div className="col-xs-12 col-sm-6 col-lg-8 col-md-6 logo">
+                        <Link to="/home">
+                                <img src="http://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/01/logo_green.png" alt=""/>
+                            </Link>
                         </div>
                         <div className="col-xs-12 col-sm-6 col-md-6 col-lg-5 bks-cart-widget ">
                             <div className="d-flex justify-content-center align-items-center">
@@ -105,7 +132,6 @@ export const Header = () => {
                                 </div>
 
                             </div>
-
                         </div>
                     </div>
                 </div>

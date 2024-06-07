@@ -9,9 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class RegisterDto {
+public class AuthRequestDto {
     private String username;
     private String password;
-    private String email;
-    private String phone;
 }

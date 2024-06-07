@@ -9,6 +9,7 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState<string | null>(null);
 
@@ -27,7 +28,8 @@ const Register = () => {
             const response = await axios.post<RegisterDto>('http://localhost:8080/api/v1/auth/register', {
                 username,
                 password,
-                email
+                email,
+                phone
             });
 
             setSuccess("Đăng ký thành công!");
@@ -63,23 +65,28 @@ const Register = () => {
                     <div className={"login_section"}>
                         <div className={"username"}>
                             <input className={"user_input"} type={"text"} placeholder={" "} required
-                                onChange={e=> setUsername(e.target.value)}/>
+                                   onChange={e => setUsername(e.target.value)}/>
                             <label className={"label_username"}>Tên người dùng</label>
                         </div>
                         <div className={"username"}>
                             <input className={"user_input"} type={"email"} placeholder={" "} required
-                                   onChange={e=> setEmail(e.target.value)}/>
+                                   onChange={e => setEmail(e.target.value)}/>
                             <label className={"label_username"}>Email</label>
                         </div>
                         <div className={"password"}>
                             <input className={"password_input"} type={"password"} placeholder={" "} required
-                                   onChange={e=> setPassword(e.target.value)}/>
+                                   onChange={e => setPassword(e.target.value)}/>
                             <label className={"label_password"}>Mật khẩu</label>
                         </div>
                         <div className={"confirm_password"}>
                             <input className={"confirm_password_input"} type={"password"} placeholder={" "} required
-                                   onChange={e=> setConfirmPassword(e.target.value)}/>
+                                   onChange={e => setConfirmPassword(e.target.value)}/>
                             <label className={"label_password"}>Xác nhận mật khẩu</label>
+                        </div>
+                        <div className={"confirm_password"}>
+                            <input className={"confirm_password_input"} type={"password"} placeholder={" "} required
+                                   onChange={e => setPhone(e.target.value)}/>
+                            <label className={"label_password"}>Số điện thoại</label>
                         </div>
 
                         {/*<div className={"username"}>*/}
