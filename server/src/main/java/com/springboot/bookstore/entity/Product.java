@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -60,6 +61,9 @@ public class Product {
 
     @Column(name = "active",nullable = false)
     private Boolean active;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Rate> rates;
 
     @Override
     public String toString() {
