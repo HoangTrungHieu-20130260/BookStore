@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -26,20 +28,37 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "confirm_password")
-    private String confirm_password;
-
     @Column(name = "email")
     private String email;
 
     @Column(name = "phone")
     private String phone;
 
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Column(name = "avatar")
+    private String avatar;
+
+    @Column(name = "created_at")
+    private String createdAt;
+
+    @Column(name = "updated_at")
+    private String updatedAt;
+
+    @Column(name = "status")
+    private boolean status;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
+    private List<Address> address;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
+    private List<Rate> rates;
+
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @Column(name = "status")
-    private boolean status;
+
 }
