@@ -1,5 +1,5 @@
 import React from "react";
-import {BooleanField, Datagrid, DateField, EditButton, List, NumberField, TextField} from 'react-admin';
+import {BooleanField, Datagrid, DateField, EditButton, ImageField, List, NumberField, TextField} from 'react-admin';
 
 export const ProductList = () => (
     <List>
@@ -7,13 +7,13 @@ export const ProductList = () => (
             <TextField source="id" />
             <NumberField source="category.id" />
             <TextField source="title" />
-            <TextField source="image" />
+            <ImageField source="image" />
             <NumberField source="oldPrice" />
             <NumberField source="currentPrice" />
             <NumberField source="quantity" />
             <DateField source="createdAt" />
             <BooleanField source="active" />
-            {/*<EditButton/>*/}
+            <EditButton/>
         </Datagrid>
     </List>
 );

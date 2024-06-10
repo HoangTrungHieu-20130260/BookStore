@@ -26,7 +26,7 @@ public class Rate {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
