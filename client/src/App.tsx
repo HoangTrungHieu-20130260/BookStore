@@ -30,7 +30,6 @@ function App() {
                 <Route path={"checkout"} element={<Checkout />}></Route>
                 <Route path={"forgot-confirm"} element={<ForgotConfirm/>}/>
                 <Route path={"my-account"} element={<AccountDetailScreen/>}/>
-                <Route path={"admin/**"} element={<Manager/>}/>
             </Route>
             <Route path={"/admin/*"} element={<Manager/>}>
             </Route>

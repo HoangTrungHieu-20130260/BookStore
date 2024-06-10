@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,6 +33,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> getAllProducts() {
+        System.out.println(productRepository.findAll());
+        return productRepository.findAll();
+    }
+
+    @Override
     public Product findById(int id) {
         return productRepository.findById(id).orElse(null);
     }
@@ -39,5 +46,23 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(int id) {
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public Product updateProduct(int id, Product product) {
+        Product result = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Product not found"));
+        result.setCategory(product.getCategory());
+        result.setTitle(product.getTitle());
+        result.setImage(product.getImage());
+        result.setOldPrice(product.getOldPrice());
+        result.setCurrentPrice(product.getCurrentPrice());
+        result.setQuantity(product.getQuantity());
+        result.setDescription(product.getDescription());
+        result.setAuthor(product.getAuthor());
+        result.setPublisher(product.getPublisher());
+        result.setPublishYear(product.getPublishYear());
+        result.setUpdatedAt(LocalDateTime.now());
+        result = productRepository.save(result);
+        return result;
     }
 }

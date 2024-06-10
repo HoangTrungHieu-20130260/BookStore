@@ -1,9 +1,10 @@
 import React from "react";
-import {Admin, ListGuesser, Resource, ShowGuesser} from "react-admin"
+import {Admin, EditGuesser, ListGuesser, Resource, ShowGuesser} from "react-admin"
 import {dataProvider} from "./DataProvider";
 import {UserList} from "./user/UserList";
+import {ProductList} from "./product/ProductList";
+import {ProductEdit} from "./product/ProductEdit";
 export const Manager = ()=> {
-    console.log("Oke")
     return <Admin dataProvider={dataProvider} basename={"/admin"}>
         <Resource
             name={"user"}
@@ -12,8 +13,9 @@ export const Manager = ()=> {
         </Resource>
         <Resource
             name={"product"}
-            list={ListGuesser}
-            show={ShowGuesser}>
+            list={ProductList}
+            show={ShowGuesser}
+            edit={ProductEdit}>
         </Resource>
         <Resource
             name={"category"}
