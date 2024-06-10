@@ -1,4 +1,5 @@
 import {DataProvider, fetchUtils} from "react-admin";
+import {imgUpload} from "./img/imageUpload";
 
 const apiUrl = 'http://localhost:8080/api/v1';
 const httpClient = fetchUtils.fetchJson;
@@ -14,7 +15,6 @@ export const dataProvider: DataProvider = {
             page: page -1,
             size: perPage,
         };
-        console.log(fetchUtils.queryParameters(query))
         const {json} = await httpClient(`${apiUrl}/${resource}?${fetchUtils.queryParameters(query)}`, {
             method: 'GET',
             headers: new Headers({
@@ -56,6 +56,24 @@ export const dataProvider: DataProvider = {
     ,
     // @ts-ignore
     update: async (resource: any, params: any) => {
+        if (resource === 'product') {
+            const { id, data } = params;
+            if (data.image && data.image.rawFile) {
+                // Upload image to imgBB
+                const imageUrl = await imgUpload(data.image);
+                data.image = imageUrl;
+            }
+
+            const { json } = await httpClient(`${apiUrl}/${resource}/${id}`, {
+                method: 'PUT', // or 'PATCH' depending on your API
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+                body: JSON.stringify(data),
+            });
+            return { data: json };
+        }
     },
 // @ts-ignore
     delete: async (resource: any, params: any) => {

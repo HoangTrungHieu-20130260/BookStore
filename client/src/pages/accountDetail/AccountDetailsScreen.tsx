@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {TextField} from "@mui/material";
+import { TextField} from "@mui/material";
+// @ts-ignore
 import {makeStyles} from '@mui/styles';
 
 // components
@@ -12,8 +13,7 @@ import {MdNotificationsNone} from "react-icons/md";
 // css
 import "./AccountDetailsScreen.css"
 import IMG from '../../images/Avatar/up fb.jpg'
-import {Header} from "../../components/header/Header";
-import {Footer} from "../../components/footer/Footer";
+
 import AccountDetails from "./AccountDetails";
 import axios from "axios";
 // import AccountDetailContentComponent from "../../components/AccountDetailContent/AccountDetailContentComponent";
@@ -72,6 +72,7 @@ const AccountDetailScreen = () => {
         else setIsHiddenPopup(false)
     }
 
+    // @ts-ignore
     const classes = useStyles();
 
     useEffect(() => {
