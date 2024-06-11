@@ -287,3 +287,11 @@
     margin-left: 50px;
 }
 
+.item_cart{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1) ;
+}
+
+.col-2{
+    margin-left: 20px;
+}
+
