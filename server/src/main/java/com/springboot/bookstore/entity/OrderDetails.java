@@ -16,7 +16,7 @@ import lombok.ToString;
 public class OrderDetails {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
@@ -29,6 +29,9 @@ public class OrderDetails {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Column(name = "product_name")
+    private String product_name;
+
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
@@ -38,7 +41,5 @@ public class OrderDetails {
     @OneToOne
     @JoinColumn(name = "review_id")
     private Rate review;
-
-
 
 }
