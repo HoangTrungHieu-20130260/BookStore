@@ -84,3 +84,16 @@ export interface LoginDto{
 export interface ForgotDto{
     email: string;
 }
+
+export interface OrderDto{
+    fullName: string;
+    email: string;
+    phone: string;
+    address: string;
+    paymentMethod: string;
+    paymentStatus: boolean;
+    note: string;
+    shippingCost: number;
+    totalAmount: number;
+    products: Product[];
+}

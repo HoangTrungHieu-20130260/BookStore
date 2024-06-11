@@ -3,7 +3,7 @@ import React, {useEffect} from "react";
 import './Cart1.css'
 import '../../common/Common.css'
 import {Link} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from 'react-redux';
 import {RootState, store} from "../../redux/store";
 import { FaMinus, FaPlus, FaArrowLeft  } from "react-icons/fa";
 import {CartState, Product} from "../../models";
@@ -48,8 +48,8 @@ function Cart() {
                     <div className="col-md-8 cart">
                         <div className="title">
                             <div className="row">
-                                <div className="col"><h4><b>Shopping Cart</b></h4></div>
-                                <div className="col align-self-center text-right text-body-secondary">3 items</div>
+                                <div className="col"><h4><b>Giỏ hàng</b></h4></div>
+                                <div className="col align-self-center text-right text-body-secondary">{cart.cartTotalQuantity} sản phẩm</div>
                             </div>
                         </div>
                         {cart.cartItems.map(item =>
@@ -85,32 +85,33 @@ function Cart() {
                         <div className="back-to-shop">
                             <Link to={"/home"} className="text-decoration-none text-body-secondary">
                                 <FaArrowLeft className="me-2"/>
-                                <span className="text-muted">Back to shop</span>
+                                <span className="text-muted">Tiếp tục mua sắm</span>
                             </Link>
                         </div>
                     </div>
                     <div className="col-md-4 summary">
-                        <div><h5><b>Summary</b></h5></div>
+                        <div><h5><b>Tổng tiền</b></h5></div>
 
                         <div className="row">
-                            <div className="col ps-0">ITEMS: {cart.cartTotalQuantity}</div>
-                            <div className="col text-right">{cart.cartTotalAmount}₫</div>
+                            <div className="col">Tổng sản phẩm:</div>
+                            <div className="col text-right">{cart.cartTotalQuantity} sản phẩm</div>
                         </div>
-                        <form>
-                            <p>SHIPPING</p>
-                            <select>
-                                <option className="text-muted">Standard-Delivery- &euro;5.00</option>
-                            </select>
-                            <p>GIVE CODE</p>
-                            <input id="code" placeholder="Enter your code"/>
-                        </form>
+                        {/*<form>*/}
+                        {/*    <p>SHIPPING</p>*/}
+                        {/*    <select>*/}
+                        {/*        <option className="text-muted">Standard-Delivery- &euro;5.00</option>*/}
+                        {/*    </select>*/}
+                        {/*    <p>GIVE CODE</p>*/}
+                        {/*    <input id="code" placeholder="Enter your code"/>*/}
+                        {/*</form>*/}
                         <div className="row"
                         >
-                            <div className="col">TOTAL PRICE</div>
-                            <div className="col text-right">&euro; 137.00</div>
+                            <div className="col">Tổng tiền giỏ hàng:</div>
+                            <div className="col text-right">{cart.cartTotalAmount}₫</div>
                         </div>
-                        <button className="btn">CHECKOUT</button>
-
+                        <Link to={"/checkout"}>
+                            <button className="btn">Thanh toán</button>
+                        </Link>
                     </div>
                 </div>
 

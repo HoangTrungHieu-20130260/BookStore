@@ -128,7 +128,7 @@ export const Header =()=> {
                                     </div> : ""}
                                 </div>
                                 <div className="icon-cart" data-count={cart.cartTotalQuantity}>
-                                    <FaShoppingCart className="ms-3"/>
+                                    <Link className={"link-cart"} to={"/cart"}><FaShoppingCart className="ms-3"/></Link>
                                 </div>
 
                             </div>

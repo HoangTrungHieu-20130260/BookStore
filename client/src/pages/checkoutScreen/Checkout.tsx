@@ -7,6 +7,13 @@ import {Footer} from "../../components/footer/Footer";
 import {fetchData, fetchDataShipping, shippingApiService} from "../../services/AddressAPI";
 import {TextField} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
+import {Link} from "react-router-dom";
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState, store} from "../../redux/store";
+import {FaMinus, FaPlus, FaArrowLeft} from "react-icons/fa";
+import {CartState, OrderDto, Product} from "../../models";
+import {addToCart, decreaseCart, getTotals, removeFromCart} from "../../redux/reducer/CartReducer";
+import axios from "axios";
 
 interface Province {
     ProvinceID: string;
@@ -23,7 +30,16 @@ interface Ward {
     WardName: string;
 }
 
+
 const Checkout: React.FC = () => {
+    const [userLogged, setUserLogged] = useState(null)
+
+    const [selectedMethod, setSelectedMethod] = useState('COD')
+    const [fullName, setFullName] = useState('')
+    const [email, setEmail] = useState('')
+    const [phone, setPhone] = useState('')
+    const [street, setStreet] = useState('')
+    const [note, setNote] = useState('')
     const [provinces, setProvinces] = useState<Province[]>([]);
     const [province, setProvince] = useState<Province | null>(null);
     const [districts, setDistricts] = useState<District[]>([]);
@@ -33,7 +49,12 @@ const Checkout: React.FC = () => {
     const [provinceId, setProvinceId] = useState<string>("");
     const [districtId, setDistrictId] = useState<string>("");
     const [wardId, setWardId] = useState<string>("");
+    const [discountCode, setDiscountCode] = useState('')
+    const [discountPrice, setDiscountPrice] = useState(0)
+    const [provisionalAmount, setProvisionalAmount] = useState(0)
     const [shippingCost, setShippingCost] = useState<number>(0);
+    const [totalMoney, setTotalMoney] = useState(0)
+
 
     useEffect(() => {
         fetchDataProvince();
@@ -79,6 +100,10 @@ const Checkout: React.FC = () => {
         }
     };
 
+    const formatToVNPrice = (price: any) => {
+        return price.toLocaleString('vi-VN') + 'đ';
+    }
+
     const handleOnChangeWard = async (wardCode: string) => {
         setWardId(wardCode);
         const selected = wards.find((ward) => ward.WardCode === wardCode) || null;
@@ -90,10 +115,70 @@ const Checkout: React.FC = () => {
         )
     };
 
-    const formatToVNPrice = (price: any) => {
-        return price.toLocaleString('vi-VN') + 'đ';
+    const handleOnClickCheckout = async (e: any) => {
+        e.preventDefault()
+        const data = {
+            // "userId": userLogged && userLogged !== null ? userLogged.id : 0,
+            "fullName": fullName,
+            "email": email,
+            "phone": phone,
+            "address": `${street} ${ward?.WardName} ${district?.DistrictName} ${province?.ProvinceName}`,
+            "paymentMethod": selectedMethod,
+            "paymentStatus": false,
+            "note": note,
+            "shippingCost": shippingCost,
+            "totalAmount": totalMoney,
+            "products": cart.cartItems.map((item) => ({
+                id: item.id,
+                title: item.title,
+                price: item.currentPrice,
+                quantity: item.cartTotal
+            }))
+        }
+        console.log(data)
+
+        switch (selectedMethod){
+            case 'COD':
+                try {
+                    const response = await axios.post<OrderDto>('http://localhost:8080/api/v1/order/cod', data)
+                    console.log(response)
+                } catch (e) {
+                    console.log(e)
+                }
+                break
+
+        }
     }
 
+    const dispatch = useDispatch();
+    const cart = useSelector((state: RootState) => state.carts)
+    // const cartItems = useSelector( (state: RootState)=> state.carts.cartItems)
+    const handleRemoveFromCart = (cartItem: Product) => {
+        dispatch(removeFromCart(cartItem))
+    }
+    const handleDecreaseCart = (cartItem: Product) => {
+        dispatch(decreaseCart(cartItem))
+    }
+    const handleIncreaseCart = (cartItem: Product) => {
+        dispatch(addToCart(cartItem))
+    }
+    useEffect(() => {
+        dispatch(getTotals())
+    }, [cart])
+
+    useEffect(() => {
+        // let totalAmount = 0
+        // cart.cartItems.forEach((item, index) => {
+        //     totalAmount += item.currentPrice * item.quantity
+        // })
+        // console.log(totalAmount)
+        setProvisionalAmount(cart.cartTotalAmount)
+    }, [cart]);
+
+
+    useEffect(() => {
+        setTotalMoney(provisionalAmount + shippingCost - discountPrice)
+    }, [discountPrice, provisionalAmount, shippingCost]);
 
     return (
         <>
@@ -122,18 +207,57 @@ const Checkout: React.FC = () => {
                     <div className="main_info">
                         <h3>Thông tin giao hàng</h3>
                         <div className="full-type">
-                            <label>Họ và tên<span className="notice">*</span></label>
-                            <input type="text" className="full_input"/>
+                            <TextField
+                                required
+                                id={'fullName'}
+                                label={'Họ và Tên'}
+                                name={'fullName'}
+                                variant={'outlined'}
+                                size={'small'}
+                                className={"info_name"}
+                                value={fullName}
+                                onChange={e => setFullName(e.target.value)}
+                            />
                         </div>
                         <div className="half_section">
                             <div className="half_input">
-                                <label>Email<span className="notice">*</span></label>
-                                <input type="text" className="info_name"/>
+                                <TextField
+                                    id={'email'}
+                                    label={'Email'}
+                                    name={'fullName'}
+                                    variant={'outlined'}
+                                    size={'small'}
+                                    className={"half"}
+                                    value={email}
+                                    onChange={e => setEmail(e.target.value)}
+                                />
                             </div>
                             <div className="half_input">
-                                <label>Số điện thoại<span className="notice">*</span></label>
-                                <input type="text" className="info_name"/>
+                                <TextField
+                                    required
+                                    id={'phone'}
+                                    label={'Số điện thoại'}
+                                    name={'phone'}
+                                    variant={'outlined'}
+                                    size={'small'}
+                                    className={"half"}
+                                    value={phone}
+                                    onChange={e => setPhone(e.target.value)}
+                                />
                             </div>
+                        </div>
+                        <div className="full-type">
+                            <TextField
+                                required
+                                id={'street'}
+                                label={'Số nhà và tên đường'}
+                                name={'street'}
+                                variant={'outlined'}
+                                size={'small'}
+                                className={"info_name"}
+                                value={street}
+                                onChange={e => setStreet(e.target.value)}
+                            />
                         </div>
                         <div className="half_section">
                             <div className="half_input">
@@ -228,44 +352,95 @@ const Checkout: React.FC = () => {
                     <div className="note_info">
                         <h3>Thông tin ghi thích thêm</h3>
                         <label>Ghi chú đơn hàng</label>
-                        <input type="text" className="note_input"
-                               placeholder="Vui lòng điền thêm ghi chú về đơn hàng của bạn!"/>
+                        <TextField
+                            id={'note'}
+                            label={'Vui lòng nhập ghi chú tại đây!'}
+                            name={'note'}
+                            variant={'outlined'}
+                            size={'small'}
+                            className={"info_name"}
+                            value={note}
+                            onChange={e => setNote(e.target.value)}
+                        />
                     </div>
                 </div>
                 <div className="order_info">
                     <h3>Đơn hàng của bạn</h3>
                     <div className="table_order">
                         <div className="table_title">
+                            <h4></h4>
                             <h4>Tên sản phẩm</h4>
-                            <h4>Giá tiền</h4>
+                            <h4 className={"first_title"}>Giá tiền</h4>
+                            <h4>Số lượng</h4>
+                            <h4 className={"total_price_title"}>Thành tiền</h4>
                         </div>
-                        <div className="table_product">
-                            <div className="products">
-                                <div className="product">
-                                    <p className="book_name">The Book Of Love</p>
-                                    <p className="quantity_text">x 1</p>
-                                </div>
-                                <div className="product_price">
-                                    <p className="price">300.000</p>
-                                    <p className="currency">VND</p>
+
+                        {/*<div className="table_product">*/}
+                        {/*    <div className="product-items">*/}
+                        {/*        <div className="product">*/}
+                        {/*            <p className="book_name">The Book Of Love</p>*/}
+                        {/*            <p className="quantity_text">x 1</p>*/}
+                        {/*        </div>*/}
+                        {/*        <div className="product_price">*/}
+                        {/*            <p className="price">300.000</p>*/}
+                        {/*            <p className="currency">VND</p>*/}
+                        {/*        </div>*/}
+                        {/*    </div>*/}
+                        {/*    <div className={"shipping_fee"}>*/}
+                        {/*        <p>Phí giao hàng:</p>*/}
+                        {/*        {*/}
+                        {/*            (shippingCost && shippingCost > 0) ?*/}
+                        {/*                <p>{formatToVNPrice(shippingCost)}</p>*/}
+                        {/*                : <p>0đ</p>*/}
+                        {/*        }*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
+
+                        {cart.cartItems.map(item =>
+                            <div className="row border-top border-bottom">
+                                <div className="row main align-items-center">
+                                    <div className="col-2">
+                                        {item.image && <img className="img-fluid"
+                                                            src={item.image} alt=""/>}
+
+                                    </div>
+                                    <div className="col">
+                                        {/*<div className="row text-muted">{item.}</div>*/}
+                                        <div className="row">{item.title}</div>
+                                    </div>
+                                    <div className="col text-center">
+                                        {item.currentPrice}₫
+                                    </div>
+                                    <div className="col">
+                                        <FaMinus onClick={() => handleDecreaseCart(item)}/>
+                                        <a href="#" className="border text-black text-decoration-none ms-3 me-3">
+                                            {item.cartTotal}
+                                        </a>
+                                        <FaPlus onClick={() => handleIncreaseCart(item)}/>
+                                    </div>
+                                    <div className="col"> {item.cartTotal * item.currentPrice}₫
+                                        <span className="close float-end" onClick={() => handleRemoveFromCart(item)}>
+                                            &#10005;
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                            <div className={"shipping_fee"}>
-                                <p>Phí giao hàng:</p>
-                                {
-                                    (shippingCost && shippingCost > 0) ?
-                                        <p>{formatToVNPrice(shippingCost)}</p>
-                                        : <p>0đ</p>
-                                }
-                            </div>
+                        )}
+                        <div className={"shipping_fee"}>
+                            <p>Phí giao hàng:</p>
+                            {
+                                (shippingCost && shippingCost > 0) ?
+                                    <p className="shipping_price">{formatToVNPrice(shippingCost)}</p>
+                                    : <p>0đ</p>
+                            }
                         </div>
                         <div className="total">
                             <div className="title_sum">
                                 <h4>Tổng cộng</h4>
                             </div>
                             <div className="price_total">
-                                <p className="price">300.000</p>
-                                <p className="currency">VND</p>
+                                <p className="price">{formatToVNPrice(totalMoney)}</p>
+                                {/*<p className="currency">VND</p>*/}
                             </div>
                         </div>
                     </div>
@@ -273,16 +448,28 @@ const Checkout: React.FC = () => {
                 <div className="payment">
                     <div className="option">
                         <div className="method">
-                            <input type="radio"/>
-                            <p>Thanh toán qua ngân hàng</p>
+                            <input
+                                type="radio"
+                                id={"cod"}
+                                value={"COD"}
+                                checked={selectedMethod === "COD"}
+                                onChange={e => setSelectedMethod(e.target.value)}
+                            />
+                            <p>Thanh toán khi nhận hàng</p>
                         </div>
                         <div className="method">
-                            <input type="radio"/>
-                            <p>Thanh toán khi nhận hàng</p>
+                            <input
+                                type="radio"
+                                id={"VNPay"}
+                                value={"VNPay"}
+                                checked={selectedMethod === "VNPay"}
+                                onChange={e => setSelectedMethod(e.target.value)}
+                            />
+                            <p>Thanh toán với VN Pay</p>
                         </div>
                     </div>
                     <div className="place_order">
-                        <input type="submit" className="order_button" value="Đặt hàng"/>
+                        <input onClick={handleOnClickCheckout} type="submit" className="order_button" value="Đặt hàng"/>
                     </div>
                 </div>
             </div>

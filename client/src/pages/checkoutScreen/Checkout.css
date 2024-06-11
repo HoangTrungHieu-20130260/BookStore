@@ -3,9 +3,13 @@
     color: white;
 }
 
+.checkout_title{
+    margin-left: 46%;
+}
+
 .title{
     font-size: 30px;
-    text-align: center;
+    text-align: right;
 }
 
 
@@ -112,6 +116,7 @@
     display: flex;
     flex-direction: column;
     padding: 10px 0px;
+    width: 90%;
 }
 
 .full-type label{
@@ -124,6 +129,10 @@
     margin-right: 60px;
     height: 25px;
     border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.half{
+    width: 80%;
 }
 
 .note_info{
@@ -163,17 +172,17 @@
     padding-left: 20px;
     padding-bottom: 10px;
     font-size: 18px;
-    flex-basis: 50%;
+    flex-basis: 15%;
 }
 
-.products{
+.product-items{
     display: flex;
     height: 50px;
     border-bottom: 1px solid rgba(0, 0, 0, .1);
     margin-top: 10px;
 }
 
-.products div{
+.product-items div{
     flex-basis: 50%;
 }
 
@@ -233,6 +242,12 @@
 .method{
     display: flex;
     margin-left: 10px;
+    width: 20%;
+}
+
+.method p{
+    margin-top: 10px;
+    margin-left: 5px;
 }
 
 .order_button{
@@ -254,6 +269,21 @@
 }
 
 .shipping_fee p{
-    margin-left: 20px;
+    font-weight: bold;
+    margin-left: 65px;
     flex-basis: 50%;
 }
+
+.first_title{
+    margin-left: 140px;
+}
+
+.total_price_title{
+    margin-left: 40px;
+}
+
+.price{
+    font-weight: bold;
+    margin-left: 50px;
+}
+
