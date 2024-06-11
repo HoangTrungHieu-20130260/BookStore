@@ -397,7 +397,7 @@ const Checkout: React.FC = () => {
                         {/*</div>*/}
 
                         {cart.cartItems.map(item =>
-                            <div className="row border-top border-bottom">
+                            <div className="item_cart">
                                 <div className="row main align-items-center">
                                     <div className="col-2">
                                         {item.image && <img className="img-fluid"
