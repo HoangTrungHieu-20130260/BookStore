@@ -1,6 +1,8 @@
 package com.springboot.bookstore.service.serviceImpl;
 
+import com.springboot.bookstore.entity.Category;
 import com.springboot.bookstore.entity.Product;
+import com.springboot.bookstore.repository.CategoryRepository;
 import com.springboot.bookstore.repository.ProductRepository;
 import com.springboot.bookstore.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +18,11 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
+    private CategoryRepository categoryRepository;
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -64,5 +68,25 @@ public class ProductServiceImpl implements ProductService {
         result.setUpdatedAt(LocalDateTime.now());
         result = productRepository.save(result);
         return result;
+    }
+    @Override
+    public Product createProduct(Product product) {
+        Product result = new Product();
+        Category category = categoryRepository.findById(product.getCategory().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+
+        result.setTitle(product.getTitle());
+        result.setCategory(category);
+        result.setImage(product.getImage());
+        result.setOldPrice(product.getOldPrice());
+        result.setCurrentPrice(product.getCurrentPrice());
+        result.setQuantity(product.getQuantity());
+        result.setDescription(product.getDescription());
+        result.setAuthor(product.getAuthor());
+        result.setPublisher(product.getPublisher());
+        result.setPublishYear(product.getPublishYear());
+        result.setCreatedAt(LocalDateTime.now());
+        result.setActive(true);
+        return productRepository.save(result);
     }
 }

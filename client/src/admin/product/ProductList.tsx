@@ -1,5 +1,15 @@
 import React from "react";
-import {BooleanField, Datagrid, DateField, EditButton, ImageField, List, NumberField, TextField} from 'react-admin';
+import {
+    BooleanField,
+    Datagrid,
+    DateField,
+    DeleteButton,
+    EditButton,
+    ImageField,
+    List,
+    NumberField,
+    TextField
+} from 'react-admin';
 
 export const ProductList = () => (
     <List>
@@ -14,6 +24,7 @@ export const ProductList = () => (
             <DateField source="createdAt" />
             <BooleanField source="active" />
             <EditButton/>
+            <DeleteButton/>
         </Datagrid>
     </List>
 );

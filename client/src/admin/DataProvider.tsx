@@ -44,15 +44,26 @@ export const dataProvider: DataProvider = {
 
     // @ts-ignore
     create: async (resource: any, params: any) => {
+        if(resource === 'product') {
+            if (params.data.image && params.data.image.rawFile) {
+                // Upload image to imgBB
+                const imageUrl = await imgUpload(params.data.image);
+                params.data.image = imageUrl;
+            }
+            const {data: category} = await dataProvider.getOne('category', params.data.category);
+            params.data.category = category;
+            const { json } = await httpClient(`${apiUrl}/${resource}`, {
+                method: 'POST', // or 'PATCH' depending on your API
+                body: JSON.stringify(params.data),
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+
+            });
+            return { data: json };
+        }
     }
-    // catch (error: any) {
-    //     if (error.status === 401) {
-    //         // @ts-ignore
-    //         authProvider.logout().then(r => console.log(r));
-    //         window.location.href = '/#/login';
-    //     }
-    // }
-    // }
     ,
     // @ts-ignore
     update: async (resource: any, params: any) => {

@@ -42,4 +42,8 @@ public class ProductController {
     public ResponseEntity<Product> updateProduct(@PathVariable int id, @RequestBody Product product) {
         return ResponseEntity.ok(productService.updateProduct(id, product));
     }
+    @PostMapping
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+        return ResponseEntity.ok(productService.createProduct(product));
+    }
 }
