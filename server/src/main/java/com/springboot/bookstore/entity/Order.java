@@ -1,5 +1,6 @@
 package com.springboot.bookstore.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,11 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "full_name")
     private String fullName;
@@ -47,12 +53,8 @@ public class Order {
 
      @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
      @OneToOne(fetch = FetchType.LAZY)
-     @JoinColumn(name = "discount_code_id", referencedColumnName = "id", nullable = false)
+     @JoinColumn(name = "discount_code_id", referencedColumnName = "id")
      private DiscountCode discountCode;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private OrderStatus status;
 
      @Column(name = "shipping_cost")
      private double shipping_cost;
@@ -63,4 +65,9 @@ public class Order {
      @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
      @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
      private List<OrderDetails> orderDetails;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_status_id", referencedColumnName = "id", nullable = false)
+    private OrderStatus orderStatus;
 }
