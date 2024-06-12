@@ -1,17 +1,24 @@
 package com.springboot.bookstore.service.serviceImpl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.bookstore.entity.Category;
 import com.springboot.bookstore.entity.Product;
 import com.springboot.bookstore.repository.CategoryRepository;
 import com.springboot.bookstore.repository.ProductRepository;
 import com.springboot.bookstore.service.ProductService;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,14 +33,43 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> findAll(int page, int size,String sortBy, String sortDir) {
+    public Page<Product> findAll(int page, int size,String sortBy, String sortDir, String filter) {
         Sort.Direction direction = Sort.Direction.ASC;
         if (sortDir.equalsIgnoreCase("desc")) {
             direction = Sort.Direction.DESC;
         }
-        Sort sortPa = Sort.by(direction, sortBy);
-        Pageable pageable = PageRequest.of(page, size, sortPa);
-        return productRepository.findAll(pageable);
+
+        JsonNode filterJson;
+        try {
+            filterJson = new ObjectMapper().readTree(java.net.URLDecoder.decode(filter, StandardCharsets.UTF_8));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        Specification<Product> specification = (root, query, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.conjunction();
+            if (filterJson.has("q")) {
+
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("title"), "%" + filterJson.get("q").asText().toLowerCase() + "%"));
+            }
+            if (filterJson.has("status")) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("active"), filterJson.get("status").asBoolean()));
+            }
+            if (filterJson.has("category")) {
+                Join<Product, Category> categoryJoin = root.join("category");
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(categoryJoin.get("id"), filterJson.get("category").asLong()));
+            }
+            return predicate;
+        };
+        return switch (sortBy) {
+            case "current_price" ->
+                    productRepository.findAll(specification, PageRequest.of(page, size, Sort.by(direction, "price")));
+            case "title" ->
+                    productRepository.findAll(specification, PageRequest.of(page, size, Sort.by(direction, "title")));
+            case "status" ->
+                    productRepository.findAll(specification, PageRequest.of(page, size, Sort.by(direction, "status")));
+            default ->
+                    productRepository.findAll(specification, PageRequest.of(page, size, Sort.by(direction, sortBy)));
+        };
     }
 
     @Override

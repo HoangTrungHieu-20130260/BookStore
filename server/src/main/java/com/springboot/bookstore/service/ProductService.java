@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public interface ProductService {
-    Page<Product> findAll(int page, int size,String sortBy, String sortDir);
+    Page<Product> findAll(int page, int size,String sortBy, String sortDir, String filter);
     List<Product> getAllProducts();
     Product findById(int id);
     void deleteProduct(int id);

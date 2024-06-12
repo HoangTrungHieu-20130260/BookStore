@@ -14,6 +14,7 @@ export const dataProvider: DataProvider = {
             sortDir: order, // Thứ tự sắp xếp
             page: page -1,
             size: perPage,
+            filter: JSON.stringify(fetchUtils.flattenObject(params.filter)),
         };
         const {json} = await httpClient(`${apiUrl}/${resource}?${fetchUtils.queryParameters(query)}`, {
             method: 'GET',
