@@ -1,11 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { TextField} from "@mui/material";
-// @ts-ignore
-import {makeStyles} from '@mui/styles';
 
-// components
-// import HeaderComponent from "../../components/Header/HeaderComponent";
-// import FooterComponent from "../../components/Footer/FooterComponent";
 // icons
 import {FaPen, FaRegUser} from "react-icons/fa";
 import {BiPurchaseTag} from "react-icons/bi";
@@ -17,17 +12,17 @@ import IMG from '../../images/Avatar/up fb.jpg'
 import AccountDetails from "./AccountDetails";
 import axios from "axios";
 // import AccountDetailContentComponent from "../../components/AccountDetailContent/AccountDetailContentComponent";
-
-const useStyles = makeStyles({
-    root: {
-        '& .MuiInputLabel-root': {
-            fontSize: '14px'
-        },
-        '& .MuiInputBase-input': {
-            fontSize: '14px',
-        },
-    }
-});
+//
+// const useStyles = makeStyles({
+//     root: {
+//         '& .MuiInputLabel-root': {
+//             fontSize: '14px'
+//         },
+//         '& .MuiInputBase-input': {
+//             fontSize: '14px',
+//         },
+//     }
+// });
 
 
 

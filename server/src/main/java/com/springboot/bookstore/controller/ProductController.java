@@ -22,8 +22,9 @@ public class ProductController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
-        return productService.findAll(page, size, sortBy,sortDir);
+            @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(defaultValue = "") String filter) {
+        return productService.findAll(page, size, sortBy,sortDir,filter);
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable int id) {
@@ -41,5 +42,9 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable int id, @RequestBody Product product) {
         return ResponseEntity.ok(productService.updateProduct(id, product));
+    }
+    @PostMapping
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+        return ResponseEntity.ok(productService.createProduct(product));
     }
 }

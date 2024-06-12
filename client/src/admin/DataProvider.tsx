@@ -14,6 +14,7 @@ export const dataProvider: DataProvider = {
             sortDir: order, // Thứ tự sắp xếp
             page: page -1,
             size: perPage,
+            filter: JSON.stringify(fetchUtils.flattenObject(params.filter)),
         };
         const {json} = await httpClient(`${apiUrl}/${resource}?${fetchUtils.queryParameters(query)}`, {
             method: 'GET',
@@ -44,15 +45,42 @@ export const dataProvider: DataProvider = {
 
     // @ts-ignore
     create: async (resource: any, params: any) => {
+        if(resource === 'product') {
+            if (params.data.image && params.data.image.rawFile) {
+                // Upload image to imgBB
+                const imageUrl = await imgUpload(params.data.image);
+                params.data.image = imageUrl;
+            }
+            const {data: category} = await dataProvider.getOne('category', params.data.category);
+            params.data.category = category;
+            const { json } = await httpClient(`${apiUrl}/${resource}`, {
+                method: 'POST', // or 'PATCH' depending on your API
+                body: JSON.stringify(params.data),
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+
+            });
+            return { data: json };
+        }
+        if (resource === 'category') {
+            console.log(params.data.parentCategory)
+            if (params.data.parentCategory.id === null || params.data.parentCategory.id === undefined ) {
+                params.data.parentCategory = null
+            }
+            const { json } = await httpClient(`${apiUrl}/${resource}`, {
+                method: 'POST',
+                body: JSON.stringify(params.data),
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+
+            });
+            return { data: json };
+        }
     }
-    // catch (error: any) {
-    //     if (error.status === 401) {
-    //         // @ts-ignore
-    //         authProvider.logout().then(r => console.log(r));
-    //         window.location.href = '/#/login';
-    //     }
-    // }
-    // }
     ,
     // @ts-ignore
     update: async (resource: any, params: any) => {
@@ -65,12 +93,26 @@ export const dataProvider: DataProvider = {
             }
 
             const { json } = await httpClient(`${apiUrl}/${resource}/${id}`, {
-                method: 'PUT', // or 'PATCH' depending on your API
+                method: 'PUT',
                 headers: new Headers({
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
                 }),
                 body: JSON.stringify(data),
+            });
+            return { data: json };
+        }
+        if (resource === 'category') {
+            if (params.data.parentCategory.id === null) {
+                params.data.parentCategory = null
+            }
+            const { json } = await httpClient(`${apiUrl}/${resource}/${params.id}`, {
+                method: 'PUT',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+                body: JSON.stringify(params.data),
             });
             return { data: json };
         }
