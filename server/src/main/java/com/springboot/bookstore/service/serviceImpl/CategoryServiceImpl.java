@@ -52,6 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Category updateCategory(int id, Category category) {
         Category result = categoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+        result.setParentCategory(category.getParentCategory());
         result.setName(category.getName());
         result.setUpdatedAt(LocalDateTime.now());
         result.setActive(category.getActive());

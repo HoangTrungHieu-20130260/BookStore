@@ -16,7 +16,7 @@ export const ProductEdit = () => {
 
     const [categories, setCategories] = useState<Category[]>([])
     const {data: listCategory} = useGetList('category', {
-        pagination: { page: 1, perPage: 25 },
+        pagination: { page: 1, perPage: 100 },
         sort: { field: 'id', order: 'ASC' },
     })
 
@@ -54,8 +54,6 @@ export const ProductEdit = () => {
                 <TextInput source="author"/>
                 <TextInput source="publisher"/>
                 <NumberInput source="publishYear"/>
-                <DateInput source="createdAt"/>
-                <TextInput source="updatedAt"/>
                 <BooleanInput source="active"/>
             </SimpleForm>
         </Edit>

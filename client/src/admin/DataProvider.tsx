@@ -63,6 +63,22 @@ export const dataProvider: DataProvider = {
             });
             return { data: json };
         }
+        if (resource === 'category') {
+            console.log(params.data.parentCategory)
+            if (params.data.parentCategory.id === null || params.data.parentCategory.id === undefined ) {
+                params.data.parentCategory = null
+            }
+            const { json } = await httpClient(`${apiUrl}/${resource}`, {
+                method: 'POST',
+                body: JSON.stringify(params.data),
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+
+            });
+            return { data: json };
+        }
     }
     ,
     // @ts-ignore
@@ -76,12 +92,26 @@ export const dataProvider: DataProvider = {
             }
 
             const { json } = await httpClient(`${apiUrl}/${resource}/${id}`, {
-                method: 'PUT', // or 'PATCH' depending on your API
+                method: 'PUT',
                 headers: new Headers({
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
                 }),
                 body: JSON.stringify(data),
+            });
+            return { data: json };
+        }
+        if (resource === 'category') {
+            if (params.data.parentCategory.id === null) {
+                params.data.parentCategory = null
+            }
+            const { json } = await httpClient(`${apiUrl}/${resource}/${params.id}`, {
+                method: 'PUT',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+                body: JSON.stringify(params.data),
             });
             return { data: json };
         }
