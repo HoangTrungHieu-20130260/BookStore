@@ -1,11 +1,9 @@
-.accountDetailContentContainer{
+.accountDetailContentContainer {
     position: relative;
 }
 
 accountDetailContentWrapper {
-    height: 420px;
     height: auto;
-    /*position: relative;*/
 }
 
 .accountDetailContentWrapper .title {
@@ -53,7 +51,6 @@ accountDetailContentWrapper {
     text-align: right;
     margin-right: 20px;
     font-size: 14px;
-    font-weight: bold;
     color: var(--color-silver);
 }
 
@@ -93,18 +90,15 @@ accountDetailContentWrapper {
 }
 
 .accountDetailContentWrapper .profileWrapper .editForm .saveBtn {
-    margin-top: 20px;
-    background-color: #27ae61;
-    color: white;
-    text-transform: uppercase;
-    font-weight: 600;
-    border-radius: 3px;
-    border: none;
-    cursor: pointer;
-    width: 120px;
-    height: 30px;
-    margin-left: 15px;
-    text-align: center;
+    background: var(--color-black);
+    color: var(--color-silver-white);
+    font-size: 14px;
+    padding: 5px 10px;
+    width: 100px;
+    border-radius: 4px;
+    margin-top: 10px;
+    border: 1px solid var(--color-black);
+    transition: all .3s;
 }
 
 .accountDetailContentWrapper .profileWrapper .editForm .saveBtn:hover {
@@ -133,6 +127,24 @@ accountDetailContentWrapper {
     overflow: hidden;
     border-radius: 9999px;
     margin-bottom: 20px;
+    position: relative;
+}
+
+.accountDetailContentWrapper .profileWrapper .editAvatar .avatarWrapper .uploadAvatarLoading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.accountDetailContentWrapper .profileWrapper .editAvatar .avatarWrapper .uploadAvatarLoading .icon {
+    font-size: 20px;
+    animation: spin 2s linear infinite;
 }
 
 .accountDetailContentWrapper .profileWrapper .editAvatar .avatarWrapper img {
@@ -146,18 +158,14 @@ accountDetailContentWrapper {
 }
 
 .accountDetailContentWrapper .profileWrapper .editAvatar label {
-    background-color: #27ae61;
-    color: white;
-    text-transform: uppercase;
-    font-weight: 500;
-    border-radius: 3px;
-    border: none;
-    cursor: pointer;
+    border: 1px solid #dadada;
     width: 100px;
-    height: 30px;
-    margin-left: 10px;
-    padding-top: 3px;
+    padding: 5px 10px;
     text-align: center;
+    font-size: 14px;
+    color: var(--color-black);
+    transition: all .3s;
+    cursor: pointer;
 }
 
 .accountDetailContentWrapper .profileWrapper .editAvatar label:hover {
@@ -194,8 +202,8 @@ accountDetailContentWrapper {
 }
 
 .addressContainer .headerAddress .addAddressBtn:hover {
-    background: var(--color-black);
-    color: var(--color-silver-white);
+    background: #27ae61;
+    color: white;
 }
 
 .addressContainer .addressListWrapper {
@@ -228,6 +236,14 @@ accountDetailContentWrapper {
     border-right: 1px solid var(--color-silver);
     border-bottom: 0;
 }
+
+/*.addressContainer .addressListWrapper .addressList .addressItem .addressInfo .fullNamePhone h3 {*/
+/*    font-size: 16px;*/
+/*    color: var(--color-silver);*/
+/*    padding-left: 10px;*/
+/*    margin-bottom: 0;*/
+/*    font-weight: normal;*/
+/*}*/
 
 .addressContainer .addressListWrapper .addressList .addressItem .addressInfo .fullNamePhone h3:last-child {
     border: none;
@@ -267,17 +283,17 @@ accountDetailContentWrapper {
 }
 
 .addressContainer .addressListWrapper .addressList .addressItem .addressAction .updateAddress:hover {
-    color: var(--color-silver);
-    text-decoration: underline;
+    color: #27ae61;
+    font-weight: bolder;
 }
 
 .addressContainer .addressListWrapper .addressList .addressItem .addressAction .setDefaultAddress {
-    padding: 5px 10px;
+    margin-left: 5px;
 }
 
 .addressContainer .addressListWrapper .addressList .addressItem .addressAction .setDefaultAddress:hover {
-    background: var(--color-black);
-    color: var(--color-silver-white);
+    color: #27ae61;
+    font-weight: bolder;
 }
 
 .addressContainer .addressListWrapper .addressList .addressItem .addressAction .defaulted {
@@ -315,7 +331,6 @@ accountDetailContentWrapper {
 .changePasswordContainer .changePasswordWrapper form .passwordControl label {
     font-family: var(--font-family-sans-serif);
     font-size: 16px;
-    font-weight: bold;
     color: var(--color-silver);
     margin-right: 20px;
     width: 40%;
@@ -330,8 +345,7 @@ accountDetailContentWrapper {
 }
 
 .changePasswordContainer .changePasswordWrapper form .passwordControl .inputWrapper input {
-    border: 1px solid black;
-    border-radius: 5px;
+    border: none;
     background: none;
     outline: none;
     padding: 5px 10px;
@@ -359,7 +373,7 @@ accountDetailContentWrapper {
     align-items: center;
 }
 
-.changePasswordContainer .changePasswordWrapper form .changePassBtn{
+.changePasswordContainer .changePasswordWrapper form .changePassBtn {
     border: none;
     padding: 5px 10px;
     font-size: 14px;
@@ -422,16 +436,52 @@ accountDetailContentWrapper {
     padding: 10px;
 }
 
-.purchaseOrderContainer .orderContainer {
+.purchaseOrderContainer .orderUserContainer {
+    height: 500px;
+    overflow-y: scroll;
+    position: relative;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper {
+.purchaseOrderContainer .orderUserContainer::-webkit-scrollbar {
+    width: 6px;
+    display: none;
+}
+
+.purchaseOrderContainer .orderUserContainer .orderLoader {
+    position: sticky;
+    top: 0;
+    left: 0;
+    /*background: rgba(0, 0, 0, 0.8);*/
+    background-color: #fff;;
+    width: 100%;
+    min-height: 500px;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+}
+
+.purchaseOrderContainer .orderUserContainer .orderLoader .icon {
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper {
     background: #FFFFFF;
     padding: 20px;
     margin-bottom: 20px;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderHeader {
     padding: 10px;
     border-bottom: 1px solid #dadada;
     display: flex;
@@ -439,23 +489,26 @@ accountDetailContentWrapper {
     align-items: center;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader .orderStatus {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderHeader .orderId {
+    font-weight: 500;
+}
+
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderHeader .orderStatus {
     display: flex;
     align-items: center;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader .orderStatus .detail {
-    font-size: 14px;
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderHeader .orderStatus span {
+    font-size: 16px;
     font-family: var(--font-family-sans-serif);
-    font-weight: 400;
+    font-weight: 500;
     color: #26aa99;
     display: flex;
     align-items: center;
     padding: 0 10px;
-    border-right: 1px solid var(--color-silver);
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader .orderStatus .status {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderHeader .orderStatus .status {
     text-transform: uppercase;
     font-size: 14px;
     color: red;
@@ -463,62 +516,87 @@ accountDetailContentWrapper {
 }
 
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts {
     padding: 10px;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct {
+.orderProduct {
     display: flex;
+    align-items: center;
     padding: 10px;
+    justify-content: space-between;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .imgWrapper {
+.orderProduct .info {
+    display: flex;
+    align-items: center;
+}
+
+.orderProducts .ratingButtonContainer {
+
+}
+
+.orderProducts .ratingButtonContainer .ratingButton {
+    font-weight: bold;
+    color: var(--color-black);
+    border: none;
+    background: none;
+    transition: all .3s;
+}
+
+.orderProducts .ratingButtonContainer .ratingButton:hover {
+    color: var(--color-silver);
+}
+
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .imgWrapper {
     width: 100px;
     height: 100px;
     overflow: hidden;
     margin-right: 10px;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .imgWrapper img {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .imgWrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .contentWrapper {
     display: flex;
     flex-direction: column;
     line-height: 2;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .nameProduct {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .contentWrapper .nameProduct {
     font-size: 16px;
     font-family: var(--font-family-sans-serif);
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .colorSize {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .contentWrapper .colorSize {
     font-size: 14px;
     font-family: var(--font-family-sans-serif);
     color: var(--color-silver);
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .price .oldPrice,
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .price .newPrice {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .contentWrapper .price .oldPrice,
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .contentWrapper .price .newPrice {
     font-size: 16px;
     font-family: var(--font-family-sans-serif);
+    color: red;
+    font-weight: 500;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .price .oldPrice {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .contentWrapper .price .oldPrice {
     margin-right: 10px;
     color: var(--color-silver);
     text-decoration: line-through;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .action {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .action {
     text-align: right
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .action button {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .action button {
     width: 150px;
     font-size: 14px;
     font-weight: bold;
@@ -528,9 +606,24 @@ accountDetailContentWrapper {
     color: #FFFFFF;
     border-radius: 4px;
     transition: all .3s;
+    margin-right: 10px;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .action button:hover {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .action button:hover{
     background: #FFFFFF;
     color: var(--color-black);
 }
+
+.avatar_button{
+    background-color: #2fd074;
+    color: white;
+    text-decoration-color: white;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+}
+
+
