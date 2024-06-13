@@ -1,5 +1,6 @@
 package com.springboot.bookstore.controller;
 
+import com.springboot.bookstore.dto.AddressDto;
 import com.springboot.bookstore.dto.UserDTO;
 import com.springboot.bookstore.entity.User;
 import com.springboot.bookstore.service.UserService;
@@ -51,6 +52,29 @@ public class UserController {
     @GetMapping("/get-data-user")
     public ResponseEntity<?> fecthDataUser (@RequestParam String token){
         return userService.getDataUser(token);
+    }
+
+    @PostMapping("/user-details/edit")
+    public ResponseEntity<?> editDataUser(
+            @RequestBody UserDTO userDTO
+    ) {
+        return userService.editDataUser(userDTO);
+    }
+
+    @PostMapping("/user-details/add-new-address")
+    public ResponseEntity<?> addNewAddress(
+            @RequestParam String username,
+            @RequestBody AddressDto addressDto
+    ) {
+        return userService.addNewAddress(username, addressDto);
+    }
+
+    @PostMapping("/user-details/edit-address")
+    public ResponseEntity<?> editAddress(
+            @RequestParam String username,
+            @RequestBody AddressDto addressDto
+    ) {
+        return userService.editAddress(username, addressDto);
     }
 
 //    public Page<User> getAll(
