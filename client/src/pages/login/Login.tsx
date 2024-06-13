@@ -3,7 +3,7 @@ import "./Login.css";
 import '../../common/Common.css'
 import axios from "axios";
 import {CategoryResponse} from "../../models";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 function Login() {
     const [username, setUsername] = useState('')
@@ -85,8 +85,8 @@ function Login() {
                                     <input type={"submit"} className={"login_button"} value={"Đăng nhập"} onClick={e=>handleOnSubmit(e)}/>
                                 </div>
                                 <div className={"forgot"}>
-                                    {/*<Link to={""}>Quên mật khẩu?</Link>*/}
-                                    <p className={"link_forgot"}>Quên mật khẩu?</p>
+                                    <Link to={"/forgot"}><p className={"link_forgot"}>Quên mật khẩu?</p></Link>
+                                    <Link to={"/sign-up"}><p>Đăng kí</p></Link>
                                 </div>
                             </form>
                         </div>
