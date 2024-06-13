@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 @Service
@@ -45,6 +46,24 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(int id) {
         categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public Category updateCategory(int id, Category category) {
+        Category result = categoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+        result.setParentCategory(category.getParentCategory());
+        result.setName(category.getName());
+        result.setUpdatedAt(LocalDateTime.now());
+        result.setActive(category.getActive());
+        return categoryRepository.save(result);
+    }
+
+    @Override
+    public Category createCategory(Category category) {
+        category.setCreatedAt(LocalDateTime.now());
+        category.setActive(true);
+        return categoryRepository.save(category);
     }
 
     @Override
