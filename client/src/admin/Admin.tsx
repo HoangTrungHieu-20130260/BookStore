@@ -4,6 +4,10 @@ import {dataProvider} from "./DataProvider";
 import {UserList} from "./user/UserList";
 import {ProductList} from "./product/ProductList";
 import {ProductEdit} from "./product/ProductEdit";
+import {CategoryList} from "./category/CategoryList";
+import {ProductCreate} from "./product/ProductCreate";
+import {CategoryCreate} from "./category/CategoryCreate";
+import {CategoryEdit} from "./category/CategoryEdit";
 export const Manager = ()=> {
     return <Admin dataProvider={dataProvider} basename={"/admin"}>
         <Resource
@@ -15,12 +19,15 @@ export const Manager = ()=> {
             name={"product"}
             list={ProductList}
             show={ShowGuesser}
-            edit={ProductEdit}>
+            edit={ProductEdit}
+            create={ProductCreate}>
         </Resource>
         <Resource
             name={"category"}
-            list={ListGuesser}
-            show={ShowGuesser}>
+            list={CategoryList}
+            show={ShowGuesser}
+            edit={CategoryEdit}
+            create={CategoryCreate}>
         </Resource>
     </Admin>
 }

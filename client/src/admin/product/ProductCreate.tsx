@@ -1,22 +1,12 @@
-import {
-    BooleanInput,
-    DateInput,
-    Edit,
-    ImageField, ImageInput,
-    NumberInput,
-    SelectInput,
-    SimpleForm,
-    TextInput,
-    useGetList
-} from 'react-admin';
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
+import {Create, ImageField, ImageInput, NumberInput, SelectInput, SimpleForm, TextInput, useGetList} from "react-admin";
+import {RichTextInput} from "ra-input-rich-text";
 import {Category} from "../../models";
 
-export const ProductEdit = () => {
-
+export const ProductCreate = () => {
     const [categories, setCategories] = useState<Category[]>([])
     const {data: listCategory} = useGetList('category', {
-        pagination: { page: 1, perPage: 100 },
+        pagination: { page: 1, perPage: 25 },
         sort: { field: 'id', order: 'ASC' },
     })
 
@@ -25,12 +15,14 @@ export const ProductEdit = () => {
             setCategories(listCategory.filter(category => category.parentCategory !== null))
         }
     })
-    // const imageFile  = useWat({name: 'image'});
+
     return (
-        <Edit>
+        <Create>
             <SimpleForm>
-                <TextInput source="id"/>
-                {/*<NumberInput source="category.id"/>*/}
+                <TextInput source="title"/>
+                <ImageInput source="image" label={"Thêm ảnh mới"} accept="image/*">
+                    <ImageField source="src"/>
+                </ImageInput>
                 <SelectInput
                     source="category.id"
                     label="Danh mục"
@@ -40,22 +32,16 @@ export const ProductEdit = () => {
                     }))}
                     optionValue="id"
                     optionText="name"
-                    fullWidth
                 />
-                <TextInput source="title"/>
-                <ImageField source="image" label="Ảnh gốc"/>
-                <ImageInput source="image" label={"Thêm ảnh mới"} accept="image/*">
-                    <ImageField source="src"/>
-                </ImageInput>
-                <NumberInput source="oldPrice"/>
+                <RichTextInput source="description"/>
                 <NumberInput source="currentPrice"/>
                 <NumberInput source="quantity"/>
-                <TextInput source="description"/>
                 <TextInput source="author"/>
                 <TextInput source="publisher"/>
-                <NumberInput source="publishYear"/>
-                <BooleanInput source="active"/>
+                <NumberInput source="publish_year"/>
+
+
             </SimpleForm>
-        </Edit>
+        </Create>
     )
 };

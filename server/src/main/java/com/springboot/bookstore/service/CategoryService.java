@@ -15,6 +15,8 @@ public interface CategoryService {
     Page<Category> findAll(int page ,int size, String sortBy, String sortDir);
     Category findById(int id);
     void deleteCategory(int id);
+    Category updateCategory(int id, Category category);
+    Category createCategory(Category category);
 
     List<Category> findByParentCategoryIsNull();
     List<Category> findByParentCategoryIsNotNull();

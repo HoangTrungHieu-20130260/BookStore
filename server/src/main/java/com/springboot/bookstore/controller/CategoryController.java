@@ -37,6 +37,14 @@ public class CategoryController {
     public void deleteCategory(@PathVariable int id) {
         categoryService.deleteCategory(id);
     }
+    @PostMapping
+    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+        return ResponseEntity.ok(categoryService.createCategory(category));
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Category> updateCategory(@PathVariable int id, @RequestBody Category category) {
+        return ResponseEntity.ok(categoryService.updateCategory(id, category));
+    }
 
     @GetMapping("/get-parent-categories-is-null")
     public List<Category> findByParentCategoryIsNull() {
