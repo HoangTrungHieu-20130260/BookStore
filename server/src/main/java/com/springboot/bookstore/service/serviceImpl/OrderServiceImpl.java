@@ -1,14 +1,25 @@
 package com.springboot.bookstore.service.serviceImpl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.bookstore.dto.ProductsOrderDto;
 import com.springboot.bookstore.dto.OrderDto;
 import com.springboot.bookstore.entity.*;
 import com.springboot.bookstore.repository.*;
 import com.springboot.bookstore.service.OrderService;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 @Service
@@ -28,6 +39,50 @@ public class OrderServiceImpl implements OrderService {
         this.orderDetailsRepository = orderDetailsRepository;
         this.orderStatusRepository = orderStatusRepository;
         this.discountCodeRepository = discountCodeRepository;
+    }
+
+    @Override
+    public Page<Order> findAll(int page, int size, String sortBy, String sortDir, String filter) {
+        Sort.Direction direction = Sort.Direction.ASC;
+        if (sortDir.equalsIgnoreCase("desc")) {
+            direction = Sort.Direction.DESC;
+        }
+        Sort sortPa = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sortPa);
+        JsonNode filterJson;
+        try {
+            filterJson = new ObjectMapper().readTree(java.net.URLDecoder.decode(filter, StandardCharsets.UTF_8));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        Specification<Order> specification = (root, query, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.conjunction();
+            if (filterJson.has("q")) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(root.get("fullName"), "%" + filterJson.get("q").asText().toLowerCase() + "%"));
+            }
+            if (filterJson.has("payment_method")) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("payment_method"), filterJson.get("payment_method").asText()));
+            }
+            if (filterJson.has("payment_status")) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("payment_status"), filterJson.get("payment_status").asBoolean()));
+            }
+            if (filterJson.has("order_status")) {
+                Join<Order, OrderStatus> orderStatusJoin = root.join("orderStatus");
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(orderStatusJoin.get("id"), filterJson.get("order_status").asLong()));
+            }
+            return predicate;
+        };
+        return orderRepository.findAll(specification, pageable);
+    }
+
+    @Override
+    public Order findById(int id) {
+        return orderRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void deleteOrder(int id) {
+        orderRepository.deleteById(id);
     }
 
     @Override

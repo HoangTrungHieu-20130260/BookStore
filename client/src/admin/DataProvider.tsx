@@ -65,7 +65,6 @@ export const dataProvider: DataProvider = {
             return { data: json };
         }
         if (resource === 'category') {
-            console.log(params.data.parentCategory)
             if (params.data.parentCategory.id === null || params.data.parentCategory.id === undefined ) {
                 params.data.parentCategory = null
             }
@@ -78,6 +77,19 @@ export const dataProvider: DataProvider = {
                 }),
 
             });
+            return { data: json };
+        }else {
+            console.log(params.data)
+            const { json } = await httpClient(`${apiUrl}/${resource}`, {
+                method: 'POST',
+                body: JSON.stringify(params.data),
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+
+            });
+            window.location.href = `/admin/${resource}`
             return { data: json };
         }
     }

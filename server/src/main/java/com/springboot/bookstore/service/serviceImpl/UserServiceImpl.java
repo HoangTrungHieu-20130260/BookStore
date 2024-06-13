@@ -55,9 +55,9 @@ public class UserServiceImpl implements UserService {
         Sort sortPa = Sort.by(direction, sort);
         Pageable pageable = PageRequest.of(page, size, sortPa);
 
-        JsonNode jsonFilter;
+        JsonNode filterJson;
         try {
-            jsonFilter = new ObjectMapper().readTree(java.net.URLDecoder.decode(filter, StandardCharsets.UTF_8));
+            filterJson = new ObjectMapper().readTree(java.net.URLDecoder.decode(filter, StandardCharsets.UTF_8));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -65,9 +65,12 @@ public class UserServiceImpl implements UserService {
         Specification<User> specification = (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
 
-            if (jsonFilter.has("q")) {
-                String searchStr = jsonFilter.get("q").asText();
-                predicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("fullName")), "%" + searchStr.toLowerCase() + "%");
+            if (filterJson.has("q")) {
+                String searchStr = filterJson.get("q").asText();
+                predicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("full_name")), "%" + searchStr.toLowerCase() + "%");
+            }
+            if (filterJson.has("status")) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("status"), filterJson.get("status").asBoolean()));
             }
             return predicate;
         };
