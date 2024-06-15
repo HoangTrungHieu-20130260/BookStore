@@ -78,8 +78,14 @@ export const dataProvider: DataProvider = {
 
             });
             return { data: json };
+        }
+        if(resource === 'user') {
+            if (params.data.image && params.data.image.rawFile) {
+                // Upload image to imgBB
+                const imageUrl = await imgUpload(params.data.image);
+                params.data.image = imageUrl;
+            }
         }else {
-            console.log(params.data)
             const { json } = await httpClient(`${apiUrl}/${resource}`, {
                 method: 'POST',
                 body: JSON.stringify(params.data),
@@ -127,8 +133,18 @@ export const dataProvider: DataProvider = {
                 body: JSON.stringify(params.data),
             });
             return { data: json };
+        }
+        if (resource === 'user') {
+            const { json } = await httpClient(`${apiUrl}/${resource}/${params.id}`, {
+                method: 'PUT',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+                body: JSON.stringify(params.data),
+            });
+            return { data: { ...json.data, id: json.id } };
         } else {
-            console.log(params.data)
             const { json } = await httpClient(`${apiUrl}/${resource}/${params.id}`, {
                 method: 'PUT',
                 headers: new Headers({
@@ -151,6 +167,6 @@ export const dataProvider: DataProvider = {
         })
         return {data: json}
     },
-    
+
 
 }

@@ -100,7 +100,10 @@ public class ProductServiceImpl implements ProductService {
         result.setAuthor(product.getAuthor());
         result.setPublisher(product.getPublisher());
         result.setPublishYear(product.getPublishYear());
+        result.setCreatedAt(product.getCreatedAt());
+        result.setActive(product.getActive());
         result.setUpdatedAt(LocalDateTime.now());
+        result.setRates(product.getRates());
         result = productRepository.save(result);
         return result;
     }

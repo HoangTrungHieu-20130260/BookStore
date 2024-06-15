@@ -1,33 +1,58 @@
 import React, {useEffect, useState} from "react";
 import {
-    BooleanField,
     Datagrid,
-    DateField,
     DeleteButton,
-    EditButton, FilterList, FilterListItem, FilterLiveSearch,
+    EditButton, FilterList, FilterListItem, FilterLiveSearch, FunctionField,
     ImageField,
     List,
     NumberField,
-    TextField, useGetList
+    TextField, useDataProvider, useGetList, useNotify, useRefresh
 } from 'react-admin';
-import {Card, CardContent} from "@mui/material";
+import {Button, Card, CardContent} from "@mui/material";
 import {Category} from "../../models";
 
-export const ProductList = () => (
-    <List aside={<ProductFilterSidebar/>}>
-        <Datagrid rowClick="show">
-            <TextField source="id" />
-            <NumberField source="category.id" />
-            <TextField source="title" />
-            <ImageField source="image" />
-            <NumberField source="currentPrice" />
-            <NumberField source="quantity" />
-            <BooleanField source="active" />
-            <EditButton/>
-            <DeleteButton/>
-        </Datagrid>
-    </List>
-);
+export const ProductList = () => {
+    const notify = useNotify();
+    const dataProvider = useDataProvider();
+    const refresh = useRefresh();
+    const handleStatus= async (record: any) => {
+        try {
+            // Gửi yêu cầu cập nhật trạng thái người dùng
+            await dataProvider.update('product', {
+                id: record.id,
+                data: {...record, active: !record.active},
+                previousData: record
+            });
+            // Hiển thị thông báo thành công
+            notify('Thay đổi trạng thái thành công', {type: 'success'});
+            // Làm mới danh sách
+            refresh();
+        } catch ({message}) {
+            // Hiển thị thông báo lỗi
+            notify(`Error: ${message}`, {type: 'warning'});
+        }
+    }
+    return (
+        <List aside={<ProductFilterSidebar/>}>
+            <Datagrid rowClick="show">
+                {/*<TextField source="id"/>*/}
+                <NumberField source="category.name" label={"Danh mục"}/>
+                <TextField source="title" label={"Tên"}/>
+                <ImageField source="image" label={"Ảnh"}/>
+                <NumberField source="currentPrice" label={"Giá"}/>
+                <NumberField source="quantity" label={"Số lượng"}/>
+                {/*<BooleanField source="active" />*/}
+                <FunctionField label={"Trạng thái"} render={(record: any) => (
+                    <Button onClick={() => handleStatus(record)} color={record.active ? 'primary' : 'error'}>
+                        {record.active ? 'Đang bán' : 'Dừng bán'}
+                    </Button>
+                )}/>
+                <EditButton label={""}/>
+                <DeleteButton label={""}/>
+            </Datagrid>
+        </List>
+    )
+};
 const ProductFilterSidebar= () => {
     const [categories, setCategories] = useState<Category[]>([])
     const {data: listCategory} = useGetList('category', {
@@ -39,7 +64,7 @@ const ProductFilterSidebar= () => {
         if (listCategory) {
             setCategories(listCategory.filter(category => category.parentCategory !== null))
         }
-    })
+    },[listCategory])
     return (
         <Card sx={{order: -1, mr: 2, mt: 9, width: 200}}>
             <CardContent>

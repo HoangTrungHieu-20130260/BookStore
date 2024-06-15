@@ -9,10 +9,10 @@ export const DiscountEdit = () => {
             <SimpleForm>
                 <TextInput source="id"/>
                 <TextInput source="code"/>
-                <NumberInput source="discountRate"/>
-                <DateTimeInput source="startDate"parse={parseDateTime} format={formatDateTime}/>
-                <DateTimeInput source="endDate"parse={parseDateTime} format={formatDateTime}/>
-                <BooleanInput source="status"/>
+                <NumberInput source="discountRate" label={"Số % giảm"}/>
+                <DateTimeInput source="startDate"parse={parseDateTime} format={formatDateTime} label={"Ngày bắt đầu"}/>
+                <DateTimeInput source="endDate"parse={parseDateTime} format={formatDateTime} label={"Ngày kết thúc"}/>
+                <BooleanInput source="status" label={"Trạng thái"}/>
             </SimpleForm>
         </Edit>
     )

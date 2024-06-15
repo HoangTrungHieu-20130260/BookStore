@@ -13,12 +13,17 @@ import {DiscountList} from "./discount/DiscountList";
 import {DiscountEdit} from "./discount/DiscountEdit";
 import {DiscountCreate} from "./discount/DiscountCreate";
 import Dashboard from "./dashboard/Dashboard";
+import {UserEdit} from "./user/UserEdit";
+import {UserCreate} from "./user/UserCreate";
+import {OrderEdit} from "./order/OrderEdit";
 export const Manager = ()=> {
     return <Admin dataProvider={dataProvider} dashboard={Dashboard} basename={"/admin"}>
         <Resource
             name={"user"}
             list={UserList}
             show={ShowGuesser}
+            edit={UserEdit}
+            create={UserCreate}
             options={{
                 label: "Người dùng"
             }}>
@@ -46,6 +51,7 @@ export const Manager = ()=> {
         <Resource name={"order"}
             list={OrderList}
             show={ShowGuesser}
+            edit={OrderEdit}
             options={{
                 label: "Đơn hàng"
             }}>

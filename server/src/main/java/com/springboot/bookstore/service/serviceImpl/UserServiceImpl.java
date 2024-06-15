@@ -116,15 +116,10 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> updateUser(int id, User user) {
         User result = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        if (userRepository.existsUserByEmail(user.getEmail())) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Email already exists");
-        }
         result.setPassword(encoder.encode(user.getPassword()));
         result.setEmail(user.getEmail());
         result.setPhone(user.getPhone());
-        result.setUsername(user.getUsername());
+        result.setFullName(user.getFullName());
         result.setAvatar(user.getAvatar());
         result.setStatus(user.isStatus());
         result.setUpdatedAt(LocalDateTime.now());

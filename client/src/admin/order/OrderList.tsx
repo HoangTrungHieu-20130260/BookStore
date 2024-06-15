@@ -4,30 +4,66 @@ import {
     ChipField,
     Datagrid,
     DateField,
-    DeleteButton, FilterList, FilterListItem, FilterLiveSearch,
+    DeleteButton, FilterList, FilterListItem, FilterLiveSearch, FunctionField,
     List,
     NumberField,
     SingleFieldList,
-    TextField
+    TextField, useDataProvider, useNotify, useRefresh
 } from 'react-admin';
-import {Card, CardContent} from "@mui/material";
+import {Button, Card, CardContent} from "@mui/material";
 import React from "react";
 
-export const OrderList = () => (
-    <List aside={<OrderFilterSidebar/>}>
-        <Datagrid rowClick="edit">
-            <TextField source="id" />
-            <TextField source="fullName" label={"Tên"}/>
-            <TextField source="phone" label={"SĐT"}/>
-            <TextField source="payment_method" label={"Phương thức"}/>
-            <BooleanField source="payment_status" label={"Thanh toán"}/>
-            <NumberField source="total_amount" label={"Tổng tiền"}/>
-            <NumberField source="shipping_cost" label={"Phí giao"}/>
-            <TextField source="orderStatus.status" label={"Trạng thái"}/>
-            <DeleteButton/>
-        </Datagrid>
-    </List>
-);
+export const OrderList = () => {
+    const notify = useNotify();
+    const dataProvider = useDataProvider();
+    const refresh = useRefresh();
+    const handleStatus= async (record: any, status: number) => {
+        try {
+            // Gửi yêu cầu cập nhật trạng thái người dùng
+            await dataProvider.update('product', {
+                id: record.id,
+                data: {...record, orderStatus: {id: status}},
+                previousData: record
+            });
+            // Hiển thị thông báo thành công
+            notify('Thay đổi trạng thái thành công', {type: 'success'});
+            // Làm mới danh sách
+            refresh();
+        } catch ({message}) {
+            // Hiển thị thông báo lỗi
+            notify(`Error: ${message}`, {type: 'warning'});
+        }
+    }
+    return (
+        <List
+            sort={{field: 'createdAt', order: 'DESC'}}
+            aside={<OrderFilterSidebar/>}>
+            <Datagrid rowClick="edit">
+                <DateField source="createdAt" label={"Ngày"}/>
+                <TextField source="fullName" label={"Tên"}/>
+                <TextField source="phone" label={"SĐT"}/>
+                <TextField source="payment_method" label={"Phương thức"}/>
+                <BooleanField source="payment_status" label={"Thanh toán"}/>
+                <NumberField source="total_amount" label={"Tổng tiền"}/>
+                <NumberField source="shipping_cost" label={"Phí giao"}/>
+                <TextField source="orderStatus.status" label={"Trạng thái"}/>
+                <FunctionField label={"Trạng thái"} render={(record: any) => (
+                    <>
+                        <Button onClick={() => handleStatus(record, 2)}
+                                color={record.orderStatus.id === 1 ? 'info' : 'success'}>
+                            {record.orderStatus.id === 1 ? 'Đang chờ' : 'Đã duyệt'}
+                        </Button>
+                        <Button onClick={() => handleStatus(record, 3)}
+                                color={record.orderStatus.id === 3 ? 'error' : 'warning'}>
+                            {record.orderStatus.id === 1 ? 'Đã hủy' : 'Hủy'}
+                        </Button>
+                    </>
+                )}/>
+                <DeleteButton/>
+            </Datagrid>
+        </List>
+    )
+};
 const OrderFilterSidebar = () => {
     return (
         <Card sx={{order: -1, mr: 2, mt: 6, width: 200}}>
