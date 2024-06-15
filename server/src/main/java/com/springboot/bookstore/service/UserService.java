@@ -10,6 +10,8 @@ public interface UserService {
     Page<User> findAll(int page, int size, String sort, String order, String filter);
     User findById(int id);
     void deleteUser(int id);
+    ResponseEntity<?> createUser(User user);
+    ResponseEntity<?> updateUser(int id, User user);
     User findByUserName(String username);
     boolean existsUserByUsername(String username);
 

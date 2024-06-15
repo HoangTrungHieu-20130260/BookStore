@@ -1,6 +1,7 @@
 package com.springboot.bookstore.controller;
 
 import com.springboot.bookstore.dto.OrderDto;
+import com.springboot.bookstore.entity.DiscountCode;
 import com.springboot.bookstore.entity.Order;
 import com.springboot.bookstore.entity.Product;
 import com.springboot.bookstore.service.OrderService;
@@ -28,6 +29,7 @@ public class OrderController {
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir,
             @RequestParam(defaultValue = "") String filter) {
+
         return orderService.findAll(page, size, sortBy,sortDir,filter);
     }
     @GetMapping("/{id}")
@@ -39,9 +41,13 @@ public class OrderController {
     public void deleteOrder(@PathVariable int id) {
         orderService.deleteOrder(id);
     }
-
+    @PutMapping("{id}")
+    public ResponseEntity<Order> updateOrder(@PathVariable int id, @RequestBody Order order) {
+        return ResponseEntity.ok(orderService.updateOrder(id, order));
+    }
     @PostMapping("/cod")
     public ResponseEntity<?> orderCOD(@RequestBody OrderDto orderDto){
         return orderService.orderWithPaymentMethodCOD(orderDto);
     }
+
 }

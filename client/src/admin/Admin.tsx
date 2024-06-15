@@ -12,8 +12,9 @@ import {OrderList} from "./order/OrderList";
 import {DiscountList} from "./discount/DiscountList";
 import {DiscountEdit} from "./discount/DiscountEdit";
 import {DiscountCreate} from "./discount/DiscountCreate";
+import Dashboard from "./dashboard/Dashboard";
 export const Manager = ()=> {
-    return <Admin dataProvider={dataProvider} basename={"/admin"}>
+    return <Admin dataProvider={dataProvider} dashboard={Dashboard} basename={"/admin"}>
         <Resource
             name={"user"}
             list={UserList}

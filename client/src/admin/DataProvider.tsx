@@ -127,6 +127,17 @@ export const dataProvider: DataProvider = {
                 body: JSON.stringify(params.data),
             });
             return { data: json };
+        } else {
+            console.log(params.data)
+            const { json } = await httpClient(`${apiUrl}/${resource}/${params.id}`, {
+                method: 'PUT',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+                body: JSON.stringify(params.data),
+            });
+            return { data: json };
         }
     },
 // @ts-ignore

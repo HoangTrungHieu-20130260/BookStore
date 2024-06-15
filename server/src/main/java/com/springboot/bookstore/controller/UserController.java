@@ -1,6 +1,7 @@
 package com.springboot.bookstore.controller;
 
 import com.springboot.bookstore.dto.UserDTO;
+import com.springboot.bookstore.entity.Category;
 import com.springboot.bookstore.entity.User;
 import com.springboot.bookstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,14 @@ public class UserController {
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir) {
         return userService.findAll(page,size,sortBy,sortDir);
+    }
+    @PostMapping
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        return ResponseEntity.ok(userService.createUser(user));
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable int id, @RequestBody User user) {
+        return ResponseEntity.ok(userService.updateUser(id, user));
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable int id) {

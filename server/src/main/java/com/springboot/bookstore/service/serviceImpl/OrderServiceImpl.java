@@ -70,6 +70,10 @@ public class OrderServiceImpl implements OrderService {
                 Join<Order, OrderStatus> orderStatusJoin = root.join("orderStatus");
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(orderStatusJoin.get("id"), filterJson.get("order_status").asLong()));
             }
+            if (filterJson.has("createdAt_gte")) {
+                LocalDateTime createdAtGte = LocalDateTime.parse(filterJson.get("createdAt_gte").asText());
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), createdAtGte));
+            }
             return predicate;
         };
         return orderRepository.findAll(specification, pageable);
@@ -83,6 +87,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteOrder(int id) {
         orderRepository.deleteById(id);
+    }
+
+    @Override
+    public Order updateOrder(int id, Order order) {
+        Order result = orderRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        result.setFullName(order.getFullName());
+        result.setEmail(order.getEmail());
+        result.setAddress(order.getEmail());
+        result.setOrderStatus(order.getOrderStatus());
+        return result;
     }
 
     @Override
@@ -109,7 +124,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.setShipping_cost(orderDto.getShippingCost());
-        order.setCreated_at(String.valueOf(LocalDateTime.now()));
+        order.setCreatedAt(LocalDateTime.now());
         orderRepository.save(order);
 
         OrderDetails order_details;

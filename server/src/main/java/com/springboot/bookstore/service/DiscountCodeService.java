@@ -10,4 +10,5 @@ public interface DiscountCodeService {
     DiscountCode findByCode(String code);
     void deleteDiscountCode(int id);
     DiscountCode createDiscountCode(DiscountCode discountCode);
+    DiscountCode updateDiscountCode(int id, DiscountCode discountCode);
 }

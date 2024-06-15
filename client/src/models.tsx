@@ -1,3 +1,14 @@
+export interface User {
+    id: number,
+    username: string,
+    email: string,
+    phone: number,
+    fullName: string,
+    avatar: string,
+    updatedAt: string,
+    createdAt: string,
+    status: boolean
+}
 export interface CartState{
     cartItems : Product[];
     cartTotalQuantity: number;
@@ -21,7 +32,25 @@ export interface Product {
     active: boolean;
     cartTotal: number;
 }
-
+export interface Order {
+    id: number;
+    user: User; // Assume User interface is defined elsewhere
+    fullName: string;
+    email: string;
+    phone: string;
+    address: string;
+    note: string;
+    payment_method: string;
+    payment_status: boolean;
+    total_amount: number;
+    shipping_cost: number;
+    createdAt: string;
+    orderStatus: OrderStatus;
+}
+export interface OrderStatus {
+    id: number;
+    status: string;
+}
 export interface Category {
     id: number;
     parentCategory: Category | null;

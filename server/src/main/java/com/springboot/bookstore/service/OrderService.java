@@ -11,6 +11,7 @@ public interface OrderService {
     public Page<Order> findAll(int page, int size, String sortBy, String sortDir, String filter);
     Order findById(int id);
     void deleteOrder(int id);
+    Order updateOrder(int id, Order order);
     ResponseEntity<?> orderWithPaymentMethodCOD(OrderDto orderDto);
 
 }

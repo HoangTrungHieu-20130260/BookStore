@@ -52,7 +52,7 @@ public class AuthController {
     }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
-        Authentication authentication = authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.  authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDto.getUsername(),
                         loginDto.getPassword()));
@@ -75,7 +75,6 @@ public class AuthController {
         user.setStatus(true);
         Role role = roleRepository.findByName("USER").orElse(null);
         user.setRole(role);
-        System.out.println(role);
         userRepository.save(user);
         return ResponseEntity.ok("User registered success!");
     }

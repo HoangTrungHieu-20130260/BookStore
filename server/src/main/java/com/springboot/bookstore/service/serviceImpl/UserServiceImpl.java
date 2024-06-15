@@ -22,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.util.Collections;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -90,6 +92,43 @@ public class UserServiceImpl implements UserService {
             userRepository.deleteById(id);
         }
 
+    }
+
+    @Override
+    public ResponseEntity<?> createUser(User user) {
+        if (userRepository.existsUserByUsername(user.getUsername())) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Username already exists");
+        }
+        if (userRepository.existsUserByEmail(user.getEmail())) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Email already exists");
+        }
+        user.setPassword(encoder.encode(user.getPassword()));
+        user.setStatus(true);
+        user.setCreatedAt(LocalDateTime.now());
+        return ResponseEntity.ok(userRepository.save(user));
+    }
+
+    @Override
+    public ResponseEntity<?> updateUser(int id, User user) {
+        User result = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        if (userRepository.existsUserByEmail(user.getEmail())) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Email already exists");
+        }
+        result.setPassword(encoder.encode(user.getPassword()));
+        result.setEmail(user.getEmail());
+        result.setPhone(user.getPhone());
+        result.setUsername(user.getUsername());
+        result.setAvatar(user.getAvatar());
+        result.setStatus(user.isStatus());
+        result.setUpdatedAt(LocalDateTime.now());
+        return ResponseEntity.ok(userRepository.save(result));
     }
 
     @Override

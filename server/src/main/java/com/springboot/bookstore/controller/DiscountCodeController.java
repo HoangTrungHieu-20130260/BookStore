@@ -38,6 +38,10 @@ public class DiscountCodeController {
     public ResponseEntity<DiscountCode> createDiscountCode(@RequestBody DiscountCode discountCode) {
         return ResponseEntity.ok(discountCodeService.createDiscountCode(discountCode));
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<DiscountCode> updateDiscountCode(@PathVariable int id, @RequestBody DiscountCode discountCode) {
+        return ResponseEntity.ok(discountCodeService.updateDiscountCode(id, discountCode));
+    }
     @GetMapping("/code")
     public ResponseEntity<?> findByCode(@RequestParam String code) {
         return ResponseEntity.ok(discountCodeService.findByCode(code));

@@ -38,6 +38,4 @@ public class DiscountCode {
     @Column(name = "status")
     private boolean status;
 
-
-
-}
+    }

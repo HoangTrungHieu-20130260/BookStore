@@ -75,4 +75,16 @@ public class DiscountCodeServiceImpl implements DiscountCodeService {
         discountCode.setCreatedAt(LocalDateTime.now());
         return discountCodeRepository.save(discountCode);
     }
+
+    @Override
+    public DiscountCode updateDiscountCode(int id, DiscountCode discountCode) {
+        DiscountCode result = discountCodeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Discount not found"));
+        result.setCode(discountCode.getCode());
+        result.setDiscountRate(discountCode.getDiscountRate());
+        result.setStartDate(discountCode.getStartDate());
+        result.setEndDate(discountCode.getEndDate());
+        result.setStatus(discountCode.isStatus());
+        return discountCodeRepository.save(result);
+    }
 }
