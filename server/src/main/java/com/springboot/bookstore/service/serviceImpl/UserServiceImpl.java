@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+
 import java.util.List;
 
 @Service
@@ -63,9 +64,9 @@ public class UserServiceImpl implements UserService {
         Sort sortPa = Sort.by(direction, sort);
         Pageable pageable = PageRequest.of(page, size, sortPa);
 
-        JsonNode jsonFilter;
+        JsonNode filterJson;
         try {
-            jsonFilter = new ObjectMapper().readTree(java.net.URLDecoder.decode(filter, StandardCharsets.UTF_8));
+            filterJson = new ObjectMapper().readTree(java.net.URLDecoder.decode(filter, StandardCharsets.UTF_8));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -73,9 +74,12 @@ public class UserServiceImpl implements UserService {
         Specification<User> specification = (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
 
-            if (jsonFilter.has("q")) {
-                String searchStr = jsonFilter.get("q").asText();
-                predicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("fullName")), "%" + searchStr.toLowerCase() + "%");
+            if (filterJson.has("q")) {
+                String searchStr = filterJson.get("q").asText();
+                predicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("full_name")), "%" + searchStr.toLowerCase() + "%");
+            }
+            if (filterJson.has("status")) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("status"), filterJson.get("status").asBoolean()));
             }
             return predicate;
         };
@@ -95,6 +99,38 @@ public class UserServiceImpl implements UserService {
             userRepository.deleteById(id);
         }
 
+    }
+
+    @Override
+    public ResponseEntity<?> createUser(User user) {
+        if (userRepository.existsUserByUsername(user.getUsername())) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Username already exists");
+        }
+        if (userRepository.existsUserByEmail(user.getEmail())) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Email already exists");
+        }
+        user.setPassword(encoder.encode(user.getPassword()));
+        user.setStatus(true);
+        user.setCreatedAt(LocalDateTime.now());
+        return ResponseEntity.ok(userRepository.save(user));
+    }
+
+    @Override
+    public ResponseEntity<?> updateUser(int id, User user) {
+        User result = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        result.setPassword(encoder.encode(user.getPassword()));
+        result.setEmail(user.getEmail());
+        result.setPhone(user.getPhone());
+        result.setFullName(user.getFullName());
+        result.setAvatar(user.getAvatar());
+        result.setStatus(user.isStatus());
+        result.setUpdatedAt(LocalDateTime.now());
+        return ResponseEntity.ok(userRepository.save(result));
     }
 
     @Override
