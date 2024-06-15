@@ -100,6 +100,14 @@ export interface ProductsWithCategoryResponse {
     category: Category;
     products: ProductsPage;
 }
+
+export interface UserDto{
+    username: string;
+    fullName: string;
+    email: string;
+    phone: string;
+    avatarLink: string;
+}
 export interface RegisterDto {
     username: string;
     password: string;
@@ -125,4 +133,18 @@ export interface OrderDto{
     shippingCost: number;
     totalAmount: number;
     products: Product[];
+}
+
+export interface AddressDto{
+    id: number;
+    fullName: string;
+    phone: string;
+    street: string;
+    wardId: number;
+    ward: string;
+    districtId: number;
+    district: string;
+    provinceId: number;
+    province: string;
+    default: boolean;
 }
