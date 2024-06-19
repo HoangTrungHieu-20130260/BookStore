@@ -14,6 +14,7 @@ import Forgot from "./pages/forgot/Forgot";
 import ForgotConfirm from "./pages/forgotConfirm/ForgotConfirm";
 import AccountDetailScreen from "./pages/accountDetail/AccountDetailsScreen";
 import Checkout from "./pages/checkoutScreen/Checkout";
+import PaymentResult from "./pages/paymentResult/PaymentResult";
 
 function App() {
     return (
@@ -30,6 +31,7 @@ function App() {
                 <Route path={"checkout"} element={<Checkout />}></Route>
                 <Route path={"forgot-confirm"} element={<ForgotConfirm/>}/>
                 <Route path={"my-account"} element={<AccountDetailScreen/>}/>
+                <Route path={"payment-result"} element={<PaymentResult />} />
             </Route>
             <Route path={"/admin/*"} element={<Manager/>}>
             </Route>
