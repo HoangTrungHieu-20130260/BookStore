@@ -65,7 +65,6 @@ export const dataProvider: DataProvider = {
             return { data: json };
         }
         if (resource === 'category') {
-            console.log(params.data.parentCategory)
             if (params.data.parentCategory.id === null || params.data.parentCategory.id === undefined ) {
                 params.data.parentCategory = null
             }
@@ -78,6 +77,25 @@ export const dataProvider: DataProvider = {
                 }),
 
             });
+            return { data: json };
+        }
+        if(resource === 'user') {
+            if (params.data.image && params.data.image.rawFile) {
+                // Upload image to imgBB
+                const imageUrl = await imgUpload(params.data.image);
+                params.data.image = imageUrl;
+            }
+        }else {
+            const { json } = await httpClient(`${apiUrl}/${resource}`, {
+                method: 'POST',
+                body: JSON.stringify(params.data),
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+
+            });
+            window.location.href = `/admin/${resource}`
             return { data: json };
         }
     }
@@ -116,6 +134,27 @@ export const dataProvider: DataProvider = {
             });
             return { data: json };
         }
+        if (resource === 'user') {
+            const { json } = await httpClient(`${apiUrl}/${resource}/${params.id}`, {
+                method: 'PUT',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+                body: JSON.stringify(params.data),
+            });
+            return { data: { ...json.data, id: json.id } };
+        } else {
+            const { json } = await httpClient(`${apiUrl}/${resource}/${params.id}`, {
+                method: 'PUT',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+                body: JSON.stringify(params.data),
+            });
+            return { data: json };
+        }
     },
 // @ts-ignore
     delete: async (resource: any, params: any) => {
@@ -128,6 +167,6 @@ export const dataProvider: DataProvider = {
         })
         return {data: json}
     },
-    
+
 
 }

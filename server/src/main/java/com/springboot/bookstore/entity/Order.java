@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -42,25 +43,22 @@ public class Order {
     @Column(name = "note")
     private String note;
 
-     @Column(name = "payment_method")
-     private String payment_method;
+    @Column(name = "payment_method")
+    private String payment_method;
 
-     @Column(name = "payment_status")
-     private boolean payment_status;
+    @Column(name = "payment_status")
+    private boolean payment_status;
 
-     @Column(name = "total_amount")
-     private double total_amount;
+    @Column(name = "total_amount")
+    private double total_amount;
 
-     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-     @OneToOne(fetch = FetchType.LAZY)
-     @JoinColumn(name = "discount_code_id", referencedColumnName = "id")
-     private DiscountCode discountCode;
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "discount_code_id", referencedColumnName = "id")
+    private DiscountCode discountCode;
 
-     @Column(name = "shipping_cost")
-     private double shipping_cost;
-
-     @Column(name = "created_at")
-     private String created_at;
+    @Column(name = "shipping_cost")
+    private double shipping_cost;
 
     @Column(name = "transaction_id")
     private String transaction_id;
@@ -69,6 +67,12 @@ public class Order {
      @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
      private List<OrderDetails> orderDetails;
 
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderDetails> orderDetails;
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_status_id", referencedColumnName = "id", nullable = false)
