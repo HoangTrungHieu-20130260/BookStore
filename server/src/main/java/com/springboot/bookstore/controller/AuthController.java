@@ -58,8 +58,18 @@ public class AuthController {
                         loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerator.generateToken(authentication);
-        System.out.println("Login success");
-        return new ResponseEntity<>(new AuthResponseDto(token), HttpStatus.OK);
+        User user = userRepository.findByUsername(loginDto.getUsername())
+                .orElse(null);
+        if (user == null) {
+            return new ResponseEntity<>("Tài khoản không tồn tại!", HttpStatus.NOT_FOUND);
+        }
+        if (!encoder.matches(loginDto.getPassword(), user.getPassword())) {
+            return new ResponseEntity<>("Mật khẩu không đúng!", HttpStatus.BAD_REQUEST);
+        }
+        if (!user.isStatus()) {
+            return new ResponseEntity<>("Tài khoản đã bị khóa!", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new AuthResponseDto(token, user.getRole()), HttpStatus.OK);
 
     }
     @PostMapping("/register")

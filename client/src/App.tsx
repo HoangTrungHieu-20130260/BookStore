@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import {Outlet, Route, Routes} from "react-router-dom";
+import {Navigate, Outlet, Route, Routes} from "react-router-dom";
 import {Header} from "./components/header/Header";
 import {Footer} from "./components/footer/Footer";
 import {Home} from "./pages/homeScreen/Home";
@@ -32,6 +32,13 @@ function App() {
                 <Route path={"my-account"} element={<AccountDetailScreen/>}/>
             </Route>
             <Route path={"/admin/*"} element={<Manager/>}>
+                <Route
+                    path="/"
+                    element={
+                        // Kiểm tra quyền hạn ở đây
+                        <Navigate to="/sign-in" />
+                    }
+                />
             </Route>
             {/*<Route path={"/si"} element={<Login />} />*/}
 

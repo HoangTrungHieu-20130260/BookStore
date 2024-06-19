@@ -47,6 +47,17 @@ export interface Order {
     createdAt: string;
     orderStatus: OrderStatus;
 }
+export interface Rate {
+    id: number;
+    product: Product;
+    user: User;
+    rating: number;
+    comment: string;
+    createdAt: string; // or Date, depending on how you handle dates
+    updatedAt: string; // or Date, depending on how you handle dates
+    status: boolean;
+    // orderDetails: OrderDetails;
+}
 export interface OrderStatus {
     id: number;
     status: string;

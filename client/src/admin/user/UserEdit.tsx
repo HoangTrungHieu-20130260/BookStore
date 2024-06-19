@@ -18,14 +18,14 @@ export const UserEdit = ()=> {
                     <ImageField source="src"/>
                 </ImageInput>
                 <SelectInput
-                    source="orderStatus.id"
+                    source="role.id"
                     choices={roles.map(i => ({
                         id: i.id,
                         name: i.name
                     }))}
                     optionValue="id"
                     optionText="name"
-                    label="Trạng thái" />
+                    label="Quyền" />
                 <BooleanInput source={"status"} label={"Trạng thái"}/>
             </SimpleForm>
         </Edit>

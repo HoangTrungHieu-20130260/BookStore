@@ -1,5 +1,6 @@
 package com.springboot.bookstore.dto;
 
+import com.springboot.bookstore.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,4 +12,5 @@ import lombok.ToString;
 @ToString
 public class AuthResponseDto {
     private String token;
+    private Role role;
 }

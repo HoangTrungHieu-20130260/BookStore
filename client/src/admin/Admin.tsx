@@ -16,6 +16,11 @@ import Dashboard from "./dashboard/Dashboard";
 import {UserEdit} from "./user/UserEdit";
 import {UserCreate} from "./user/UserCreate";
 import {OrderEdit} from "./order/OrderEdit";
+import {BlogList} from "./blog/BlogList";
+import {BlogEdit} from "./blog/BlogEdit";
+import {BlogCreate} from "./blog/BlogCreate";
+import {ReviewList} from "./review/ReviewList";
+
 export const Manager = ()=> {
     return <Admin dataProvider={dataProvider} dashboard={Dashboard} basename={"/admin"}>
         <Resource
@@ -63,6 +68,21 @@ export const Manager = ()=> {
                   create={DiscountCreate}
                   options={{
                       label: "Mã giảm giá"
+                  }}>
+        </Resource>
+        <Resource name={"review"}
+                  list={ReviewList}
+                  show={ShowGuesser}
+                  options={{
+                      label: "Đánh giá"
+                  }}>
+        </Resource>
+        <Resource name={"blog"}
+                  list={BlogList}
+                  edit={BlogEdit}
+                  create={BlogCreate}
+                  options={{
+                      label: "Bài viết"
                   }}>
         </Resource>
     </Admin>

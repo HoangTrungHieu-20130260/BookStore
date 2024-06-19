@@ -51,9 +51,10 @@ public class User {
     @Column(name = "status")
     private boolean status;
 
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
     private List<Address> address;
-
+    
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
     private List<Rate> rates;
 

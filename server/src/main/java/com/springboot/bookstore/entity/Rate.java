@@ -46,6 +46,7 @@ public class Rate {
     @Column(name = "status")
     private boolean status;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_detail_id")
     private OrderDetails orderDetails;

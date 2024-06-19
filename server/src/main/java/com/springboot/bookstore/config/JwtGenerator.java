@@ -14,6 +14,7 @@ public class JwtGenerator {
     public String generateToken(Authentication authentication) {
         return Jwts.builder()
                 .setSubject(authentication.getName())
+                .claim("role", authentication.getAuthorities())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + SecurityConstants.JWT_EXPIRATION))
                 .signWith(SignatureAlgorithm.HS256, SecurityConstants.JWT_SECRET)
