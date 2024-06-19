@@ -25,8 +25,9 @@ public class CategoryController {
     public Page<Category> findAll(@RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "10") int size,
                               @RequestParam(defaultValue = "id") String sortBy,
-                              @RequestParam(defaultValue = "asc") String sortDir) {
-        return categoryService.findAll(page,size,sortBy,sortDir);
+                              @RequestParam(defaultValue = "asc") String sortDir,
+                              @RequestParam(defaultValue = "") String filter) {
+        return categoryService.findAll(page,size,sortBy,sortDir, filter);
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable int id) {

@@ -12,7 +12,7 @@ import java.util.List;
 
 
 public interface CategoryService {
-    Page<Category> findAll(int page ,int size, String sortBy, String sortDir);
+    Page<Category> findAll(int page ,int size, String sortBy, String sortDir, String filter);
     Category findById(int id);
     void deleteCategory(int id);
     Category updateCategory(int id, Category category);
