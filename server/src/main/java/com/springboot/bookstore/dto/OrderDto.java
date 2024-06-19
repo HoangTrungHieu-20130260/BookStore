@@ -23,5 +23,6 @@ public class OrderDto {
     private double shippingCost;
     private double totalAmount;
     private String discountCode;
+    private String transactionId;
     private List<ProductsOrderDto> products;
 }

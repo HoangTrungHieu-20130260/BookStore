@@ -11,4 +11,5 @@ public interface DiscountCodeService {
     void deleteDiscountCode(int id);
     DiscountCode createDiscountCode(DiscountCode discountCode);
     DiscountCode updateDiscountCode(int id, DiscountCode discountCode);
+
 }
