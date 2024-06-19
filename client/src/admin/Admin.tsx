@@ -1,5 +1,5 @@
 import React from "react";
-import {Admin, EditGuesser, ListGuesser, Resource, ShowGuesser} from "react-admin"
+import {Admin, EditGuesser, ListGuesser, Menu, MenuItemLink, Resource, ShowGuesser} from "react-admin"
 import {dataProvider} from "./DataProvider";
 import {UserList} from "./user/UserList";
 import {ProductList} from "./product/ProductList";
@@ -20,9 +20,28 @@ import {BlogList} from "./blog/BlogList";
 import {BlogEdit} from "./blog/BlogEdit";
 import {BlogCreate} from "./blog/BlogCreate";
 import {ReviewList} from "./review/ReviewList";
+import {authProvider} from "./AuthProvider";
+import {Navigate} from "react-router-dom";
+import {Home} from "@mui/icons-material"
+const CustomMenu: React.FC = (props) => {
+    return (
+        <Menu {...props}>
+            <MenuItemLink
+                to="/"
+                primaryText="Home"
+                leftIcon={<Home />}
+            />
+        </Menu>
+    );
+};
 
 export const Manager = ()=> {
-    return <Admin dataProvider={dataProvider} dashboard={Dashboard} basename={"/admin"}>
+    return <Admin dataProvider={dataProvider}
+                  dashboard={Dashboard}
+                  authProvider={authProvider}
+                  loginPage={<Navigate to={'/sign-in'}/>}
+                  menu={CustomMenu}
+                  basename={"/admin"}>
         <Resource
             name={"user"}
             list={UserList}

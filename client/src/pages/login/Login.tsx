@@ -24,10 +24,10 @@ function Login() {
 
         try {
             const response = await axios.post("http://localhost:8080/api/v1/auth/login", data)
-            console.log(response)
+
             if (response.status === 200){
-                const token = response.data.token
-                localStorage.setItem("token", token)
+                const token = response.data
+                localStorage.setItem("token", JSON.stringify(token))
                 navigate('/')
             }
 

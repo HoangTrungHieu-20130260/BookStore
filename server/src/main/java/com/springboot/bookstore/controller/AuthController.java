@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,12 +53,6 @@ public class AuthController {
     }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
-        Authentication authentication = authenticationManager.  authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginDto.getUsername(),
-                        loginDto.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtGenerator.generateToken(authentication);
         User user = userRepository.findByUsername(loginDto.getUsername())
                 .orElse(null);
         if (user == null) {
@@ -69,7 +64,19 @@ public class AuthController {
         if (!user.isStatus()) {
             return new ResponseEntity<>("Tài khoản đã bị khóa!", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new AuthResponseDto(token, user.getRole()), HttpStatus.OK);
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginDto.getUsername(),
+                            loginDto.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String token = jwtGenerator.generateToken(authentication);
+            return new ResponseEntity<>(new AuthResponseDto(token, user.getRole().getName()), HttpStatus.OK);
+        } catch (AuthenticationException e) {
+            throw new RuntimeException(e);
+        }
+
+
 
     }
     @PostMapping("/register")

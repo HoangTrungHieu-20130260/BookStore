@@ -12,5 +12,5 @@ import lombok.ToString;
 @ToString
 public class AuthResponseDto {
     private String token;
-    private Role role;
+    private String role;
 }

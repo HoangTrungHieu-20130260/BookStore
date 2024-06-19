@@ -58,8 +58,7 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
     private List<Rate> rates;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 

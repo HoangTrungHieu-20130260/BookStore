@@ -32,15 +32,7 @@ function App() {
                 <Route path={"my-account"} element={<AccountDetailScreen/>}/>
             </Route>
             <Route path={"/admin/*"} element={<Manager/>}>
-                <Route
-                    path="/"
-                    element={
-                        // Kiểm tra quyền hạn ở đây
-                        <Navigate to="/sign-in" />
-                    }
-                />
             </Route>
-            {/*<Route path={"/si"} element={<Login />} />*/}
 
         </Routes>
     );
