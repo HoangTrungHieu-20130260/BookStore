@@ -26,4 +26,9 @@ public class OrderController {
     public ResponseEntity<?> orderCOD(@RequestBody OrderDto orderDto){
         return orderService.orderWithPaymentMethodCOD(orderDto);
     }
+
+    @PostMapping("/vnpay")
+    public ResponseEntity<?> orderVNPAY(@RequestBody OrderDto orderDto){
+        return orderService.orderWithPaymentMethodVNPAY(orderDto);
+    }
 }

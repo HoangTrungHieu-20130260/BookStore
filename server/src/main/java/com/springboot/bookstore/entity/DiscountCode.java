@@ -24,7 +24,10 @@ public class DiscountCode {
     private String code;
 
     @Column(name = "discount_rate")
-    private int discountRate;
+    private double discountRate;
+
+    @Column(name = "quantity")
+    private int quantity;
 
     @Column(name = "start_date")
     private LocalDateTime startDate;

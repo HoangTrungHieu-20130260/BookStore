@@ -62,6 +62,9 @@ public class Order {
      @Column(name = "created_at")
      private String created_at;
 
+    @Column(name = "transaction_id")
+    private String transaction_id;
+
      @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
      @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
      private List<OrderDetails> orderDetails;
