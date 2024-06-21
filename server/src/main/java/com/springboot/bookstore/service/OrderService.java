@@ -18,6 +18,6 @@ public interface OrderService {
     Order findById(int id);
     void deleteOrder(int id);
     Order updateOrder(int id, Order order);
-    ResponseEntity<?> orderWithPaymentMethodCOD(OrderDto orderDto);
 
+    ResponseEntity<?> getListOrderByToken(String token);
 }

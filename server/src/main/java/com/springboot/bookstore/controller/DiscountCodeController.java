@@ -17,19 +17,18 @@ import org.springframework.web.bind.annotation.*;
 public class DiscountCodeController {
 
     private DiscountCodeService discountCodeService;
+
+    @Autowired
+    public DiscountCodeController(DiscountCodeService discountCodeService) {
+        this.discountCodeService = discountCodeService;
+    }
+
     @GetMapping("/check")
     public ResponseEntity<?> checkCode(
             @RequestParam String code
     ) {
         return discountCodeService.checkDiscountCode(code);
     }
-
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable int id){
-        return discountCodeService.findById(id);
-    }
-}
 
     @GetMapping("")
     public Page<DiscountCode> findAll(@RequestParam(defaultValue = "0") int page,

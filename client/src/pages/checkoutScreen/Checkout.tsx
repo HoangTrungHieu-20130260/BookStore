@@ -249,7 +249,7 @@ const Checkout: React.FC = () => {
     useEffect(() => {
         // let totalAmount = 0
         // cart.cartItems.forEach((item, index) => {
-        //     totalAmount += item.currentPrice * item.quantity
+        //     totalAmount += item.currentPrice * item.gitquantity
         // })
         // console.log(totalAmount)
         setProvisionalAmount(cart.cartTotalAmount)
@@ -458,28 +458,6 @@ const Checkout: React.FC = () => {
                             <h4>Số lượng</h4>
                             <h4 className={"total_price_title"}>Thành tiền</h4>
                         </div>
-
-                        {/*<div className="table_product">*/}
-                        {/*    <div className="product-items">*/}
-                        {/*        <div className="product">*/}
-                        {/*            <p className="book_name">The Book Of Love</p>*/}
-                        {/*            <p className="quantity_text">x 1</p>*/}
-                        {/*        </div>*/}
-                        {/*        <div className="product_price">*/}
-                        {/*            <p className="price">300.000</p>*/}
-                        {/*            <p className="currency">VND</p>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*    <div className={"shipping_fee"}>*/}
-                        {/*        <p>Phí giao hàng:</p>*/}
-                        {/*        {*/}
-                        {/*            (shippingCost && shippingCost > 0) ?*/}
-                        {/*                <p>{formatToVNPrice(shippingCost)}</p>*/}
-                        {/*                : <p>0đ</p>*/}
-                        {/*        }*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
-
                         {cart.cartItems.map(item =>
                             <div className="item_cart">
                                 <div className="row main align-items-center">
