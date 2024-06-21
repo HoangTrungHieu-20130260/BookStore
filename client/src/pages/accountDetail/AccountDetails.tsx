@@ -1,18 +1,21 @@
-import React, { useState, ChangeEvent, FC, useEffect, useRef } from "react";
+import React, {useState, ChangeEvent, FC, useEffect, useRef} from "react";
 import './AccountDetails.css';
 import IMG from '../../images/Avatar/up fb.jpg';
 import PRODUCT from '../../images/Product Images/book17.png';
-import { FaEye, FaEyeSlash, FaPlus } from "react-icons/fa";
-import { IoSearchSharp } from "react-icons/io5";
-import { LiaShippingFastSolid } from "react-icons/lia";
+import {FaEye, FaEyeSlash, FaPlus} from "react-icons/fa";
+import {IoSearchSharp} from "react-icons/io5";
+import {LiaShippingFastSolid} from "react-icons/lia";
 import axios from "axios";
-import { AddressDto, UserDto } from "../../models";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import {AddressDto, OrderDto, UserDto} from "../../models";
+import {useNavigate} from "react-router-dom";
 import PopupAddress from "../../components/address/PopupAddress";
 import {TbLoader3} from "react-icons/tb";
+import PopupRating from "../../components/address/PopupRating";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface User {
+    id:number;
     fullName: string;
     email: string;
     phone: string;
@@ -26,7 +29,9 @@ interface AccountDetailContentComponentProps {
     user: User;
 }
 
-const AccountDetails: FC<AccountDetailContentComponentProps> = ({ nameShow, user }) => {
+const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}, props: any) => {
+    const [success, setSuccess] = useState<string | null>(null)
+    const [error, setError] = useState<string | null>(null)
     const [username, setUsername] = useState('');
     const [fullName, setFullName] = useState<string>(user.fullName);
     const [email, setEmail] = useState<string>(user.email);
@@ -43,10 +48,18 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({ nameShow, user
     const [addressData, setAddressData] = useState<AddressDto | null>(null);
     const [isChanged, setIsChanged] = useState(true)
     const [uploadAvatarLoaded, setupLoadAvatarLoaded] = useState(true)
+    const [orders, setOrders]: any = useState([])
+    const [searchInput, setSearchInput] = useState('')
     const token = localStorage.getItem("token");
     const childRef = useRef<any>();
+    const [openRatingPopup, setOpenRatingPopup] = useState(false);
+    const [selectedDetail, setSelectedDetail] = useState(null);
     const navigate = useNavigate();
 
+
+    const formatToVNPrice = (price: any) => {
+        return price.toLocaleString('vi-VN') + 'đ';
+    }
     const handleChangeAvatar = async (e: any) => {
         const file = e.target.files[0];
         if (file) {
@@ -89,14 +102,22 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({ nameShow, user
         };
         console.log(userData)
         try {
-            const response = await axios.post<UserDto>('http://localhost:8080/api/v1/user/user-details/edit', userData);
-            if (response.status === 400) {
-                toast.error('Lỗi thao tác');
-                return;
+
+            if (userData.fullName === '' || userData.email === '' || userData.phone === ''){
+                setError('Vui lòng nhập đầy đủ thông tin!');
+                setSuccess('')
+            } else{
+                const response = await axios.post<UserDto>('http://localhost:8080/api/v1/user/user-details/edit', userData);
+                if (response.status === 400) {
+                    setError('Lỗi thao tác');
+                    setSuccess('')
+                    return;
+                }
+                setSuccess('Thay đổi thông tin thành công');
+                setError('')
+                navigate('/my-account');
+                setIsChanged(!isChanged)
             }
-            toast.success('Thay đổi thông tin thành công');
-            navigate('/my-account');
-            setIsChanged(!isChanged)
         } catch (error) {
             console.log(error);
         }
@@ -109,14 +130,16 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({ nameShow, user
         // console.log(data)
         try {
             // @ts-ignore
-            const res = await axios.post<AddressDto>(`http://localhost:8080/api/v1/user/user-details/add-new-address?username=${user.username}` , data);
+            const res = await axios.post<AddressDto>(`http://localhost:8080/api/v1/user/user-details/add-new-address?username=${user.username}`, data);
             toast.success('Thêm địa chỉ thành công');
+            setError('')
             // console.log(res)
             setIsHiddenPopup(true);
             setIsChanged(!isChanged);
         } catch (error) {
             console.log(error);
-            toast.error('Lỗi thao tác !');
+            setError('Lỗi thao tác !');
+            setSuccess('')
         }
     };
 
@@ -126,12 +149,14 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({ nameShow, user
         const data = childRef.current.getData();
         try {
             const res = await axios.post<AddressDto>(`http://localhost:8080/api/v1/user/user-details/edit-address?username=${user.username}`, data);
-            toast.success('Cập nhật địa chỉ thành công');
+            setSuccess('Cập nhật địa chỉ thành công');
+            setError('')
             setIsHiddenPopup(true);
             setIsChanged(!isChanged);
         } catch (error) {
             console.log(error);
-            toast.error('Lỗi thao tác !');
+            setError('Lỗi thao tác !');
+            setSuccess('')
         }
     };
 
@@ -152,23 +177,45 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({ nameShow, user
         }
 
         if (reNewPassword !== newPassword) {
-            toast.error('Mật khẩu nhập lại không chính xác !')
+            setError('Mật khẩu nhập lại không chính xác !')
+            setSuccess('')
             return
         }
         try {
-            const res = await axios.post<UserDto>('http://localhost:8080/api/v1/user/user-details/change-password', userData)
-            // console.log('res: ', res)
-            // toast.success(res)
-            setOldPassword('')
-            setNewPassword('')
-            setReNewPassword('')
-            // await addLog(token, 'Thay đổi mật khẩu')
+            if (oldPassword === '' || newPassword === '' || reNewPassword === ''){
+                setError('Vui lòng nhập đầy đủ thông tin!')
+                setSuccess('')
+            } else {
+                const res = await axios.post<UserDto>('http://localhost:8080/api/v1/user/user-details/change-password', userData)
+                setOldPassword('')
+                setNewPassword('')
+                setReNewPassword('')
+                setSuccess('Thay đổi mật khẩu thành công!')
+                setError('')
+            }
         } catch (error) {
             // toast.error(error.response.data)
-            // await addLog(token, `Lỗi khi thay đổi mật khẩu ${error.response.data}`)
             console.log(error)
         }
     }
+
+    const handleSearch = (e: any) => {
+        e.preventDefault();
+        if (searchInput.trim()) {
+            navigate('/search', {state: {keyword: searchInput}});
+            // setSearchPopupShowStatus(false);
+        }
+    }
+
+    const handleOpenRatingPopup = (detail: any) => {
+        setSelectedDetail(detail);
+        setOpenRatingPopup(true);
+    };
+
+    const handleCloseRatingPopup = () => {
+        setOpenRatingPopup(false);
+        setSelectedDetail(null);
+    };
 
     const handleOnClickHiddenPopup = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -177,32 +224,45 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({ nameShow, user
         setAddressData(null);
     };
 
-    const fetchDataUser = async () => {
-        try {
-            const response = await axios.get<User>('http://localhost:8080/api/v1/user/get-data-user', { params: { token } });
-            const userData = response.data;
-            setUsername(userData.username);
-            setFullName(userData.fullName);
-            setEmail(userData.email);
-            setPhone(userData.phone);
-            setAvatarLink(userData.avatar);
-            setAddresses(userData.address || []);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
-
     useEffect(() => {
+        const fetchDataOrdersUser = async () => {
+            if (token !== null) {
+                try {
+                    await axios.get<User>(`http://localhost:8080/api/v1/order/find-by-user?token=${token}`).then((response: any) => {
+                        setOrders(response.data)
+                        localStorage.setItem('user_id', response.data[0].id)
+                        console.log("fetched a")
+                    }).catch((error) => {
+                        console.log(error)
+                    })
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+        }
+
+        const fetchDataUser = async () => {
+            try {
+                const response = await axios.get<User>('http://localhost:8080/api/v1/user/get-data-user', {params: {token}});
+                const userData = response.data;
+                console.log(response.data)
+                setUsername(userData.username);
+                setFullName(userData.fullName);
+                setEmail(userData.email);
+                setPhone(userData.phone);
+                setAvatarLink(userData.avatar);
+                setAddresses(userData.address || []);
+                console.log("fetched")
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
         fetchDataUser();
+        fetchDataOrdersUser();
     }, [token]);
 
-    useEffect(() => {
-        fetchDataUser();
-    }, [isChanged]);
-
-
-
     return (
+        <>
         <div className={'accountDetailContentWrapper'}>
             {nameShow === 'profile' &&
                 <div className={'profileContainer'}>
@@ -252,6 +312,8 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({ nameShow, user
                                     onClick={e => handleEditDataUser(e)}>
                                 Lưu
                             </button>
+                            {success && <div className="success_message">{success}</div>}
+                            {error && <div className="error_message">{error}</div>}
                         </form>
                         <div className={'editAvatarWrapper'}>
                             <form className={'editAvatar'}>
@@ -334,7 +396,7 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({ nameShow, user
                                                 </button>
                                                 :
                                                 <button className={'setDefaultAddress'}
-                                                        // onClick={e => handleSetDefaultAddress(address.id)}
+                                                    // onClick={e => handleSetDefaultAddress(address.id)}
                                                 >Thiết lập mặc định</button>
 
                                             }
@@ -371,6 +433,7 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({ nameShow, user
                                         type={showOldPassword ? 'text' : 'password'}
                                         id={'oldPassword'}
                                         value={oldPassword}
+                                        className={"password_input"}
                                         onChange={e => setOldPassword(e.target.value.trim())}/>
                                     {oldPassword.trim().length > 0 &&
                                         <button className={'showBtn'}
@@ -388,6 +451,7 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({ nameShow, user
                                         type={showNewPassword ? 'text' : 'password'}
                                         id={'newPassword'}
                                         value={newPassword}
+                                        className={"password_input"}
                                         onChange={e => setNewPassword(e.target.value.trim())}/>
                                     {newPassword.trim().length > 0 &&
                                         <button className={'showBtn'}
@@ -405,6 +469,7 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({ nameShow, user
                                         type={showNewPassword ? 'text' : 'password'}
                                         id={'reNewPassword'}
                                         value={reNewPassword}
+                                        className={"password_input"}
                                         onChange={e => setReNewPassword(e.target.value.trim())}/>
                                     {reNewPassword.trim().length > 0 &&
                                         <button className={'showBtn'}
@@ -415,7 +480,8 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({ nameShow, user
                                     }
                                 </div>
                             </div>
-
+                            {success && <div className="success_message">{success}</div>}
+                            {error && <div className="error_message">{error}</div>}
                             <button className={'changePassBtn'}
                                     onClick={e => handleChangePassword(e)}
                             >
@@ -429,95 +495,80 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({ nameShow, user
             }
             {nameShow === 'purchaseOrder' &&
                 <div className={'purchaseOrderContainer'}>
-                    <div className={'listStatusWrapper'}>
-                        <button className={'statusBtn active'}>Tất cả</button>
-                        <button className={'statusBtn'}>Chờ thanh toán</button>
-                        <button className={'statusBtn'}>Vận chuyển</button>
-                        <button className={'statusBtn'}>Chờ giao hàng</button>
-                        <button className={'statusBtn'}>Hoàn thành</button>
-                        <button className={'statusBtn'}>Đã hủy</button>
-                        <button className={'statusBtn'}>Trả hàng/Hoàn tiền</button>
-                    </div>
                     <div className={'searchOrderContainer'}>
                         <div className={'searchOrderWrapper'}>
                             <IoSearchSharp size={'20'} color={'#999999'}/>
-                            {/*<input*/}
-                            {/*    type="text"*/}
-                            {/*    placeholder={'Bạn có thể tìm kiếm theo ID hoặc Tên Sản Phẩm'}*/}
-                            {/*    value={searchInput}*/}
-                            {/*    onChange={e => setSearchInput(e.target.value)}*/}
-                            {/*/>*/}
+                            <input
+                                type="text"
+                                placeholder={'Bạn có thể tìm kiếm theo ID hoặc Tên Sản Phẩm'}
+                                value={searchInput}
+                                onChange={e => setSearchInput(e.target.value)}
+                            />
                         </div>
                     </div>
 
                     <div className={'orderUserContainer'}>
-                        {/*<div className={'orderLoader'} hidden={isLoaded}>*/}
-                        {/*    <TbLoader3 className={'icon'}/>*/}
-                        {/*</div>*/}
-                        {/*{orders && orders.length > 0 ?*/}
-                        {/*    orders.map(item => {*/}
-                        {/*        const details = item.orderDetails*/}
-                        {/*        return (*/}
-                        {/*            <div className={'orderUserWrapper'} key={item.id}>*/}
-                        {/*                <div className={'orderHeader'}>*/}
-                        {/*                    <span className={'orderId'}>Mã đơn hàng: {item.id}</span>*/}
-                        {/*                    <div className={'orderStatus'}>*/}
-                        {/*                        <span>{item.deliveryStatusHistories[item.deliveryStatusHistories.length - 1].deliveryStatus.description}</span>*/}
-                        {/*                    </div>*/}
-                        {/*                </div>*/}
-                        {/*                <div className={'orderProducts'}>*/}
-                        {/*                    {details.length > 0 &&*/}
-                        {/*                        details.map(de => {*/}
-                        {/*                            return (*/}
-                        {/*                                <div className={'orderProduct'} key={de.id}>*/}
-                        {/*                                    <div className={'info'}>*/}
-                        {/*                                        <div className={'imgWrapper'}>*/}
-                        {/*                                            <img src={de.product.thumbnail} alt={""}/>*/}
-                        {/*                                        </div>*/}
-                        {/*                                        <div className={'contentWrapper'}>*/}
-                        {/*                                            <span*/}
-                        {/*                                                className={'nameProduct'}>{de.product_name}</span>*/}
-                        {/*                                            <span*/}
-                        {/*                                                className={'colorSize'}>{de.color.name}, {de.size.name}, x{de.quantity}</span>*/}
-                        {/*                                            <div className={'price'}>*/}
-                        {/*                                                /!*<span className={'oldPrice'}>350.000đ</span>*!/*/}
-                        {/*                                                <span*/}
-                        {/*                                                    className={'newPrice'}>{formattedPrice(de.price)}</span>*/}
-                        {/*                                            </div>*/}
-                        {/*                                        </div>*/}
-                        {/*                                    </div>*/}
-                        {/*                                    <div className={'ratingButtonContainer'}>*/}
-                        {/*                                        <button className={'ratingButton'}*/}
-                        {/*                                                onClick={() => handleOpenRatingPopup(de)}>Đánh*/}
-                        {/*                                            giá*/}
-                        {/*                                        </button>*/}
-                        {/*                                    </div>*/}
-                        {/*                                </div>*/}
-                        {/*                            )*/}
-                        {/*                        })*/}
-                        {/*                    }*/}
-                        {/*                </div>*/}
-                        {/*                <div className={'action'}>*/}
-                        {/*                    <button className={'cancelOrder'} type={'button'}*/}
-                        {/*                            onClick={e => handleNavigateTracking(item)}*/}
-                        {/*                    >Chi tiết*/}
-                        {/*                    </button>*/}
-                        {/*                    <button className={'cancelOrder'} type="button">Hủy đơn hàng</button>*/}
-                        {/*                </div>*/}
-                        {/*            </div>*/}
-                        {/*        )*/}
-                        {/*    })*/}
-                        {/*    :*/}
-                        {/*    <div className={'orderUserWrapper'}>*/}
-                        {/*        <span>Chưa có đơn hàng nào</span>*/}
-                        {/*    </div>*/}
-                        {/*}*/}
-
-
+                        {!orders && <div className={'orderLoader'}>
+                            <TbLoader3 className={'icon'}/>
+                        </div>}
+                        {orders.map((item: OrderDto) => {
+                            const products = item.orderDetails
+                            console.log(item)
+                            return (
+                                <div className={'orderUserWrapper'}>
+                                    <div className={'orderHeader'}>
+                                        <span className={'orderId'}>Mã đơn hàng: {item.id}</span>
+                                        <div className={'orderStatus'}>
+                                            <span>{item.paymentStatus}</span>
+                                        </div>
+                                    </div>
+                                    <div className={'orderProducts'}>
+                                        {products.map((pro: any) => {
+                                            console.log(products)
+                                            return (
+                                                <div className={'orderProduct'}>
+                                                    <div className={'info'}>
+                                                        <div className={'imgWrapper'}>
+                                                            <img className="img-fluid" src={pro.product.image} alt=""/>
+                                                        </div>
+                                                        <div className={'contentWrapper'}>
+                                                            <span
+                                                                className={'nameProduct'}>{pro.product.title}</span>
+                                                            <span
+                                                                className={'colorSize'}> x {pro.quantity}</span>
+                                                            <div className={'price'}>
+                                                                <span
+                                                                    className={'newPrice'}>{formatToVNPrice(pro.price)}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className={'ratingButtonContainer'}>
+                                                        <button className={'ratingButton'}
+                                                            onClick={() => handleOpenRatingPopup(pro)}
+                                                        >Đánh giá
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            )
+                        })
+                        }
+                        {(!orders || orders.length === 0) && <div className={'orderUserWrapper'}>
+                            <span>Chưa có đơn hàng nào</span>
+                        </div>}
                     </div>
 
                 </div>
             }
+            <PopupRating
+                open={openRatingPopup}
+                handleClose={handleCloseRatingPopup}
+                detail={selectedDetail}
+                user={user}
+            />
             <PopupAddress
                 showNamePopup={showNamePopup}
                 addressData={addressData}
@@ -529,6 +580,19 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({ nameShow, user
                 ref={childRef}
                 user={user}/>
         </div>
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+        </>
     )
 };
 
