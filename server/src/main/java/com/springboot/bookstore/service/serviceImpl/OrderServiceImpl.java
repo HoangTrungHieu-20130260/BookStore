@@ -3,6 +3,7 @@ package com.springboot.bookstore.service.serviceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springboot.bookstore.config.JwtGenerator;
 import com.springboot.bookstore.dto.ProductsOrderDto;
 import com.springboot.bookstore.dto.OrderDto;
 import com.springboot.bookstore.entity.*;
@@ -32,15 +33,17 @@ public class OrderServiceImpl implements OrderService {
     private OrderDetailsRepository orderDetailsRepository;
     private OrderStatusRepository orderStatusRepository;
     private DiscountCodeRepository discountCodeRepository;
+    private JwtGenerator jwtGenerator;
 
     @Autowired
-    public OrderServiceImpl(UserRepository userRepository, ProductRepository productRepository, OrderRepository orderRepository, OrderDetailsRepository orderDetailsRepository, OrderStatusRepository orderStatusRepository, DiscountCodeRepository discountCodeRepository) {
+    public OrderServiceImpl(UserRepository userRepository, ProductRepository productRepository, OrderRepository orderRepository, OrderDetailsRepository orderDetailsRepository, OrderStatusRepository orderStatusRepository, DiscountCodeRepository discountCodeRepository, JwtGenerator jwtGenerator) {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
         this.orderDetailsRepository = orderDetailsRepository;
         this.orderStatusRepository = orderStatusRepository;
         this.discountCodeRepository = discountCodeRepository;
+        this.jwtGenerator = jwtGenerator;
     }
 
     @Override
@@ -49,6 +52,7 @@ public class OrderServiceImpl implements OrderService {
                 orderRepository.findById(id).orElse(null),
                 HttpStatus.OK
         );
+    }
     public Page<Order> findAll(int page, int size, String sortBy, String sortDir, String filter) {
         Sort.Direction direction = Sort.Direction.ASC;
         if (sortDir.equalsIgnoreCase("desc")) {
@@ -107,92 +111,106 @@ public class OrderServiceImpl implements OrderService {
         return result;
     }
 
+        @Override
+        public ResponseEntity<?> orderWithPaymentMethodCOD (OrderDto orderDto){
+            Order order = new Order();
+            OrderStatus status = orderStatusRepository.findByStatus("Pending").orElse(null);
+            if (orderDto.getUserId() != 0) {
+                User user = userRepository.findUserById(orderDto.getUserId());
+                order.setUser(user);
+            }
+            order.setFullName(orderDto.getFullName());
+            order.setAddress(orderDto.getAddress());
+            order.setPhone(orderDto.getPhone());
+            order.setPayment_method(orderDto.getPaymentMethod());
+            order.setPayment_status(false);
+            order.setOrderStatus(status);
+            order.setTotal_amount(orderDto.getTotalAmount());
+            order.setNote(orderDto.getNote());
+            if (orderDto.getDiscountCode() != null) {
+                DiscountCode discountCode = discountCodeRepository.findByCode(orderDto.getDiscountCode()).orElse(null);
+                System.out.println(discountCode);
+                order.setDiscountCode(discountCode);
+            }
+
+            order.setShipping_cost(orderDto.getShippingCost());
+            order.setCreatedAt(LocalDateTime.now());
+            orderRepository.save(order);
+
+            OrderDetails order_details;
+            for (ProductsOrderDto products : orderDto.getProducts()) {
+                order_details = new OrderDetails();
+                Product product = productRepository.findById(products.getId()).orElse(null);
+                order_details.setProduct(product);
+                assert product != null;
+                order_details.setProduct_name(product.getTitle());
+                order_details.setQuantity(product.getQuantity());
+                order_details.setPrice(product.getCurrentPrice());
+                order_details.setOrder(order);
+                orderDetailsRepository.save(order_details);
+
+            }
+
+            System.out.println("Order created: " + order.getId());
+            return ResponseEntity.ok(order);
+        }
+
+        @Override
+        public ResponseEntity<?> orderWithPaymentMethodVNPAY (OrderDto orderDto){
+            System.out.println(orderDto);
+            Order order = new Order();
+            OrderStatus status = orderStatusRepository.findByStatus("Pending").orElse(null);
+            if (orderDto.getUserId() != 0) {
+                User user = userRepository.findUserById(orderDto.getUserId());
+                order.setUser(user);
+            }
+            order.setFullName(orderDto.getFullName());
+            order.setAddress(orderDto.getAddress());
+            order.setPhone(orderDto.getPhone());
+            order.setPayment_method(orderDto.getPaymentMethod());
+            order.setPayment_status(false);
+            order.setOrderStatus(status);
+            order.setTotal_amount(orderDto.getTotalAmount());
+            order.setNote(orderDto.getNote());
+            if (orderDto.getDiscountCode() != null) {
+                DiscountCode discountCode = discountCodeRepository.findByCode(orderDto.getDiscountCode()).orElse(null);
+                System.out.println(discountCode);
+                order.setDiscountCode(discountCode);
+            }
+
+            order.setShipping_cost(orderDto.getShippingCost());
+            order.setCreatedAt(LocalDateTime.now());
+            orderRepository.save(order);
+
+            OrderDetails order_details;
+            for (ProductsOrderDto products : orderDto.getProducts()) {
+                order_details = new OrderDetails();
+                Product product = productRepository.findById(products.getId()).orElse(null);
+                order_details.setProduct(product);
+                assert product != null;
+                order_details.setProduct_name(product.getTitle());
+                order_details.setQuantity(product.getQuantity());
+                order_details.setPrice(product.getCurrentPrice());
+                order_details.setOrder(order);
+                orderDetailsRepository.save(order_details);
+
+            }
+
+            System.out.println("Order VNPAY created: " + order.getId());
+            return ResponseEntity.ok("Order VNPAY success");
+        }
+
     @Override
-    public ResponseEntity<?> orderWithPaymentMethodCOD(OrderDto orderDto) {
-        Order order = new Order();
-        OrderStatus status = orderStatusRepository.findByStatus("Pending").orElse(null);
-        if (orderDto.getUserId() != 0) {
-            User user = userRepository.findUserById(orderDto.getUserId());
-            order.setUser(user);
+    public ResponseEntity<?> getListOrderByToken(String token) {
+        try {
+            String username = jwtGenerator.getUsernameFromJWT(token);
+            User user = userRepository.findByUsername(username).orElse(null);
+            assert user != null;
+            List<Order> orders = orderRepository.findAllByUserIdOrderByCreatedAtDesc(user.getId());
+            return new ResponseEntity<>(orders, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Token is expired", HttpStatus.BAD_REQUEST);
         }
-        order.setFullName(orderDto.getFullName());
-        order.setAddress(orderDto.getAddress());
-        order.setPhone(orderDto.getPhone());
-        order.setPayment_method(orderDto.getPaymentMethod());
-        order.setPayment_status(false);
-        order.setOrderStatus(status);
-        order.setTotal_amount(orderDto.getTotalAmount());
-        order.setNote(orderDto.getNote());
-        if (orderDto.getDiscountCode() != null) {
-            DiscountCode discountCode = discountCodeRepository.findByCode(orderDto.getDiscountCode()).orElse(null);
-            System.out.println(discountCode);
-            order.setDiscountCode(discountCode);
-        }
-
-        order.setShipping_cost(orderDto.getShippingCost());
-        order.setCreatedAt(LocalDateTime.now());
-        orderRepository.save(order);
-
-        OrderDetails order_details;
-        for (ProductsOrderDto products : orderDto.getProducts()) {
-            order_details = new OrderDetails();
-            Product product = productRepository.findById(products.getId()).orElse(null);
-            order_details.setProduct(product);
-            assert product != null;
-            order_details.setProduct_name(product.getTitle());
-            order_details.setQuantity(product.getQuantity());
-            order_details.setPrice(product.getCurrentPrice());
-            order_details.setOrder(order);
-            orderDetailsRepository.save(order_details);
-
-        }
-
-        System.out.println("Order created: " + order.getId());
-        return ResponseEntity.ok(order);
+    }
     }
 
-    @Override
-    public ResponseEntity<?> orderWithPaymentMethodVNPAY(OrderDto orderDto) {
-        System.out.println(orderDto);
-        Order order = new Order();
-        OrderStatus status = orderStatusRepository.findByStatus("Pending").orElse(null);
-        if (orderDto.getUserId() != 0) {
-            User user = userRepository.findUserById(orderDto.getUserId());
-            order.setUser(user);
-        }
-        order.setFullName(orderDto.getFullName());
-        order.setAddress(orderDto.getAddress());
-        order.setPhone(orderDto.getPhone());
-        order.setPayment_method(orderDto.getPaymentMethod());
-        order.setPayment_status(false);
-        order.setOrderStatus(status);
-        order.setTotal_amount(orderDto.getTotalAmount());
-        order.setNote(orderDto.getNote());
-        if (orderDto.getDiscountCode() != null) {
-            DiscountCode discountCode = discountCodeRepository.findByCode(orderDto.getDiscountCode()).orElse(null);
-            System.out.println(discountCode);
-            order.setDiscountCode(discountCode);
-        }
-
-        order.setShipping_cost(orderDto.getShippingCost());
-        order.setCreated_at(String.valueOf(LocalDateTime.now()));
-        orderRepository.save(order);
-
-        OrderDetails order_details;
-        for (ProductsOrderDto products : orderDto.getProducts()) {
-            order_details = new OrderDetails();
-            Product product = productRepository.findById(products.getId()).orElse(null);
-            order_details.setProduct(product);
-            assert product != null;
-            order_details.setProduct_name(product.getTitle());
-            order_details.setQuantity(product.getQuantity());
-            order_details.setPrice(product.getCurrentPrice());
-            order_details.setOrder(order);
-            orderDetailsRepository.save(order_details);
-
-        }
-
-        System.out.println("Order VNPAY created: " + order.getId());
-        return ResponseEntity.ok("Order VNPAY success");
-    }
-}

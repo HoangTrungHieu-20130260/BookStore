@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @Table(name = "rate")
 public class Rate {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
 
@@ -46,6 +47,7 @@ public class Rate {
     @Column(name = "status")
     private boolean status;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_detail_id")
     private OrderDetails orderDetails;

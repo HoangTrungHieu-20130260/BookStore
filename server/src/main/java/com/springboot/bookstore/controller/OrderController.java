@@ -41,10 +41,17 @@ public class OrderController {
     public void deleteOrder(@PathVariable int id) {
         orderService.deleteOrder(id);
     }
+
     @PutMapping("{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable int id, @RequestBody Order order) {
         return ResponseEntity.ok(orderService.updateOrder(id, order));
     }
+
+    @GetMapping("/find-by-user")
+    public ResponseEntity<?> findByUser(@RequestParam String token) {
+        return orderService.getListOrderByToken(token);
+    }
+
     @PostMapping("/cod")
     public ResponseEntity<?> orderCOD(@RequestBody OrderDto orderDto){
         return orderService.orderWithPaymentMethodCOD(orderDto);
