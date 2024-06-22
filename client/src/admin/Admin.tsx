@@ -22,15 +22,19 @@ import {BlogCreate} from "./blog/BlogCreate";
 import {ReviewList} from "./review/ReviewList";
 import {authProvider} from "./AuthProvider";
 import {Navigate} from "react-router-dom";
-import {Home} from "@mui/icons-material"
+import {Home, SpaceDashboard, People, Inventory, Category, Receipt, Discount, RateReview, Newspaper} from "@mui/icons-material"
 const CustomMenu: React.FC = (props) => {
     return (
         <Menu {...props}>
-            <MenuItemLink
-                to="/"
-                primaryText="Home"
-                leftIcon={<Home />}
-            />
+            <MenuItemLink to="/" primaryText="Home" leftIcon={<Home />}/>
+            <MenuItemLink to="/admin" primaryText="Bảng điều khiển" leftIcon={<SpaceDashboard />}/>
+            <MenuItemLink to="/admin/user" primaryText="Người dùng" leftIcon={<People />}/>
+            <MenuItemLink to="/admin/product" primaryText="Sản phẩm" leftIcon={<Inventory />}/>
+            <MenuItemLink to="/admin/category" primaryText="Danh mục" leftIcon={<Category />}/>
+            <MenuItemLink to="/admin/order" primaryText="Đơn hàng" leftIcon={<Receipt />}/>
+            <MenuItemLink to="/admin/discount" primaryText="Mã giảm giá" leftIcon={<Discount />}/>
+            <MenuItemLink to="/admin/review" primaryText="Đánh giá" leftIcon={<RateReview />}/>
+            <MenuItemLink to="/admin/blog" primaryText="Bài viết" leftIcon={<Newspaper />}/>
         </Menu>
     );
 };

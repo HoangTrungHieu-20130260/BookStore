@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RateRepository extends JpaRepository<Rate, Integer> {
     Page<Rate> findAll(Specification<Rate> specification, Pageable pageable);
+
+    Page<Rate> findByProductId(int id,Pageable pageable);
 }

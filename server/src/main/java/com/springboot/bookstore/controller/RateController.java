@@ -25,6 +25,12 @@ public class RateController {
             @RequestParam(defaultValue = "") String filter) {
         return rateService.findAll(page, size, sortBy,sortDir,filter);
     }
+    @GetMapping("/by-product/{id}")
+    public Page<Rate> findByProductId(@PathVariable int id,
+                                      @RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "5") int size) {
+        return rateService.findByProductId(id, page, size);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable int id) {
         return ResponseEntity.ok(rateService.findById(id));

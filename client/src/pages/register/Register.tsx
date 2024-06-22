@@ -43,68 +43,49 @@ const Register = () => {
     return (
         <>
         <div className={"contain"}>
-            <div className="page-header text-center">
-                <div className="container">
-                    <h1>Đăng nhập</h1>
-                    <ul className="breadcrumb clearfix">
-                        <li className="bc-item">
-                            <a className="bc-home" href="" >Home</a>
-                        </li>
-                        <li className="bc-item">
-                            <a className="bc-category" href="">Đăng nhập</a>
-                        </li>
-                        {/*<li className="bc-item">*/}
-                        {/*    <strong className="bc-category">{categoryData?.category.name}</strong>*/}
-                        {/*</li>*/}
-                    </ul>
-                </div>
-            </div>
             <div className={"content"}>
-                <form className={"form"} onSubmit={handleSubmit}>
+                <div className="py-1"></div>
+                <form className={"form my-4"} onSubmit={handleSubmit}>
                     <h2 className={"login_heading"}>Đăng Kí</h2>
-                    <div className={"login_section"}>
-                        <div className={"username"}>
+                    <div className={""}>
+                        <div className={"username ms-0"}>
                             <input className={"user_input"} type={"text"} placeholder={" "} required
                                    onChange={e => setUsername(e.target.value)}/>
                             <label className={"label_username"}>Tên người dùng</label>
                         </div>
-                        <div className={"username"}>
+                        <div className={"username ms-0"}>
                             <input className={"user_input"} type={"email"} placeholder={" "} required
                                    onChange={e => setEmail(e.target.value)}/>
                             <label className={"label_username"}>Email</label>
                         </div>
-                        <div className={"password"}>
+                        <div className={"password ms-0"}>
                             <input className={"password_input"} type={"password"} placeholder={" "} required
                                    onChange={e => setPassword(e.target.value)}/>
                             <label className={"label_password"}>Mật khẩu</label>
                         </div>
-                        <div className={"confirm_password"}>
+                        <div className={"confirm_password ms-0"}>
                             <input className={"confirm_password_input"} type={"password"} placeholder={" "} required
                                    onChange={e => setConfirmPassword(e.target.value)}/>
                             <label className={"label_password"}>Xác nhận mật khẩu</label>
                         </div>
-                        <div className={"confirm_password"}>
+                        <div className={"confirm_password ms-0"}>
                             <input className={"confirm_password_input"} type={"password"} placeholder={" "} required
                                    onChange={e => setPhone(e.target.value)}/>
                             <label className={"label_password"}>Số điện thoại</label>
                         </div>
 
-                        {/*<div className={"username"}>*/}
-                        {/*    <input className={"user_input"} type={"text"} placeholder={" "}/>*/}
-                        {/*    <label className={"label_username"}>Số điện thoại</label>*/}
-                        {/*</div>*/}
                         {error && <div className="alert alert-danger" role="alert">
                             {error}
                         </div>}
                         {success && <div className="alert alert-success" role="alert">
                             {success}
                         </div>}
-                        <div className={"register_button"}>
+                        <div className={"register_button my-3"}>
                             <input type={"submit"} className={"register_button"} value={"Đăng kí"}/>
 
                         </div>
-                        <div className={"to-login"}>
-                            <Link to={"/sign-in"}>Đăng nhập</Link>
+                        <div className="to-register">
+                            <p className={'text-center'}>Đã có tài khoản? <Link to={'/sign-in'}>Đăng nhập</Link></p>
                         </div>
                     </div>
                 </form>

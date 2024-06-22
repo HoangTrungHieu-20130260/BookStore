@@ -1,35 +1,46 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import './Home.css'
 import { FaLongArrowAltRight, FaCartPlus,FaRegHeart  } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-
+import {Product} from "../../models";
+import axios from "axios"
+interface Object {
+  id: number;
+  imageUrl: string;
+  name: string;
+  oldPrice: number;
+  currentPrice: number;
+  quantity: number;
+}
 export const SlideShow =()=> {
 
     return (
-        <div id="carouselExampleAutoplaying" className="carousel slide" data-bs-ride="carousel">
-            <div className="carousel-inner">
-                <div className="carousel-item active">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTmdcZ7EdLJAP3mi6SpE3nDsJj4x8z8lNQxlgV4x_V&s" className="d-block w-100" alt="..."/>
+        <div className="container" style={{marginTop: 200}}>
+            <div id="carouselExampleAutoplaying" className="carousel slide " data-bs-ride="carousel">
+                <div className="carousel-inner">
+                    <div className="carousel-item active">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTmdcZ7EdLJAP3mi6SpE3nDsJj4x8z8lNQxlgV4x_V&s" className="d-block w-100" alt="..."/>
+                    </div>
+                    <div className="carousel-item">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTmdcZ7EdLJAP3mi6SpE3nDsJj4x8z8lNQxlgV4x_V&s" className="d-block w-100" alt="..."/>
+                    </div>
+                    <div className="carousel-item">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTmdcZ7EdLJAP3mi6SpE3nDsJj4x8z8lNQxlgV4x_V&s" className="d-block w-100" alt="..."/>
+                    </div>
                 </div>
-                <div className="carousel-item">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTmdcZ7EdLJAP3mi6SpE3nDsJj4x8z8lNQxlgV4x_V&s" className="d-block w-100" alt="..."/>
-                </div>
-                <div className="carousel-item">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTmdcZ7EdLJAP3mi6SpE3nDsJj4x8z8lNQxlgV4x_V&s" className="d-block w-100" alt="..."/>
-                </div>
+                <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
+                        data-bs-slide="prev">
+                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span className="visually-hidden">Previous</span>
+                </button>
+                <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
+                        data-bs-slide="next">
+                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span className="visually-hidden">Next</span>
+                </button>
             </div>
-            <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
-                    data-bs-slide="prev">
-                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span className="visually-hidden">Previous</span>
-            </button>
-            <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
-                    data-bs-slide="next">
-                <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                <span className="visually-hidden">Next</span>
-            </button>
         </div>
     )
 }
@@ -37,7 +48,7 @@ export const Home= ()=> {
     const responsive = {
         desktop: {
             breakpoint: { max: 3000, min: 1024 },
-            items: 4,
+            items: 5,
         },
         tablet: {
             breakpoint: { max: 1024, min: 464 },
@@ -52,6 +63,26 @@ export const Home= ()=> {
     const changeCarousel = (index: number) => {
         setCarousel(index);
     }
+    const [bestSell, setBestSell] = useState<any[]>([])
+    const [newest, setNewest] = useState<Product[]>()
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [responseB, responseN] = await Promise.all(
+                    [axios.get<any>(`http://localhost:8080/api/v1/product/best-sellers`),
+                    axios.get<Product[]>(`http://localhost:8080/api/v1/product/newest`)]
+                )
+                setBestSell(responseB.data)
+                setNewest(responseN.data)
+                
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        fetchData()
+    }, [bestSell, newest])
+    
     return (
         <>
             <SlideShow/>
@@ -105,9 +136,9 @@ export const Home= ()=> {
                 <div className="products-slider">
                     <div className="tabs-list">
                         <div className={carousel === 1 ? "tab-title active" : "tab-title"}
-                             onClick={() => setCarousel(1)}>best selling</div>
+                             onClick={() => setCarousel(1)}>Bán chạy nhất</div>
                         <div className={carousel === 2 ? "tab-title active" : "tab-title"}
-                             onClick={() => setCarousel(2)}>e-books</div>
+                             onClick={() => setCarousel(2)}>Mới nhất</div>
                         <div className={carousel === 3 ? "tab-title active" : "tab-title"}
                              onClick={() => setCarousel(3)}>text book</div>
                     </div>
@@ -118,6 +149,30 @@ export const Home= ()=> {
                             infinite={true}
                             containerClass={carousel === 1 ? "" : "hide-carousel-container"}
                         >
+                        {bestSell.map((item, index)=> (
+                        <div className="product-wrap">
+                                <div className="product-img">
+                                    <a href="">
+                                        <img src="https://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/02/book17-216x265.png" alt=""/>
+                                    </a>
+                                    <div className="product-buttons d-flex justify-content-evenly">
+                                        <FaCartPlus className={"product-btn-icon"}/>
+                                        <FaRegHeart className={"product-btn-icon"}/>
+                                    </div>
+                                </div>
+                                <div className="product-content">
+                                    <h4 className="product-title">
+                                        <a href="">Colorless Tsukur 1</a>
+                                    </h4>
+                                    <span className="price">
+                                        100.000
+                                        <span className="currency-symbol">
+                                            &nbsp;VNĐ
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
                             <div className="product-wrap">
                                 <div className="product-img">
                                     <a href="">

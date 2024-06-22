@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import {Navigate, Outlet, Route, Routes} from "react-router-dom";
+import {Outlet, Route, Routes} from "react-router-dom";
 import {Header} from "./components/header/Header";
 import {Footer} from "./components/footer/Footer";
 import {Home} from "./pages/homeScreen/Home";
@@ -41,7 +41,9 @@ const BasicLayout = ()=> {
     return (
         <>
             <Header/>
-            <Outlet/>
+            <div style={{marginTop: 156}}>
+                <Outlet/>
+            </div>
             <Footer/>
         </>
     )

@@ -47,4 +47,12 @@ public class ProductController {
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         return ResponseEntity.ok(productService.createProduct(product));
     }
+    @GetMapping("/best-sellers")
+    public List<Object[]> getBestSellingProducts() {
+        return productService.getBestSellingProducts();
+    }
+    @GetMapping("/newest")
+    public List<Product> getNewestProducts() {
+        return productService.get10NewsProduct();
+    }
 }

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.bookstore.entity.Category;
+import com.springboot.bookstore.entity.Product;
 import com.springboot.bookstore.entity.Rate;
+import com.springboot.bookstore.repository.ProductRepository;
 import com.springboot.bookstore.repository.RateRepository;
 import com.springboot.bookstore.service.RateService;
 import jakarta.persistence.criteria.Predicate;
@@ -22,10 +24,15 @@ import java.time.LocalDateTime;
 @Service
 public class RateServiceImpl implements RateService {
     private RateRepository rateRepository;
+    private ProductRepository productRepository;
     @Autowired
-    public RateServiceImpl(RateRepository rateRepository) {
+    public RateServiceImpl(RateRepository rateRepository, ProductRepository productRepository) {
         this.rateRepository = rateRepository;
+        this.productRepository = productRepository;
     }
+
+
+
 
     @Override
     public Page<Rate> findAll(int page, int size, String sortBy, String sortDir, String filter) {
@@ -53,6 +60,12 @@ public class RateServiceImpl implements RateService {
             return predicate;
         };
         return rateRepository.findAll(specification, pageable);
+    }
+
+    @Override
+    public Page<Rate> findByProductId(int id, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return rateRepository.findByProductId(id, pageable);
     }
 
     @Override

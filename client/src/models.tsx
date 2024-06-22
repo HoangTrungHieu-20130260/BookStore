@@ -76,7 +76,14 @@ export interface CategoryResponse {
     category: Category;
     categories: Category[];
 }
-
+export interface Review {
+    id: number,
+    rating: number,
+    comment: string,
+    createAt: string,
+    updateAt: string,
+    status: boolean
+}
 export interface Pageable {
     pageNumber: number;
     pageSize: number;
@@ -92,6 +99,23 @@ export interface Pageable {
 
 export interface ProductsPage {
     content: Product[];
+    pageable: Pageable;
+    last: boolean;
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    number: number;
+    sort: {
+        empty: boolean;
+        sorted: boolean;
+        unsorted: boolean;
+    };
+    first: boolean;
+    numberOfElements: number;
+    empty: boolean;
+}
+export interface ReviewsPage {
+    content: Review[];
     pageable: Pageable;
     last: boolean;
     totalElements: number;
