@@ -4,8 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.bookstore.config.JwtGenerator;
+import com.springboot.bookstore.dto.AddressDto;
 import com.springboot.bookstore.dto.UserDTO;
+import com.springboot.bookstore.entity.Address;
 import com.springboot.bookstore.entity.User;
+import com.springboot.bookstore.repository.AddressRepository;
 import com.springboot.bookstore.repository.UserRepository;
 import com.springboot.bookstore.service.UserService;
 import jakarta.persistence.criteria.Predicate;
@@ -23,18 +26,22 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Collections;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private PasswordEncoder encoder;
     private JwtGenerator jwtGenerator;
+
+    private AddressRepository addressRepository;
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder, JwtGenerator jwtGenerator) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder, JwtGenerator jwtGenerator, AddressRepository addressRepository) {
         this.userRepository = userRepository;
         this.encoder = encoder;
         this.jwtGenerator = jwtGenerator;
+        this.addressRepository = addressRepository;
     }
 
     @Override
@@ -148,6 +155,55 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ResponseEntity<?> editDataUser(UserDTO userDTO){
+        User user = findByUserName(userDTO.getUsername());
+        if (user == null) return new ResponseEntity<>("Tài khoản không tồn tại!", HttpStatus.BAD_REQUEST);
+        String fullName = userDTO.getFullName();
+        String email = userDTO.getEmail();
+        String phone = userDTO.getPhone();
+        String avatar = userDTO.getAvatarLink();
+        user.setUpdatedAt(LocalDateTime.now());
+        user.setFullName(fullName);
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setAvatar(avatar);
+        userRepository.save(user);
+        System.out.println("Edit user:" + user.getUsername() + " success");
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> addNewAddress(String username, AddressDto addressDto) {
+        try {
+            User user = findByUserName(username);
+            if (addressDto.isDefault()) {
+                List<Address> addresses = user.getAddress();
+                for (Address ar : addresses) {
+                    ar.setDefault(false);
+                }
+            }
+            userRepository.save(user);
+            Address address = new Address();
+            address.setUser(user);
+            address.setFullName(addressDto.getFullName());
+            address.setPhone(addressDto.getPhone());
+            address.setStreet(addressDto.getStreet());
+            address.setWardId(addressDto.getWardId());
+            address.setWard(addressDto.getWard());
+            address.setDistrictId(addressDto.getDistrictId());
+            address.setDistrict(addressDto.getDistrict());
+            address.setProvinceId(addressDto.getProvinceId());
+            address.setProvince(addressDto.getProvince());
+            address.setDefault(addressDto.isDefault());
+            address.setCreatedAt(LocalDateTime.now());
+            addressRepository.save(address);
+            return new ResponseEntity<>(address, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Lỗi thao tác !", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
     public ResponseEntity<?> changePassword(UserDTO userDTO) {
         User user = findByUserName(userDTO.getUsername());
         if (encoder.matches(userDTO.getPassword(), user.getPassword())) {
@@ -157,6 +213,50 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity<>("Thay đổi mật khẩu thành công", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Mật khẩu không chính xác !", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> editAddress(String username, AddressDto addressDto) {
+        try {
+            User user = findByUserName(username);
+            if (addressDto.isDefault()) {
+                List<Address> addresses = user.getAddress();
+                for (Address ar : addresses) {
+                    ar.setDefault(false);
+                }
+            }
+            userRepository.save(user);
+            Address address = addressRepository.findById(addressDto.getId()).orElse(null);
+            if (address == null) return new ResponseEntity<>("Address not found!", HttpStatus.BAD_REQUEST);
+            address.setFullName(addressDto.getFullName());
+            address.setPhone(addressDto.getPhone());
+            address.setStreet(addressDto.getStreet());
+            address.setWardId(addressDto.getWardId());
+            address.setWard(addressDto.getWard());
+            address.setDistrictId(addressDto.getDistrictId());
+            address.setDistrict(addressDto.getDistrict());
+            address.setProvinceId(addressDto.getProvinceId());
+            address.setProvince(addressDto.getProvince());
+            address.setDefault(addressDto.isDefault());
+            address.setUpdatedAt(LocalDateTime.now());
+            addressRepository.save(address);
+            return new ResponseEntity<>(address, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Lỗi thao tác !", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> loadAddressUser(String token) {
+        if (token == null) return new ResponseEntity<>("Token expired !", HttpStatus.BAD_REQUEST);
+        try {
+            String username = jwtGenerator.getUsernameFromJWT(token);
+            User user = findByUserName(username);
+            if (user == null) return new ResponseEntity<>("User not found !", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(user.getAddress(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Token expired !", HttpStatus.OK);
         }
     }
 

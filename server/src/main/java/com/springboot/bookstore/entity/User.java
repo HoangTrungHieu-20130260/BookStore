@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class User {
     @Column(name = "status")
     private boolean status;
 
-
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
     private List<Address> address;
     

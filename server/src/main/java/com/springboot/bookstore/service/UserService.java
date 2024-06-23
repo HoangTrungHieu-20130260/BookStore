@@ -1,5 +1,6 @@
 package com.springboot.bookstore.service;
 
+import com.springboot.bookstore.dto.AddressDto;
 import com.springboot.bookstore.dto.UserDTO;
 import com.springboot.bookstore.entity.User;
 import org.springframework.data.domain.Page;
@@ -17,5 +18,13 @@ public interface UserService {
 
     ResponseEntity<?> getDataUser(String token);
 
+    ResponseEntity<?> editDataUser(UserDTO userDTO);
+
+    ResponseEntity<?> addNewAddress(String username, AddressDto addressDto);
+
     ResponseEntity<?> changePassword(UserDTO userDTO);
+
+    ResponseEntity<?> editAddress(String username, AddressDto addressDto);
+
+    ResponseEntity<?> loadAddressUser(String token);
 }
