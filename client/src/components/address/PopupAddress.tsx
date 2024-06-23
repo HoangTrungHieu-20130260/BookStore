@@ -1,6 +1,5 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Box, TextField, MenuItem } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import './PopupAddress.css';
 import {fetchData} from "../../services/AddressAPI";
 
@@ -23,16 +22,7 @@ interface PopupAddressProps {
     handleEditAddress: (data: any) => void;
 }
 
-const useStyles = makeStyles({
-    root: {
-        '& .MuiInputLabel-root': {
-            fontSize: '14px'
-        },
-        '& .MuiInputBase-input': {
-            fontSize: '14px',
-        },
-    }
-});
+
 
 const PopupAddress = forwardRef((props: PopupAddressProps, ref) => {
     const {
@@ -46,7 +36,6 @@ const PopupAddress = forwardRef((props: PopupAddressProps, ref) => {
         handleEditAddress
     } = props;
 
-    const classes = useStyles();
     const [provinces, setProvinces] = useState<any[]>([]);
     const [districts, setDistricts] = useState<any[]>([]);
     const [wards, setWards] = useState<any[]>([]);
@@ -202,7 +191,6 @@ const PopupAddress = forwardRef((props: PopupAddressProps, ref) => {
                                 name="fullName"
                                 variant="outlined"
                                 fullWidth
-                                className={`${classes.root} editFullNameInput`}
                                 size="small"
                                 value={fullName}
                                 onChange={e => setFullName(e.target.value)}
@@ -216,7 +204,6 @@ const PopupAddress = forwardRef((props: PopupAddressProps, ref) => {
                                 name="phone"
                                 variant="outlined"
                                 fullWidth
-                                className={classes.root}
                                 size="small"
                                 value={phone}
                                 onChange={e => setPhone(e.target.value)}
@@ -234,7 +221,6 @@ const PopupAddress = forwardRef((props: PopupAddressProps, ref) => {
                             value={provinceId}
                             variant="outlined"
                             fullWidth
-                            className={classes.root}
                             size="small"
                             onChange={e => handleChangeProvince(e.target.value)}
                         >
@@ -256,7 +242,6 @@ const PopupAddress = forwardRef((props: PopupAddressProps, ref) => {
                             value={districtId}
                             variant="outlined"
                             fullWidth
-                            className={classes.root}
                             size="small"
                             onChange={e => handleChangeDistrict(e.target.value)}
                         >
@@ -278,7 +263,6 @@ const PopupAddress = forwardRef((props: PopupAddressProps, ref) => {
                             value={wardId}
                             variant="outlined"
                             fullWidth
-                            className={classes.root}
                             size="small"
                             onChange={e => handleChangeWard(e.target.value)}
                         >
@@ -297,7 +281,6 @@ const PopupAddress = forwardRef((props: PopupAddressProps, ref) => {
                             name="sweet"
                             variant="outlined"
                             fullWidth
-                            className={classes.root}
                             size="small"
                             value={street}
                             onChange={e => setStreet(e.target.value)}

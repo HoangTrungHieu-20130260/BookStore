@@ -12,5 +12,9 @@ import java.util.Optional;
 
 public interface DiscountCodeRepository extends JpaRepository<DiscountCode, Integer> {
     Optional<DiscountCode> findByCode(String code);
+
+    Optional<DiscountCode> findById(int id);
+
     Page<DiscountCode> findAll(Specification<DiscountCode> specification, Pageable pageable);
+
 }

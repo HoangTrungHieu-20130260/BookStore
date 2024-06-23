@@ -30,6 +30,7 @@ const ForgotConfirm = () => {
                 newPassword: password,
                 email: localStorage.getItem('emailForgot')
             });
+            console.log(response)
 
             setSuccess("Thay đổi mật khẩu thành công!");
             setError(null);

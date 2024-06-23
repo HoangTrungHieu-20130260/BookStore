@@ -1,5 +1,6 @@
 package com.springboot.bookstore.controller;
 
+import lombok.RequiredArgsConstructor;
 import com.springboot.bookstore.entity.Category;
 import com.springboot.bookstore.entity.DiscountCode;
 import com.springboot.bookstore.service.DiscountCodeService;
@@ -8,14 +9,27 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/discount")
 public class DiscountCodeController {
+
     private DiscountCodeService discountCodeService;
+
     @Autowired
     public DiscountCodeController(DiscountCodeService discountCodeService) {
         this.discountCodeService = discountCodeService;
     }
+
+    @GetMapping("/check")
+    public ResponseEntity<?> checkCode(
+            @RequestParam String code
+    ) {
+        return discountCodeService.checkDiscountCode(code);
+    }
+
     @GetMapping("")
     public Page<DiscountCode> findAll(@RequestParam(defaultValue = "0") int page,
                                       @RequestParam(defaultValue = "10") int size,

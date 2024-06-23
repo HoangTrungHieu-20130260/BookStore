@@ -3,7 +3,6 @@ package com.springboot.bookstore.service.serviceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.springboot.bookstore.entity.Category;
 import com.springboot.bookstore.entity.DiscountCode;
 import com.springboot.bookstore.repository.DiscountCodeRepository;
 import com.springboot.bookstore.service.DiscountCodeService;
@@ -14,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -25,6 +26,21 @@ public class DiscountCodeServiceImpl implements DiscountCodeService {
     @Autowired
     public DiscountCodeServiceImpl(DiscountCodeRepository discountCodeRepository) {
         this.discountCodeRepository = discountCodeRepository;
+    }
+
+    @Override
+    public ResponseEntity<?> checkDiscountCode(String code) {
+        DiscountCode discount = discountCodeRepository.findByCode(code).orElse(null);
+        if (discount == null) return new ResponseEntity<>("DiscountCode invalid", HttpStatus.OK);
+        LocalDateTime nowDate = LocalDateTime.now();
+        if ((discount.getStartDate().equals(nowDate) || discount.getStartDate().isBefore(nowDate)) &&
+                discount.getEndDate().isAfter(nowDate) && discount.isStatus()) {
+            if (discount.getQuantity() > 0) {
+                return new ResponseEntity<>(discount, HttpStatus.OK);
+            } else return new ResponseEntity<>("Out of stock", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Discount invalid", HttpStatus.OK);
+        }
     }
 
     @Override

@@ -60,12 +60,16 @@ public class Order {
     @Column(name = "shipping_cost")
     private double shipping_cost;
 
+    @Column(name = "transaction_id")
+    private String transaction_id;
+
+     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+     private List<OrderDetails> orderDetails;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<OrderDetails> orderDetails;
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_status_id", referencedColumnName = "id", nullable = false)

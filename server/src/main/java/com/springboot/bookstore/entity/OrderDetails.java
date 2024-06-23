@@ -39,7 +39,7 @@ public class OrderDetails {
     private double price;
 
     @OneToOne
-    @JoinColumn(name = "review_id")
-    private Rate review;
+    @JoinColumn(name = "rate_id")
+    private Rate rate;
 
 }
