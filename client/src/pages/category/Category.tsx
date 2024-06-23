@@ -12,6 +12,8 @@ export const Category = () => {
     const dispatch = useDispatch();
     const {id} = useParams<{id: string}>()
     const [page, setPage] = useState(1)
+    const [sortBy, setSortBy] = useState('id');
+    const [sortDir, setSortDir] = useState('asc');
     const [categoryData, setCategoryData] = useState<ProductsWithCategoryResponse>()
     const [categories, setCategories] = useState<CategoryResponse[]>([])
     const handleAddToCart = (product: Product) => {
@@ -21,7 +23,14 @@ export const Category = () => {
         const fetchData = async () => {
             try {
                 const [response, responseCat] = await Promise.all([
-                    axios.get<ProductsWithCategoryResponse>(`http://localhost:8080/api/v1/category/products/${id}`),
+                    axios.get<ProductsWithCategoryResponse>(`http://localhost:8080/api/v1/category/products/${id}`, {
+                        params: {
+                            page: page -1,
+                            size: 12,
+                            sortBy: sortBy,
+                            sortDir : sortDir
+                        }
+                    }),
                     axios.get<CategoryResponse[]>("http://localhost:8080/api/v1/category/get-all")
                 ])
                 setCategoryData(response.data)
@@ -32,21 +41,40 @@ export const Category = () => {
             }
         }
         fetchData()
-
-        
-    }, [id, categoryData])
+    }, [id, page, sortBy, sortDir])
     const handlePage = async (number : number) => {
         const response = await axios.get<ProductsWithCategoryResponse>(`http://localhost:8080/api/v1/category/products/${id}`,
             {
                 params : {
                     page : number,
-                    size : 5
+                    size : 12,
+                    sortBy: sortBy,
+                    sortDir : sortDir
                 }
             }
         )
         setCategoryData(response.data)
         setPage(number)
     }
+    const handleSort = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        if (value === 'id') {
+            setSortBy('id')
+            setSortDir("asc")
+        } else if (value === 'price-asc') {
+            setSortBy("currentPrice")
+            setSortDir("asc")
+        } else if (value === 'price-desc') {
+            setSortBy("currentPrice")
+            setSortDir("desc")
+        }
+        setPage(1)
+    }
+
+    const formatToVNPrice = (price: any) => {
+        return price.toLocaleString('vi-VN') + 'đ';
+    }
+
     return (
         <>
             <div className="page-header text-center">
@@ -54,7 +82,7 @@ export const Category = () => {
                     <h1>{categoryData?.category.name}</h1>
                     <ul className="breadcrumb clearfix">
                         <li className="bc-item">
-                            <a className="bc-home" href="" >Home</a>
+                            <Link className="bc-home" to={'/'}>Home</Link>
                         </li>
                         <li className="bc-item">
                             <a className="bc-category" href="">{categoryData?.category.parentCategory?.name}</a>
@@ -84,8 +112,8 @@ export const Category = () => {
                         </div>
                         <div className="right-content col-lg-9 col-md-9 col-sm-12 col-xs-12">
                             <div className="tool-bar-top mb-4">
-                                <select name="orderby" id="">
-                                    <option value="menu_order" selected>Mặc định</option>
+                                <select name="orderby" id="" onChange={handleSort}>
+                                    <option value="id" selected>Mặc định</option>
                                     <option value="price-asc">Giá: Thấp đến cao</option>
                                     <option value="price-desc">Giá: Cao đến Thấp</option>
                                 </select>
@@ -96,11 +124,13 @@ export const Category = () => {
                                         <div className="product-img">
                                             <Link to={`/detail/${i.id}`}>{i.image && <img src={i.image} alt=""/>}</Link>
                                             <div className="product-buttons d-flex justify-content-evenly">
-                                                <FaCartPlus
-                                                    className={"product-btn-icon"}
-                                                    onClick={() => handleAddToCart(i)}
-                                                />
-                                                <FaRegHeart className={"product-btn-icon"}/>
+                                                <p className="d-flex align-items-center mb-0 text-white">
+                                                    <FaCartPlus
+                                                        className={"product-btn-icon"}
+                                                        onClick={() => handleAddToCart(i)}
+                                                    />
+                                                    Thêm vào giỏ hàng
+                                                </p>
                                             </div>
                                         </div>
                                         <div className="product-content">
@@ -108,19 +138,11 @@ export const Category = () => {
                                                 <a href="">{i.title}</a>
                                             </h4>
                                             <span className="price">
-                                        {i.currentPrice}
+                                        {formatToVNPrice(i.currentPrice)}
                                         <span className="currency-symbol">
                                             &nbsp;VNĐ
                                         </span>
                                     </span>
-                                            <div>
-                                                <s>{i.oldPrice}
-                                                    <span className="currency-symbol">
-                                            &nbsp;VNĐ
-
-                                                    </span>
-                                                </s>
-                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -134,7 +156,6 @@ export const Category = () => {
                                                 <a onClick={()=> handlePage(index + 1)}>{index + 1}</a>
                                             </li>
                                         ))}
-                                    <li><a href="#"><FaChevronRight/></a></li>
                                 </ul>
                             </div>
                         </div>

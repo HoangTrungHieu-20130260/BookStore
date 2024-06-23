@@ -1,20 +1,17 @@
 
 import React, { useEffect, useState } from "react";
-import { TextField } from "@mui/material";
 
 // Icons
 import { FaPen, FaRegUser } from "react-icons/fa";
 import { BiPurchaseTag } from "react-icons/bi";
-import { MdNotificationsNone } from "react-icons/md";
 
 // CSS
 import "./AccountDetailsScreen.css";
-import IMG from '../../images/Avatar/up fb.jpg';
+import IMG from '../../images/Avatar/avatarClone.png';
 
 import AccountDetails from "./AccountDetails";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import {AddressDto, OrderDto} from "../../models";
+import {AddressDto} from "../../models";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -46,9 +43,9 @@ const AccountDetailScreen: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [isShow, setIsShow] = useState<string>('profile');
     const token = localStorage.getItem('token');
-    const navigate = useNavigate();
-    const [avatarLink, setAvatarLink] = useState<string>('');
-    let hasShownToast = false;
+    // const navigate = useNavigate();
+    // const [avatarLink, setAvatarLink] = useState<string>('');
+    // let hasShownToast = false;
 
     const handleSelectShow = (view: string) => {
         setIsShow(view);
@@ -60,11 +57,13 @@ const AccountDetailScreen: React.FC = () => {
 
     const fetchDataUser = async () => {
         try {
-            const response = await axios.get<User>('http://localhost:8080/api/v1/user/get-data-user', {
-                params: { token }
-            });
-            const userData = response.data;
-            setUser(userData);
+            if (token) {
+                const response = await axios.get<User>('http://localhost:8080/api/v1/user/get-data-user', {
+                    params: { token: JSON.parse(token).token }
+                });
+                const userData = response.data;
+                setUser(userData);
+            }
         } catch (error) {
             console.error('Error fetching data:', error);
         }

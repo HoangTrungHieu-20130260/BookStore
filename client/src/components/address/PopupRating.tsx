@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { Modal, Box, Typography, Button, Rating, TextField } from '@mui/material';
+import { Modal, Box, Typography, Rating, TextField } from '@mui/material';
 import './PopupRating.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import {AddressDto, RateDto} from "../../models";
-import { useNotify } from 'react-admin';
-import {RateSuccess} from "../../pages/accountDetail/AccountDetailsScreen";
 
 const style = {
     position: 'absolute' as const,
@@ -21,15 +19,15 @@ const style = {
     p: 4,
 };
 
-const styleBtn = {
-    bgcolor: 'var(--color-black)',
-    p: 1,
-    mr: 2,
-    '&:hover': {
-        bgcolor: '#fff',
-        color: '#000'
-    }
-};
+// const styleBtn = {
+//     bgcolor: 'var(--color-black)',
+//     p: 1,
+//     mr: 2,
+//     '&:hover': {
+//         bgcolor: '#fff',
+//         color: '#000'
+//     }
+// };
 interface User {
     id: number;
     fullName: string;
@@ -71,7 +69,7 @@ const PopupRating: React.FC<PopupRatingProps> = ({ open, handleClose, detail, us
     const postReview = async () => {
         const postData = {
             userId: user.id,
-            orderDetailId: detail.id,
+            orderDetailsId: detail.id,
             productId: detail.product.id,
             stars: stars,
             content: reviewContent
@@ -127,20 +125,20 @@ const PopupRating: React.FC<PopupRatingProps> = ({ open, handleClose, detail, us
                     <button className={"rate_button"} onClick={handleSubmit}>
                         Gửi đánh giá
                     </button>
-                    <ToastContainer
-                        position="top-center"
-                        autoClose={5000}
-                        hideProgressBar={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        theme="light"
-                    />
-                </div>
 
+                </div>
+                <ToastContainer
+                    position="top-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
             </Box>
 
         </Modal>

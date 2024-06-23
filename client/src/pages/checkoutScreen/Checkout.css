@@ -16,6 +16,7 @@
 .checkout_page {
     display: flex;
     justify-content: center;
+    margin-bottom: 40px;
 }
 
 .checkout_home{
@@ -36,9 +37,11 @@
     width: 60%;
     border-collapse: separate;
     border-radius: 5px;
-    margin: 40px auto;
+    margin: 0 auto;
     background-color: #fafafa;
     border-top: 4px solid #27ae61;
+    border-left: 1px solid rgba(0,0,0,0.2);
+    border-right: 1px solid rgba(0,0,0,0.2);
 }
 
 .coupon_noti p{
@@ -55,14 +58,15 @@
 
 .coupon {
     margin: 0 auto;
-    border: 1px solid rgba(0, 0, 0, .3);
     border-radius: 5px;
-    height: 100px;
+    height: 120px;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-top: none;
     width: 60%;
     padding: 20px 0px;
 }
 
-.button {
+.discount_button {
     background-color: #27ae61;
     color: white;
     text-transform: uppercase;
@@ -71,6 +75,10 @@
     border-radius: 3px;
     border: none;
     cursor: pointer;
+}
+
+.discount_button:hover{
+    background-color: #31dc7b;
 }
 
 .input-text {
@@ -267,6 +275,10 @@
     margin-left: 88%;
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.order_button:hover{
+    background-color: #31dc7b;
 }
 
 .shipping_fee{

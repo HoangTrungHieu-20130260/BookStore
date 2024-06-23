@@ -23,8 +23,8 @@
 
 .editAddressPopup .editAddressPopupWrapper .titleAddress span {
     font-size: 18px;
-    font-family: var(--font-family-sans-serif);
-    color: var(--color-black);
+    font-family: sans-serif;
+    color: black;
 }
 
 .editAddressPopup .editAddressPopupWrapper form .editFullNamePhone {
@@ -47,7 +47,7 @@
 
 .editAddressPopup .editAddressPopupWrapper form .editFullNamePhone .editFullName .editFullNameInput,
 .editAddressPopup .editAddressPopupWrapper form .editFullNamePhone .editFullName .editFullNameInput:focus {
-    border-color: var(--color-black);
+    border-color: black;
 }
 
 .editAddressPopup .editAddressPopupWrapper form .editAddress,
@@ -67,7 +67,7 @@
 
 .editAddressPopup .editAddressPopupWrapper form .addressDefault label {
     font-size: 14px;
-    font-family: var(--font-family-sans-serif);
+    font-family: sans-serif;
 }
 
 .editAddressPopup .editAddressPopupWrapper form .action {
@@ -77,8 +77,8 @@
 
 .editAddressPopup .editAddressPopupWrapper form .action button {
     width: 100px;
-    border: 1px solid var(--color-black);
-    background: var(--color-black);
+    border: 1px solid black;
+    background: black;
     font-weight: 500;
     color: #FFFFFF;
     margin-right: 10px;
@@ -90,11 +90,11 @@
 
 .editAddressPopup .editAddressPopupWrapper form .action button:hover {
     background: #FFFFFF;
-    color: var(--color-black);
+    color:black;
 }
 
 .editAddressPopup .editAddressPopupWrapper form .action button:disabled {
-    background: var(--color-silver);
-    border: var(--color-silver);
-    color: var(--color-black);
+    background: silver;
+    border: silver;
+    color: black;
 }

@@ -183,18 +183,20 @@ accountDetailContentWrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px 30px;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
 }
 
 .addressContainer .headerAddress .addAddressBtn {
     display: flex;
     align-items: center;
     font-size: 14px;
-    border: 1px solid #000000;
-    padding: 5px 10px;
-    background: #FFFFFF;
-    color: black;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 15px;
+    background: #27ae61;
+    color: white;
     transition: all .3s;
-    border-radius: 3px;
 }
 
 .addressContainer .headerAddress .addAddressBtn span {
@@ -204,8 +206,7 @@ accountDetailContentWrapper {
 }
 
 .addressContainer .headerAddress .addAddressBtn:hover {
-    background: #27ae61;
-    color: white;
+    background: #31dc7b;
 }
 
 .addressContainer .addressListWrapper {
@@ -274,10 +275,14 @@ accountDetailContentWrapper {
     margin-bottom: 10px;
     border: none;
     text-align: right;
+    background-color: #27ae61;
+    color: #FFFFFF;
+    padding: 5px 10px;
+    border-radius: 3px;
 }
 
 .addressContainer .addressListWrapper .addressList .addressItem .addressAction .updateAddress:hover {
-    color: #27ae61;
+    background-color: #31dc7b;
     font-weight: bolder;
 }
 

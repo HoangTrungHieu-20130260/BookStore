@@ -92,6 +92,7 @@
     overflow: hidden;
     position: relative;
     padding-bottom: 20px;
+    height: 320px;
 }
 .product-wrap:hover {
     border: 1px solid #27ae61;
