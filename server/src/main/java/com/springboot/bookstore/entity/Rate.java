@@ -47,7 +47,7 @@ public class Rate {
     @Column(name = "status")
     private boolean status;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_detail_id")
     private OrderDetails orderDetails;

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./Forgot.css";
-import { Header } from "../../components/header/Header";
-import { Footer } from "../../components/footer/Footer";
+import '../../common/Common.css'
 import axios from "axios";
 import { ForgotDto } from "../../models";
 import { Link } from "react-router-dom";
@@ -39,22 +38,13 @@ function Forgot() {
 
     return (
         <>
-            <Header />
             <div className="contain">
-                <div className="login_label">
-                    <div className="login_title">
-                        <h2 className="title">Quên mật khẩu</h2>
-                    </div>
-                    <div className="login_page">
-                        <Link to="/"><h6 className="login_home">Trang chủ /</h6></Link>
-                        <h5 className="login_name">Quên mật khẩu</h5>
-                    </div>
-                </div>
-                <div className="content">
-                    <form className="form" onSubmit={handleSubmit}>
+                <div className="content ">
+                    <div className="py-1"></div>
+                    <form className="form my-4" onSubmit={handleSubmit}>
                         <h2 className="login_heading">Quên mật khẩu</h2>
-                        <div className="login_section">
-                            <div className="username">
+                        <div className="">
+                            <div className="username ms-0">
                                 <input
                                     className="user_input"
                                     type="email"
@@ -73,7 +63,6 @@ function Forgot() {
                     </form>
                 </div>
             </div>
-            <Footer />
         </>
     );
 }

@@ -1,40 +1,21 @@
 
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {User} from "../../models";
 import {
     Avatar,
     Box,
     Card,
     CardContent,
-    CardHeader, List,
+    List,
     ListItem,
     ListItemAvatar,
     ListItemText,
     Typography
 } from "@mui/material";
-import {Person} from "@mui/icons-material"
-import {Link} from "react-router-dom";
-interface Props {
-    newUsersCount: number;
-    newUsersList: User[];
-}
-export const NewUserStats = ({newUsersCount, newUsersList} : Props) => {
+export const NewUserStats = ({newUsersList} :  { newUsersList: User[] }) => {
 
     return (
         <Card>
-            <CardHeader
-                avatar={<Avatar><Person/></Avatar>}
-                title={"Người dùng mới"}
-                subheader={newUsersCount}
-                component={Link}
-                to="/admin/user"
-                sx={{
-                    textDecoration: 'none',
-                    color: 'inherit',
-                    '&:hover': {
-                        backgroundColor: 'rgba(0, 0, 0, 0.08)',
-                    },
-                }}/>
             <CardContent>
                 <Box>
                     <Typography variant="h6" align="center">Người dùng mới gần đây</Typography>

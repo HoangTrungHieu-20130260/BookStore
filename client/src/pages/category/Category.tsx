@@ -4,24 +4,28 @@ import "../homeScreen/Home.css"
 import {FaBook, FaCartPlus, FaRegHeart,FaChevronRight} from "react-icons/fa";
 import {CategoryResponse, Product, ProductsWithCategoryResponse} from "../../models";
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {addToCart} from "../../redux/reducer/CartReducer";
 
 export const Category = () => {
     const dispatch = useDispatch();
     const {id} = useParams<{id: string}>()
+    const [page, setPage] = useState(1)
     const [categoryData, setCategoryData] = useState<ProductsWithCategoryResponse>()
-    const [page, setPage] = useState(0)
+    const [categories, setCategories] = useState<CategoryResponse[]>([])
     const handleAddToCart = (product: Product) => {
         dispatch(addToCart(product))
     }
     useEffect(()=> {
-    const fetchData = async () => {
+        const fetchData = async () => {
             try {
-                const response = await axios.get<ProductsWithCategoryResponse>(`http://localhost:8080/api/v1/category/products/${id}`)
+                const [response, responseCat] = await Promise.all([
+                    axios.get<ProductsWithCategoryResponse>(`http://localhost:8080/api/v1/category/products/${id}`),
+                    axios.get<CategoryResponse[]>("http://localhost:8080/api/v1/category/get-all")
+                ])
                 setCategoryData(response.data)
-                console.log(response.data)
+                setCategories(responseCat.data)
 
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -29,7 +33,20 @@ export const Category = () => {
         }
         fetchData()
 
-    }, [])
+        
+    }, [id, categoryData])
+    const handlePage = async (number : number) => {
+        const response = await axios.get<ProductsWithCategoryResponse>(`http://localhost:8080/api/v1/category/products/${id}`,
+            {
+                params : {
+                    page : number,
+                    size : 5
+                }
+            }
+        )
+        setCategoryData(response.data)
+        setPage(number)
+    }
     return (
         <>
             <div className="page-header text-center">
@@ -52,37 +69,18 @@ export const Category = () => {
                 <div className="container pt-5">
                     <div className="row">
                         <div className="left-content col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <div className="widget-product-categories">
-                                <h3 className="title">
-                                    Danh mục
-                                </h3>
+                            {categories.map((item, index) => (
+                                <div className="widget-product-categories" key={index}>
+                                <h3 className="title">{item.category.name}</h3>
                                 <ul className="product-categories">
-                                    <li className="pc-item">
-                                        <a href="">
-                                            <FaBook className="me-2"/>
-                                            Budgeting and Finance
-                                        </a>
+                                    {item.categories.map((sub, index)=> (
+                                        <li className="pc-item" key={index}>
+                                            <Link to={`/category/${sub.id}`}><FaBook className="me-2"/>{sub.name}</Link>
                                     </li>
-                                    <li className="pc-item">
-                                        <a href="">
-                                            <FaBook className="me-2"/>
-                                            Creative Thinking
-                                        </a>
-                                    </li>
-                                    <li className="pc-item">
-                                        <a href="">
-                                            <FaBook className="me-2"/>
-                                            Fantasy
-                                        </a>
-                                    </li>
-                                    <li className="pc-item">
-                                        <a href="">
-                                            <FaBook className="me-2"/>
-                                            History Fiction
-                                        </a>
-                                    </li>
+                                    ))}
                                 </ul>
                             </div>
+                            ))}
                         </div>
                         <div className="right-content col-lg-9 col-md-9 col-sm-12 col-xs-12">
                             <div className="tool-bar-top mb-4">
@@ -93,12 +91,10 @@ export const Category = () => {
                                 </select>
                             </div>
                             <div className="products">
-                                {categoryData?.products.content.map(i =>
-                                    <div className="product-wrap">
+                                {categoryData?.products.content.map((i, index) =>
+                                    <div className="product-wrap" key={index}>
                                         <div className="product-img">
-                                            <a href="">
-                                                {i.image && <img src={i.image} alt=""/>}
-                                            </a>
+                                            <Link to={`/detail/${i.id}`}>{i.image && <img src={i.image} alt=""/>}</Link>
                                             <div className="product-buttons d-flex justify-content-evenly">
                                                 <FaCartPlus
                                                     className={"product-btn-icon"}
@@ -132,10 +128,12 @@ export const Category = () => {
                             </div>
                             <div className="pagination d-flex justify-content-center mt-5 mb-5">
                                 <ul className="pagination-list">
-                                    <li className="active"><a href="#">1</a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
+                                    {Array.from({length: categoryData?.products.totalPages
+                                        ? categoryData?.products.totalPages: 0}, (_, index) => (
+                                            <li key={index} className={index + 1 === page ? "active" : ""}>
+                                                <a onClick={()=> handlePage(index + 1)}>{index + 1}</a>
+                                            </li>
+                                        ))}
                                     <li><a href="#"><FaChevronRight/></a></li>
                                 </ul>
                             </div>

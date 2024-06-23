@@ -10,7 +10,6 @@ export const UserCreate = ()=> {
     return (
         <Create>
             <SimpleForm>
-                <TextInput source={"id"} label={"ID"}/>
                 <TextInput source={"username"} label={"Tên người dùng"}/>
                 <TextInput source={"password"} label={"Mật khẩu"}/>
                 <TextInput source={"email"} label={"Email"}/>
@@ -20,14 +19,14 @@ export const UserCreate = ()=> {
                     <ImageField source="src"/>
                 </ImageInput>
                 <SelectInput
-                    source="orderStatus.id"
+                    source="role.id"
                     choices={roles.map(i => ({
                         id: i.id,
                         name: i.name
                     }))}
                     optionValue="id"
                     optionText="name"
-                    label="Trạng thái" />
+                    label="Quyền" />
             </SimpleForm>
         </Create>
     )

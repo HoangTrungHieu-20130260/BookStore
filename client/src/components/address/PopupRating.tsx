@@ -69,26 +69,24 @@ const PopupRating: React.FC<PopupRatingProps> = ({ open, handleClose, detail, us
     };
 
     const postReview = async () => {
-        RateSuccess();
-        console.log('succ')
-        // const postData = {
-        //     userId: user.id,
-        //     orderDetailId: detail.id,
-        //     productId: detail.product.id,
-        //     stars: stars,
-        //     content: reviewContent
-        // };
-        // try {
-        //     const response = await axios.post<RateDto>('http://localhost:8080/api/v1/rate/createRate', postData)
-        //     setReviewContent('')
-        //     setStars(0)
-        //     console.log("success")
-        //     toast.success('Đánh giá thành công!');
-        //     console.log(response);
-        // } catch (error) {
-        //     toast.error('Đánh giá thất bại!');
-        //     console.error(error);
-        // }
+        const postData = {
+            userId: user.id,
+            orderDetailId: detail.id,
+            productId: detail.product.id,
+            stars: stars,
+            content: reviewContent
+        };
+        try {
+            const response = await axios.post<RateDto>('http://localhost:8080/api/v1/review/createRate', postData)
+            setReviewContent('')
+            setStars(0)
+            console.log("success")
+            toast.success('Đánh giá thành công!');
+            console.log(response);
+        } catch (error) {
+            toast.error('Đánh giá thất bại!');
+            console.error(error);
+        }
     }
 
     return (

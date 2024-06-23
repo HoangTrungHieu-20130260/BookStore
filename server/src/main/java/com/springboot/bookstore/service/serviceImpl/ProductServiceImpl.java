@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.bookstore.entity.Category;
 import com.springboot.bookstore.entity.Product;
 import com.springboot.bookstore.repository.CategoryRepository;
+import com.springboot.bookstore.repository.OrderDetailsRepository;
 import com.springboot.bookstore.repository.ProductRepository;
 import com.springboot.bookstore.service.ProductService;
 import jakarta.persistence.criteria.Join;
@@ -26,12 +27,13 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
+    private OrderDetailsRepository orderDetailsRepository;
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository, OrderDetailsRepository orderDetailsRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.orderDetailsRepository = orderDetailsRepository;
     }
-
     @Override
     public Page<Product> findAll(int page, int size,String sortBy, String sortDir, String filter) {
         Sort.Direction direction = Sort.Direction.ASC;
@@ -126,5 +128,16 @@ public class ProductServiceImpl implements ProductService {
         result.setCreatedAt(LocalDateTime.now());
         result.setActive(true);
         return productRepository.save(result);
+    }
+
+    @Override
+    public List<Object[]> getBestSellingProducts() {
+        Pageable pageable = PageRequest.of(0,10);
+        return orderDetailsRepository.findBestSellingProducts(pageable).getContent();
+    }
+
+    @Override
+    public List<Product> get10NewsProduct() {
+        return productRepository.findTop10ByOrderByCreatedAtDesc();
     }
 }

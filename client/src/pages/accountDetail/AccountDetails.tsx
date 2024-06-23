@@ -151,16 +151,6 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
             const res = await axios.post<AddressDto>(`http://localhost:8080/api/v1/user/user-details/edit-address?username=${user.username}`, data);
             setSuccess('Cập nhật địa chỉ thành công');
             setError('')
-            toast.success('Đánh giá thành công!', {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
             setIsHiddenPopup(true);
             setIsChanged(!isChanged);
         } catch (error) {

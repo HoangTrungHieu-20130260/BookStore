@@ -50,6 +50,17 @@ export interface Order {
     createdAt: string;
     orderStatus: OrderStatus;
 }
+export interface Rate {
+    id: number;
+    product: Product;
+    user: User;
+    rating: number;
+    comment: string;
+    createdAt: string; // or Date, depending on how you handle dates
+    updatedAt: string; // or Date, depending on how you handle dates
+    status: boolean;
+    // orderDetails: OrderDetails;
+}
 
 export interface OrderStatus {
     id: number;
@@ -70,7 +81,14 @@ export interface CategoryResponse {
     category: Category;
     categories: Category[];
 }
-
+export interface Review {
+    id: number,
+    rating: number,
+    comment: string,
+    createAt: string,
+    updateAt: string,
+    status: boolean
+}
 export interface Pageable {
     pageNumber: number;
     pageSize: number;
@@ -86,6 +104,23 @@ export interface Pageable {
 
 export interface ProductsPage {
     content: Product[];
+    pageable: Pageable;
+    last: boolean;
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    number: number;
+    sort: {
+        empty: boolean;
+        sorted: boolean;
+        unsorted: boolean;
+    };
+    first: boolean;
+    numberOfElements: number;
+    empty: boolean;
+}
+export interface ReviewsPage {
+    content: Review[];
     pageable: Pageable;
     last: boolean;
     totalElements: number;

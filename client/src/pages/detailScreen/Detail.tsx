@@ -4,24 +4,29 @@ import "../category/Catgory.css"
 import {FaStar, FaStarHalf, FaMinus, FaPlus } from "react-icons/fa";
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import {Product} from "../../models";
+import {Product, ReviewsPage} from "../../models";
 
 export const Detail = () => {
     const {id} = useParams<{id: string}>()
     const [product, setProduct] = useState<Product>()
+    const [reviews, setReviews] = useState<ReviewsPage>()
     useEffect(()=> {
         const fetchData = async () => {
             try {
-                const response = await axios.get<Product>(`http://localhost:8080/api/v1/product/${id}`)
-                setProduct(response.data)
-                console.log(response.data)
-
+                const [responseP, responseR] = await Promise.all(
+                    [axios.get<Product>(`http://localhost:8080/api/v1/product/${id}`),
+                    axios.get<ReviewsPage>(`http://localhost:8080/api/v1/review/by-product/${id}`)]
+                )
+                setProduct(responseP.data)
+                setReviews(responseR.data)
+                
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         }
         fetchData()
     },[])
+    console.log(reviews)
     return (
         <>
             <section className="py-5">
@@ -213,6 +218,46 @@ export const Detail = () => {
                     </div>
                 </div>
             </section>
+            <div className="container d-flex justify-content-center mt-5 mb-5">
+                <div className="row w-100">
+                    <div className="col-md-12">
+                        <div className="card">
+                            <div className="card-body">
+                                <h4 className="card-title">Đánh giá sản phẩm</h4>
+                                <h6 className="card-subtitle">Vui lòng mua sản phẩm để đánh giá sản phẩm.</h6>
+                            </div>
+
+                            <div className="comment-widgets m-b-20">
+                                {reviews?.content.map((item, index) => (
+                                    <div className="d-flex flex-row comment-row" key={index}>
+                                    <div className="p-2"><span className="round"><img
+                                        src="https://i.imgur.com/uIgDDDd.jpg" alt="user" width="50"/></span></div>
+                                    <div className="comment-text w-100">
+                                        <h5>Samso Nagaro</h5>
+                                        <div className="comment-footer">
+                                            <span className="date">{item.createAt}</span>
+                                        </div>
+                                            <p className="m-b-5 m-t-10">{item.comment}</p>
+                                    </div>
+                                </div>
+                                ))}
+                            </div>
+                            <nav aria-label="..." className="mt-3">
+                                <ul className="pagination pagination-lg justify-content-center">
+                                    {Array.from({ length: reviews?.totalPages ? reviews?.totalPages : 0 }, (_, index) => (
+                                        <li key={index} className="page-item">
+                                            <a className="page-link" href="#">
+                                                {index + 1}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </nav>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </>
     )
 }

@@ -1,10 +1,7 @@
 package com.springboot.bookstore.service;
 
 import com.springboot.bookstore.entity.Product;
-import com.springboot.bookstore.entity.User;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -17,4 +14,6 @@ public interface ProductService {
     Product updateProduct(int id, Product product);
 
     Product createProduct(Product product);
+    List<Object[]> getBestSellingProducts();
+    public List<Product> get10NewsProduct();
 }

@@ -24,10 +24,10 @@ function Login() {
 
         try {
             const response = await axios.post("http://localhost:8080/api/v1/auth/login", data)
-            console.log(response)
+
             if (response.status === 200){
-                const token = response.data.token
-                localStorage.setItem("token", token)
+                const token = response.data
+                localStorage.setItem("token", response.data.token)
                 navigate('/')
             }
 
@@ -42,26 +42,11 @@ function Login() {
         <>
             <div className={"wrapper"}>
                 <div className={"contain"}>
-                    <div className="page-header text-center">
-                        <div className="container">
-                            <h1>Đăng nhập</h1>
-                            <ul className="breadcrumb clearfix">
-                                <li className="bc-item">
-                                    <a className="bc-home" href="">Home</a>
-                                </li>
-                                <li className="bc-item">
-                                    <a className="bc-category" href="">Đăng nhập</a>
-                                </li>
-                                {/*<li className="bc-item">*/}
-                                {/*    <strong className="bc-category">{categoryData?.category.name}</strong>*/}
-                                {/*</li>*/}
-                            </ul>
-                        </div>
-                    </div>
                     <div className={"content"}>
-                        <div className={"form"}>
+                        <div className="py-1"></div>
+                        <div className={"form my-4"}>
                             <h2 className={"login_heading"}>Đăng nhập</h2>
-                            <form className={"login_section"}>
+                            <form className={""}>
                                 <div className={"username"}>
                                     <input className={"user_input"} type={"text"} placeholder={" "}
                                            value={username}
@@ -81,12 +66,14 @@ function Login() {
                                     <input type={"checkbox"}/>
                                     <p className={"remember_title"}>Nhớ mật khẩu</p>
                                 </div>
-                                <div className={"login_button"}>
+                                <div className={"login_button my-3"}>
                                     <input type={"submit"} className={"login_button"} value={"Đăng nhập"} onClick={e=>handleOnSubmit(e)}/>
                                 </div>
-                                <div className={"forgot"}>
-                                    <Link to={"/forgot"}><p className={"link_forgot"}>Quên mật khẩu?</p></Link>
-                                    <Link to={"/sign-up"}><p>Đăng kí</p></Link>
+                                <div className={""}>
+                                    <p className={"link_forgot text-end"}><Link to={"/forgot"}>Quên mật khẩu?</Link></p>
+                                </div>
+                                <div className="to-register">
+                                    <p className={'text-center'}>Chưa có tài khoản? <Link to={'/sign-up'}>Đăng ký</Link></p>
                                 </div>
                             </form>
                         </div>
