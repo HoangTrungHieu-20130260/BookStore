@@ -12,10 +12,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RootState, store} from "../../redux/store";
 import {FaMinus, FaPlus, FaArrowLeft} from "react-icons/fa";
 import {AddressDto, CartState, OrderDto, Product} from "../../models";
-import {addToCart, decreaseCart, getTotals, removeFromCart} from "../../redux/reducer/CartReducer";
+import {addToCart, clearCart, decreaseCart, getTotals, removeFromCart} from "../../redux/reducer/CartReducer";
 import axios from "axios";
-import moment from "moment/moment";
-import toast from "react-hot-toast";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Province {
     ProvinceID: string;
@@ -45,6 +45,8 @@ const Checkout: React.FC = () => {
     const [userLogged, setUserLogged]:any = useState(null)
     const [success, setSuccess] = useState<string | null>(null)
     const [error, setError] = useState<string | null>(null)
+    const [successOrder, setSuccessOrder] = useState<string | null>(null)
+    const [errorOrder, setErrorOrder] = useState<string | null>(null)
     const [checkoutError, setCheckoutError] = useState<string | null>(null)
     const [selectedMethod, setSelectedMethod] = useState('COD')
     const [fullName, setFullName] = useState('')
@@ -114,7 +116,7 @@ const Checkout: React.FC = () => {
     };
 
     const formatToVNPrice = (price: any) => {
-        return price.toLocaleString('vi-VN') + 'đ';
+        return price.toLocaleString('vi-VN') + 'VNĐ';
     }
 
     const handleOnChangeWard = async (wardCode: string) => {
@@ -201,8 +203,11 @@ const Checkout: React.FC = () => {
                     try {
                         const response = await axios.post<OrderDto>('http://localhost:8080/api/v1/order/cod', data)
                         console.log(response)
+                        handleClearCart()
+                        setSuccessOrder('Đặt hàng thành công!')
                     } catch (e) {
                         console.log(e)
+                        setErrorOrder('Lỗi khi đặt hàng!')
                     }
                     break;
                 case "VNPay": {
@@ -246,12 +251,11 @@ const Checkout: React.FC = () => {
         dispatch(getTotals())
     }, [cart])
 
+    const handleClearCart = () => {
+        dispatch(clearCart())
+    }
+
     useEffect(() => {
-        // let totalAmount = 0
-        // cart.cartItems.forEach((item, index) => {
-        //     totalAmount += item.currentPrice * item.gitquantity
-        // })
-        // console.log(totalAmount)
         setProvisionalAmount(cart.cartTotalAmount)
     }, [cart]);
 
@@ -281,7 +285,7 @@ const Checkout: React.FC = () => {
                 <div className="coupon">
                     <input type="text" name="coupon_code" className="input-text" id="coupon_code"
                            placeholder="Mã giảm giá" onChange={e => setDiscountCode(e.target.value)}/>
-                    <input onClick={handleOnClickCheckCode} type="submit" className="button" name="apply_coupon"
+                    <input onClick={handleOnClickCheckCode} type="submit" className="discount_button" name="apply_coupon"
                            value="Nhập mã giảm giá"/>
                     {success && <div className="success_message">{success}</div>}
                     {error && <div className="error_message">{error}</div>}
@@ -434,7 +438,7 @@ const Checkout: React.FC = () => {
                         </div>
                     </div>
                     <div className="note_info">
-                        <h3>Thông tin ghi thích thêm</h3>
+                        <h3>Thông tin ghi chú thêm</h3>
                         <label>Ghi chú đơn hàng</label>
                         <TextField
                             id={'note'}
@@ -530,6 +534,8 @@ const Checkout: React.FC = () => {
                             <p>Thanh toán với VN Pay</p>
                         </div>
                         {checkoutError && <div className="checkout_message">{checkoutError}</div>}
+                        {successOrder && <div className="success_message">{successOrder}</div>}
+                        {errorOrder && <div className="error_message">{errorOrder}</div>}
                     </div>
                     <div className="place_order">
                         <input onClick={handleOnClickCheckout} type="submit" className="order_button" value="Đặt hàng"/>

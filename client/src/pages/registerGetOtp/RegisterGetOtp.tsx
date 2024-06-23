@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import "./Forgot.css";
+import "./RegisterGetOtp.css";
 import '../../common/Common.css'
 import axios from "axios";
-import { ForgotDto } from "../../models";
+import {ForgotDto, UserDto} from "../../models";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-function Forgot() {
+function RegisterGetOtp() {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [error, setError] = useState<string | null>(null);
@@ -22,14 +22,14 @@ function Forgot() {
 
         try {
             console.log(email)
-            const data = await axios.post<ForgotDto>('http://localhost:8080/api/v1/auth/forgot', {email: email})
+            const data = await axios.post<ForgotDto>('http://localhost:8080/api/v1/auth/register-otp', {email: email})
             console.log(data)
             if (data.status === 200) {
-                localStorage.setItem("emailForgot", email);
-                setSuccess("OTP xác nhận quên mật khẩu đã gửi về email của bạn");
-                navigate("/forgot-confirm");
+                localStorage.setItem("emailRegister", email);
+                setSuccess("OTP xác nhận đăng kí đã gửi về email của bạn");
+                navigate("/sign-up");
             } else {
-                setError('Email không tồn tại!')
+                setError('Email đã tồn tại!')
             }
         } catch (err) {
             console.error(err);
@@ -42,7 +42,7 @@ function Forgot() {
                 <div className="content ">
                     <div className="py-1"></div>
                     <form className="form my-4" onSubmit={handleSubmit}>
-                        <h2 className="login_heading">Quên mật khẩu</h2>
+                        <h2 className="login_heading">Nhập Email Đăng kí</h2>
                         <div className="">
                             <div className="username ms-0">
                                 <input
@@ -60,6 +60,7 @@ function Forgot() {
                                 <input type="submit" className="confirm_button" value="Xác nhận" />
                             </div>
                         </div>
+
                     </form>
                 </div>
             </div>
@@ -67,4 +68,4 @@ function Forgot() {
     );
 }
 
-export default Forgot;
+export default RegisterGetOtp;

@@ -295,14 +295,14 @@ const PopupAddress = forwardRef((props: PopupAddressProps, ref) => {
                     </div>
                     <div className="action">
                         <button
-                            className="backBtn"
+                            className="backBtn_address"
                             type="button"
                             onClick={onClickHiddenPopup}
                         >
                             Trở về
                         </button>
                         <button
-                            className="saveBtn"
+                            className="saveBtn_address"
                             type="submit"
                             disabled={disable}
                         >

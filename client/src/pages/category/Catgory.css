@@ -111,16 +111,30 @@
     text-decoration: none;
     padding: 5px 15px;
     color: #333333;
-    font-size: 16px
+    font-size: 16px;
+    cursor: pointer;
 }
 .right-content .pagination-list .active a{
     background-color: #27ae61 !important;
     border: 2px solid #27ae61 !important;
     color: #ffffff !important;
     border-radius: 5px;
+    cursor: pointer;
 }
 @media (max-width: 768px) {
     .left-content {
         display: none;
     }
+}
+
+.product-img img{
+    height: 200px;
+}
+
+.price{
+    margin-right: 40px;
+}
+
+.product-buttons{
+    cursor: pointer;
 }

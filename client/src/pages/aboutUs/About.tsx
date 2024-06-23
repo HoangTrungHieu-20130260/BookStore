@@ -8,7 +8,6 @@ import {Footer} from "../../components/footer/Footer";
 function About() {
     return (
         <>
-            <Header/>
             <div className={"contain"}>
                 <div className={"login_label"}>
                     <div className={"login_title"}>
@@ -24,7 +23,7 @@ function About() {
                         <img className={"about-image"} src={AboutImage}/>
                     </div>
                     <div className={"info"}>
-                        <h2 className={"title"}>Đôi lời giới thiệu về BookStore</h2>
+                        <h2 className={"titleIn"}>Đôi lời giới thiệu về BookStore</h2>
                         <p className={"para"}>Truy cập đến với BookStore - Nơi để bạn khám phá và mua sắm sách online
                             một cách nhanh chóng và thuận tiện kèm với những ưu đãi hấp dẫn được cập nhật liên tục!</p>
                         <div className={"description"}>
@@ -48,7 +47,6 @@ function About() {
                     </div>
                 </div>
             </div>
-            <Footer/>
         </>
     )
 }
