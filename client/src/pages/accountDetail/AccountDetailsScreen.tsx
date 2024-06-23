@@ -28,6 +28,20 @@ interface User {
     address: AddressDto[];
 }
 
+export const RateSuccess = () => {
+    console.log('success')
+    toast.success('Đánh giá thành công!', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
+}
+
 const AccountDetailScreen: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [isShow, setIsShow] = useState<string>('profile');
@@ -39,6 +53,9 @@ const AccountDetailScreen: React.FC = () => {
     const handleSelectShow = (view: string) => {
         setIsShow(view);
     }
+
+
+
 
 
     const fetchDataUser = async () => {
@@ -132,19 +149,20 @@ const AccountDetailScreen: React.FC = () => {
                     </div>
                 )}
             </div>
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </div>
-    <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-    />
+
         </>
     );
 }

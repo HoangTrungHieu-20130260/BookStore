@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import {AddressDto, RateDto} from "../../models";
 import { useNotify } from 'react-admin';
+import {RateSuccess} from "../../pages/accountDetail/AccountDetailsScreen";
 
 const style = {
     position: 'absolute' as const,
@@ -68,46 +69,30 @@ const PopupRating: React.FC<PopupRatingProps> = ({ open, handleClose, detail, us
     };
 
     const postReview = async () => {
-        const postData = {
-            userId: user.id,
-            orderDetailId: detail.id,
-            productId: detail.product.id,
-            stars: stars,
-            content: reviewContent
-        };
-        try {
-            const response = await axios.post<RateDto>('http://localhost:8080/api/v1/rate/createRate', postData)
-            setReviewContent('')
-            setStars(0)
-            toast.success('Đánh giá thành công!', {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-
-            console.log(response);
-        } catch (error) {
-            toast.error('Đánh giá thất bại!', {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-            console.error(error);
-        }
+        RateSuccess();
+        console.log('succ')
+        // const postData = {
+        //     userId: user.id,
+        //     orderDetailId: detail.id,
+        //     productId: detail.product.id,
+        //     stars: stars,
+        //     content: reviewContent
+        // };
+        // try {
+        //     const response = await axios.post<RateDto>('http://localhost:8080/api/v1/rate/createRate', postData)
+        //     setReviewContent('')
+        //     setStars(0)
+        //     console.log("success")
+        //     toast.success('Đánh giá thành công!');
+        //     console.log(response);
+        // } catch (error) {
+        //     toast.error('Đánh giá thất bại!');
+        //     console.error(error);
+        // }
     }
 
     return (
-        <>
+
         <Modal open={open} onClose={handleClose}>
             <Box sx={style}>
                 <Typography variant="h6" component="h2">
@@ -144,22 +129,25 @@ const PopupRating: React.FC<PopupRatingProps> = ({ open, handleClose, detail, us
                     <button className={"rate_button"} onClick={handleSubmit}>
                         Gửi đánh giá
                     </button>
+                    <ToastContainer
+                        position="top-center"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="light"
+                    />
                 </div>
+
             </Box>
+
         </Modal>
-            <ToastContainer
-                position="top-center"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
-        </>
+
+
     );
 };
 
