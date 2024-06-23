@@ -80,12 +80,42 @@ export const dataProvider: DataProvider = {
             return { data: json };
         }
         if(resource === 'user') {
-            if (params.data.image && params.data.image.rawFile) {
+            if (params.data.avatar && params.data.avatar.rawFile) {
                 // Upload image to imgBB
-                const imageUrl = await imgUpload(params.data.image);
-                params.data.image = imageUrl;
+                const avatarUrl = await imgUpload(params.data.avatar);
+                params.data.avatar = avatarUrl;
             }
-        }else {
+            const { json } = await httpClient(`${apiUrl}/${resource}`, {
+                method: 'POST', // or 'PATCH' depending on your API
+                body: JSON.stringify(params.data),
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+            });
+            if (json.statusCodeValue === 400) {
+                throw new Error(json.body || 'Bad Request');
+            }
+            return { data: { ...json.data, id: json.id } };
+        }
+        if (resource === 'blog'){
+            if (params.data.thumbnail && params.data.thumbnail.rawFile) {
+                // Upload image to imgBB
+                const thumbnailUrl = await imgUpload(params.data.thumbnail);
+                params.data.thumbnail = thumbnailUrl;
+            }
+            const { json } = await httpClient(`${apiUrl}/${resource}`, {
+                method: 'POST', // or 'PATCH' depending on your API
+                body: JSON.stringify(params.data),
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+
+            });
+            return { data: json };
+        }
+        else {
             const { json } = await httpClient(`${apiUrl}/${resource}`, {
                 method: 'POST',
                 body: JSON.stringify(params.data),
@@ -118,7 +148,7 @@ export const dataProvider: DataProvider = {
                 }),
                 body: JSON.stringify(data),
             });
-            return { data: json };
+            return { data: json.data };
         }
         if (resource === 'category') {
             if (params.data.parentCategory.id === null) {
@@ -135,6 +165,11 @@ export const dataProvider: DataProvider = {
             return { data: json };
         }
         if (resource === 'user') {
+            if (params.data.avatar && params.data.avatar.rawFile) {
+                // Upload image to imgBB
+                const avatarUrl = await imgUpload(params.data.avatar);
+                params.data.avatar = avatarUrl;
+            }
             const { json } = await httpClient(`${apiUrl}/${resource}/${params.id}`, {
                 method: 'PUT',
                 headers: new Headers({
@@ -144,7 +179,25 @@ export const dataProvider: DataProvider = {
                 body: JSON.stringify(params.data),
             });
             return { data: { ...json.data, id: json.id } };
-        } else {
+        }
+        if(resource==='blog') {
+            if (params.data.thumbnail && params.data.thumbnail.rawFile) {
+                // Upload image to imgBB
+                const thumbnailUrl = await imgUpload(params.data.thumbnail);
+                params.data.thumbnail = thumbnailUrl;
+            }
+            const { json } = await httpClient(`${apiUrl}/${resource}/${params.id}`, {
+                method: 'PUT',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+                body: JSON.stringify(params.data),
+            });
+            window.location.href = `/admin/${resource}`
+            return { data: json };
+        }
+        else {
             const { json } = await httpClient(`${apiUrl}/${resource}/${params.id}`, {
                 method: 'PUT',
                 headers: new Headers({

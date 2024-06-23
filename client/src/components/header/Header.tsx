@@ -13,7 +13,6 @@ export const Header =()=> {
     const [showResults, setShowResults] = useState(false);
     const [search, setSearch] = useState("")
   const cart = useSelector( (state: RootState)=> state.carts)
-    console.log(cart)
     const getToken = localStorage.getItem("token")
     const navigate = useNavigate()
     // const [isLogin, setIsLogin]
@@ -53,118 +52,159 @@ export const Header =()=> {
     }
     return (
         <>
-            <div className="top-bar">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-xs-12 col-sm-6 col-md-6 text-start">
-                            <FaMapMarkerAlt className="top-bar-icon"/>
-                            Đại học Nông Lâm Thành phố Hồ Chí Minh
-                            <IoMdPhonePortrait className="top-bar-icon"/>
-                            0000000000
-                        </div>
-                        <div className="col-xs-12 col-sm-6 col-md-6 text-end">
-                            <ul className="menu mb-0">
-                                <li className="menu-item"><a href="#">Yêu thích</a></li>
-                                <li className="menu-item">
+            <nav className="navbar navbar-expand-md bg-body-tertiary fixed-top header py-0">
+                <div className="top-bar d-md-block">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-xs-12 col-sm-6 col-md-6 text-start">
+                                <FaMapMarkerAlt className="top-bar-icon"/>
+                                Đại học Nông Lâm Thành phố Hồ Chí Minh
+                                <IoMdPhonePortrait className="top-bar-icon"/>
+                                0000000000
+                            </div>
+                            <div className="col-xs-12 col-sm-6 col-md-6 text-end">
+                                <ul className="menu mb-0">
+                                    <li className="menu-item"><a href="#">Yêu thích</a></li>
+                                    <li className="menu-item">
+                                        {
+                                            getToken === null ?
+                                                <Link to="/sign-in">Đăng nhập</Link> :
+                                                <Link to="/my-account">Tài khoản của tôi</Link>
+                                        }
+                                    </li>
+                                    <li className="menu-item"><Link to="/checkout">Thanh toán</Link></li>
                                     {
-                                        getToken === null ?
-                                            <Link to="/sign-in">Đăng nhập</Link> :
-                                            <Link to="/my-account">Tài khoản của tôi</Link>
-                                    }
-                                </li>
-                                <li className="menu-item"><Link to="/checkout">Thanh toán</Link></li>
-                                {
-                                    getToken !== null &&
+                                        getToken !== null &&
                                         <li className="menu-item">
                                             <button onClick={e => Logout(e)}>Đăng xuất</button>
                                         </li>
-                                }
-                            </ul>
+                                    }
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <header className="header">
                 <div className="container">
-                    <div className="row">
-                        <div className="col-xs-12 col-sm-6 col-lg-8 col-md-6 logo">
-                        <Link to="/home">
-                                <img src="http://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/01/logo_green.png" alt=""/>
-                            </Link>
+                    <Link className="navbar-brand fs-4 logo" to="/home">
+                        <img src="http://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/01/logo_green.png" alt=""/>
+                    </Link>
+                    <button className="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar"
+                            aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                    <div className="offcanvas offcanvas-start" tabIndex={-1} id="offcanvasNavbar"
+                         aria-labelledby="offcanvasNavbarLabel">
+                        <div className="offcanvas-header">
+                            {/*<h5 className="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>*/}
+                            <button type="button" className="btn-close shadown-none" data-bs-dismiss="offcanvas"
+                                    aria-label="Close"></button>
                         </div>
-                        <div className="col-xs-12 col-sm-6 col-md-6 col-lg-5 bks-cart-widget ">
-                            <div className="d-flex justify-content-center align-items-center">
-                                <div className="search w-100">
+                        {/*Slidebar body*/}
+                        <div className="offcanvas-body">
+                            <div className="d-flex justify-content-center align-items-center search-container">
+                                <div className="search">
                                     <FaSearch className="icon-search"/>
-                                    <input type="text" className="form-control"
+                                    <input type="text" className="form-control border-0"
                                            placeholder="Tìm kiếm..."
                                            onChange={event => setSearch(event.target.value)}
                                            onFocus={() => setShowResults(true)}
                                            onBlur={() => setShowResults(false)}
                                     />
-                                    {/*<button className="btn btn-primary">Search</button>*/}
                                     {showResults ? <div className="search-results">
                                         {search === "" || filteredProducts.length === 0 ?
                                             <p className="text-center mb-0">Kết quả tìm kiếm</p>
                                             :
                                             <div className="results-container">
                                                 {filteredProducts.map((item, index) =>
-                                                <div className="result mb-2" key={index}>
-                                                    {item.image ?
-                                                        <img src={item.image} alt={item.title}/> :
-                                                        <div className="not-image"></div>
-                                                    }
-                                                    <div className="info-result w-100">
-                                                        <p className="name mb-2">{item.title}</p>
-                                                        <div className="d-flex justify-content-between">
-                                                            <small className="cat">{item.category.name}</small>
-                                                            <small className="price">{item.currentPrice}đ</small>
+                                                    <div className="result mb-2" key={index}>
+                                                        {item.image ?
+                                                            <img src={item.image} alt={item.title}/> :
+                                                            <div className="not-image"></div>
+                                                        }
+                                                        <div className="info-result w-100">
+                                                            <p className="name mb-2">{item.title}</p>
+                                                            <div className="d-flex justify-content-between">
+                                                                <small className="cat">{item.category.name}</small>
+                                                                <small className="price">{item.currentPrice}đ</small>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
                                                 )}
                                             </div>
                                         }
                                     </div> : ""}
+
                                 </div>
                                 <div className="icon-cart" data-count={cart.cartTotalQuantity}>
                                     <Link className={"link-cart"} to={"/cart"}><FaShoppingCart className="ms-3"/></Link>
                                 </div>
-
                             </div>
+                            <ul className="navbar-nav justify-content-end flex-grow-1 pe-3 d-md-none">
+                                <li className="nav-item border-bottom">
+                                    <Link className="nav-link active" aria-current="page" to={"/"}>Trang chủ</Link>
+                                </li>
+                                {categories.map((cat, index) =>
+                                    <li className="nav-item dropdown" key={index}>
+                                        <a className="nav-link dropdown-toggle" href="#" role="button"
+                                           data-bs-toggle="dropdown" aria-expanded="false">
+                                            {cat.category.name}
+                                        </a>
+                                        <ul className="dropdown-menu">
+                                            {cat.categories.map((subCat, index) =>
+                                                <li key={index}>
+                                                    <Link className="dropdown-item" to={`/category/${subCat.id}`}>{subCat.name}</Link>
+                                                </li>
+                                            )}
+                                        </ul>
+                                    </li>
+                                )}
+                                <li className="nav-item dropdown">
+                                    <a className="nav-link dropdown-toggle" href="#" role="button"
+                                       data-bs-toggle="dropdown" aria-expanded="false">
+                                        Dropdown
+                                    </a>
+                                    <ul className="dropdown-menu">
+                                        <li><a className="dropdown-item" href="#">Action</a></li>
+                                        <li><a className="dropdown-item" href="#">Another action</a></li>
+                                        <li>
+                                            <hr className="dropdown-divider"/>
+                                        </li>
+                                        <li><a className="dropdown-item" href="#">Something else here</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </header>
-            <nav className="main-menu">
-                <div className="container">
-                    <ul className="menu drop-down">
-                        <li className="menu-item">Trang chủ</li>
-                        <li className="menu-item show-drop-down">
-                            <p>Thể loại</p>
-                            <div className="drop-down-content">
-                                {categories.map((cat, index) =>
-                                    <div className="category" key={index}>
-                                        <h3 className="parent-cat">{cat.category.name}</h3>
-                                        <div className="sub-cat-container">
-                                            <ul className="sub-cat">
-                                                {cat.categories.map(subCat =>
-                                                    <li className="sub-cat-item">
-                                                        <Link to={`/category/${subCat.id}`}>{subCat.name}</Link>
-                                                    </li>
-                                                )}
-                                            </ul>
+                <nav className="main-menu">
+                    <div className="container">
+                        <ul className="menu drop-down">
+                            <li className="menu-item">Trang chủ</li>
+                            <li className="menu-item show-drop-down">
+                                <p>Thể loại</p>
+                                <div className="drop-down-content">
+                                    {categories.map((cat, index) =>
+                                        <div className="category" key={index}>
+                                            <h3 className="parent-cat">{cat.category.name}</h3>
+                                            <div className="sub-cat-container">
+                                                <ul className="sub-cat">
+                                                    {cat.categories.map((subCat, index) =>
+                                                        <li className="sub-cat-item" key={index}>
+                                                            <Link to={`/category/${subCat.id}`}>{subCat.name}</Link>
+                                                        </li>
+                                                    )}
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-                            </div>
+                                    )}
+                                </div>
 
-                        </li>
-                        <li className="menu-item">Về chúng tôi</li>
-                        {/*<li className="menu-item">Kinh doanh</li>*/}
-                        {/*<li className="menu-item">Sức khỏe  </li>*/}
-                    </ul>
-                </div>
+                            </li>
+                            <li className="menu-item">Về chúng tôi</li>
+                        </ul>
+                    </div>
+                </nav>
             </nav>
         </>
     )

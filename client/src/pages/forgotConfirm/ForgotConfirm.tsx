@@ -4,8 +4,7 @@ import '../../common/Common.css'
 import axios from "axios";
 import {ForgotDto} from "../../models";
 import {Link} from "react-router-dom";
-import {Header} from "../../components/header/Header";
-import {Footer} from "../../components/footer/Footer";
+import { FaArrowLeft } from "react-icons/fa";
 const ForgotConfirm = () => {
     const [otp, setOtp] = useState('');
     const [password, setPassword] = useState('');
@@ -43,39 +42,23 @@ const ForgotConfirm = () => {
     }
     return (
         <>
-            <Header />
             <div className={"contain"}>
-                <div className="page-header text-center">
-                    <div className="container">
-                        <h1>Đặt lại mật khẩu</h1>
-                        <ul className="breadcrumb clearfix">
-                            <li className="bc-item">
-                                <a className="bc-home" href="" >Trang chủ</a>
-                            </li>
-                            <li className="bc-item">
-                                <a className="bc-category" href="">Đặt lại mật khẩu</a>
-                            </li>
-                            {/*<li className="bc-item">*/}
-                            {/*    <strong className="bc-category">{categoryData?.category.name}</strong>*/}
-                            {/*</li>*/}
-                        </ul>
-                    </div>
-                </div>
                 <div className={"content"}>
-                    <form className={"form"} onSubmit={handleSubmit}>
+                    <div className="py-1"></div>
+                    <form className={"form my-4"} onSubmit={handleSubmit}>
                         <h2 className={"login_heading"}>Đặt lại mật khẩu mới</h2>
-                        <div className={"login_section"}>
-                            <div className={"username"}>
+                        <div className={""}>
+                            <div className={"username ms-0"}>
                                 <input className={"user_input"} type={"text"} placeholder={" "} required
                                        onChange={e=> setOtp(e.target.value)}/>
                                 <label className={"label_username"}>OTP</label>
                             </div>
-                            <div className={"password"}>
+                            <div className={"password ms-0"}>
                                 <input className={"password_input"} type={"password"} placeholder={" "} required
                                        onChange={e=> setPassword(e.target.value)}/>
                                 <label className={"label_password"}>Mật khẩu mới</label>
                             </div>
-                            <div className={"confirm_password"}>
+                            <div className={"confirm_password ms-0"}>
                                 <input className={"confirm_password_input"} type={"password"} placeholder={" "} required
                                        onChange={e=> setNewPassword(e.target.value)}/>
                                 <label className={"label_password"}>Xác nhận mật khẩu</label>
@@ -87,17 +70,16 @@ const ForgotConfirm = () => {
                             {success && <div className="alert alert-success" role="alert">
                                 {success}
                             </div>}
-                            <div className={"register_button"}>
+                            <div className={"register_button ms-0"}>
                                 <input type={"submit"} className={"register_button"} value={"Xác nhận"}/>
                             </div>
-                            <div className={"to-login"}>
-                                <Link to={"/sign-in"}>Đăng nhập</Link>
+                            <div className={"to-login text-end"}>
+                                <Link to={"/sign-in"}><FaArrowLeft /> Đăng nhập</Link>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-            <Footer />
         </>
     )
 }

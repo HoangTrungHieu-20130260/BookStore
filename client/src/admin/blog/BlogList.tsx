@@ -1,25 +1,24 @@
 import {
     BooleanField,
     Datagrid,
-    DateField,
-    DeleteButton,
-    EditButton, FilterList, FilterListItem,
-    FilterLiveSearch, FunctionField,
+    DateField, DeleteButton, FilterList, FilterListItem, FilterLiveSearch,
+    FunctionField,
     List,
-    NumberField,
-    TextField, useDataProvider, useNotify, useRefresh
+    TextField,
+    useDataProvider,
+    useNotify, useRefresh
 } from 'react-admin';
 import {Button, Card, CardContent} from "@mui/material";
 import React from "react";
 
-export const DiscountList = () => {
+export const BlogList = () => {
     const notify = useNotify();
     const dataProvider = useDataProvider();
     const refresh = useRefresh();
     const handleStatus= async (record: any) => {
         try {
             // Gửi yêu cầu cập nhật trạng thái người dùng
-            await dataProvider.update('discount', {
+            await dataProvider.update('blog', {
                 id: record.id,
                 data: {...record, status: !record.status},
                 previousData: record
@@ -34,32 +33,28 @@ export const DiscountList = () => {
         }
     }
     return (
-        <List aside={<DiscountFilterSidebar/>}>
+        <List aside={<BlogFilterSidebar/>}>
             <Datagrid rowClick="edit">
-                <TextField source="id"/>
-                <TextField source="code"/>
-                <NumberField source="discountRate" label={"Tỉ lệ"}/>
-                <DateField source="startDate" label={"Ngày bắt đầu"}/>
-                <DateField source="endDate" label={"Ngày kết thúc"}/>
+                <TextField source="title" label={"Tiêu đề"}/>
+                <DateField source="createdAt" label={"Ngày đăng"}/>
                 <FunctionField label={"Trạng thái"} render={(record: any) => (
                     <Button onClick={() => handleStatus(record)} color={record.status ? 'primary' : 'error'}>
-                        {record.status ? 'Chưa sử dụng' : 'Đã sử dụng'}
+                        {record.status ? 'Hoạt động' : 'Tạm dừng'}
                     </Button>
                 )}/>
-                <EditButton/>
-                <DeleteButton/>
+                <DeleteButton label={""}/>
             </Datagrid>
         </List>
     )
 };
-const DiscountFilterSidebar = () => {
+const BlogFilterSidebar = () => {
     return (
         <Card sx={{order: -1, mr: 2, mt: 6, width: 200}}>
             <CardContent>
                 <FilterLiveSearch label={'Tìm...'}/>
                 <FilterList label="Trạng thái" icon={null}>
-                    <FilterListItem label="Còn" value={{status: true}}/>
-                    <FilterListItem label="Hết" value={{status: false}}/>
+                    <FilterListItem label="Hoạt động" value={{status: true}}/>
+                    <FilterListItem label="Tạm dừng" value={{status: false}}/>
                 </FilterList>
             </CardContent>
         </Card>

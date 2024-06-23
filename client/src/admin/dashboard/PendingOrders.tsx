@@ -3,37 +3,19 @@ import {
     Box,
     Card,
     CardContent,
-    CardHeader,
     List,
     ListItem,
     ListItemAvatar,
     ListItemText,
     Typography
 } from "@mui/material";
-import {Person} from "@mui/icons-material";
 import {Link} from "react-router-dom";
 import React from "react";
-import {Order, User} from "../../models";
-interface Props {
-    pendingOrdersCount: number;
-    pendingOrders: Order[];
-}
-export const PendingOrders = ({pendingOrdersCount, pendingOrders}: Props) => {
+import {Order} from "../../models";
+
+export const PendingOrders = ({pendingOrders}: {pendingOrders: Order[]}) => {
     return (
         <Card>
-            <CardHeader
-                avatar={<Avatar><Person/></Avatar>}
-                title={"Đơn hàng chờ duyệt"}
-                subheader={pendingOrdersCount}
-                component={Link}
-                to="/admin/user"
-                sx={{
-                    textDecoration: 'none',
-                    color: 'inherit',
-                    '&:hover': {
-                        backgroundColor: 'rgba(0, 0, 0, 0.08)',
-                    },
-                }}/>
             <CardContent>
                 <Box>
                     <Typography variant="h6" align="center">Đơn hàng đang chờ</Typography>

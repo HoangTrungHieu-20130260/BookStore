@@ -1,5 +1,5 @@
 import React from "react";
-import {Admin, EditGuesser, ListGuesser, Resource, ShowGuesser} from "react-admin"
+import {Admin, EditGuesser, ListGuesser, Menu, MenuItemLink, Resource, ShowGuesser} from "react-admin"
 import {dataProvider} from "./DataProvider";
 import {UserList} from "./user/UserList";
 import {ProductList} from "./product/ProductList";
@@ -16,8 +16,36 @@ import Dashboard from "./dashboard/Dashboard";
 import {UserEdit} from "./user/UserEdit";
 import {UserCreate} from "./user/UserCreate";
 import {OrderEdit} from "./order/OrderEdit";
+import {BlogList} from "./blog/BlogList";
+import {BlogEdit} from "./blog/BlogEdit";
+import {BlogCreate} from "./blog/BlogCreate";
+import {ReviewList} from "./review/ReviewList";
+import {authProvider} from "./AuthProvider";
+import {Navigate} from "react-router-dom";
+import {Home, SpaceDashboard, People, Inventory, Category, Receipt, Discount, RateReview, Newspaper} from "@mui/icons-material"
+const CustomMenu: React.FC = (props) => {
+    return (
+        <Menu {...props}>
+            <MenuItemLink to="/" primaryText="Home" leftIcon={<Home />}/>
+            <MenuItemLink to="/admin" primaryText="Bảng điều khiển" leftIcon={<SpaceDashboard />}/>
+            <MenuItemLink to="/admin/user" primaryText="Người dùng" leftIcon={<People />}/>
+            <MenuItemLink to="/admin/product" primaryText="Sản phẩm" leftIcon={<Inventory />}/>
+            <MenuItemLink to="/admin/category" primaryText="Danh mục" leftIcon={<Category />}/>
+            <MenuItemLink to="/admin/order" primaryText="Đơn hàng" leftIcon={<Receipt />}/>
+            <MenuItemLink to="/admin/discount" primaryText="Mã giảm giá" leftIcon={<Discount />}/>
+            <MenuItemLink to="/admin/review" primaryText="Đánh giá" leftIcon={<RateReview />}/>
+            <MenuItemLink to="/admin/blog" primaryText="Bài viết" leftIcon={<Newspaper />}/>
+        </Menu>
+    );
+};
+
 export const Manager = ()=> {
-    return <Admin dataProvider={dataProvider} dashboard={Dashboard} basename={"/admin"}>
+    return <Admin dataProvider={dataProvider}
+                  dashboard={Dashboard}
+                  authProvider={authProvider}
+                  loginPage={<Navigate to={'/sign-in'}/>}
+                  menu={CustomMenu}
+                  basename={"/admin"}>
         <Resource
             name={"user"}
             list={UserList}
@@ -63,6 +91,21 @@ export const Manager = ()=> {
                   create={DiscountCreate}
                   options={{
                       label: "Mã giảm giá"
+                  }}>
+        </Resource>
+        <Resource name={"review"}
+                  list={ReviewList}
+                  show={ShowGuesser}
+                  options={{
+                      label: "Đánh giá"
+                  }}>
+        </Resource>
+        <Resource name={"blog"}
+                  list={BlogList}
+                  edit={BlogEdit}
+                  create={BlogCreate}
+                  options={{
+                      label: "Bài viết"
                   }}>
         </Resource>
     </Admin>

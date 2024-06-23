@@ -12,4 +12,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product> findAll(Specification<Product> specification, Pageable pageable);
     List<Product> findAll();
     Page<Product> findByCategoryId(int id, Pageable pageable);
+    List<Product> findTop10ByOrderByCreatedAtDesc();
 }

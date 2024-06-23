@@ -35,7 +35,6 @@ function App() {
             </Route>
             <Route path={"/admin/*"} element={<Manager/>}>
             </Route>
-            {/*<Route path={"/si"} element={<Login />} />*/}
 
         </Routes>
     );
@@ -44,7 +43,9 @@ const BasicLayout = ()=> {
     return (
         <>
             <Header/>
-            <Outlet/>
+            <div style={{marginTop: 156}}>
+                <Outlet/>
+            </div>
             <Footer/>
         </>
     )
