@@ -32,6 +32,7 @@ public class RateServiceImpl implements RateService {
     private UserRepository userRepository;
     private ProductRepository productRepository;
     private OrderDetailsRepository orderDetailsRepository;
+    private RateRepository rateRepository;
     private JwtGenerator jwtGenerator;
 
 
@@ -94,18 +95,14 @@ public class RateServiceImpl implements RateService {
         result.setUpdatedAt(LocalDateTime.now());
         return rateRepository.save(result);
     }
-    @Override
-    public Rate getRateById(int id) {
-        return rateRepository.findById(id);
-    }
 
     @Override
-    public Rate createRate(int userId, int productId, String comment, int stars, int orderDetailId) {
+    public Rate createRate(int userId, int productId, String comment, int stars, int orderDetailsId) {
         LocalDateTime time = LocalDateTime.now();
         Rate rate = new Rate();
         User user = userRepository.findById(userId).orElse(null);
         Product product = productRepository.findById(productId).orElse(null);
-        OrderDetails orderDetails = orderDetailsRepository.findById(orderDetailId).orElse(null);
+        OrderDetails orderDetails = orderDetailsRepository.findById(orderDetailsId).orElse(null);
         rate.setProduct(product);
         rate.setUser(user);
         rate.setRating(stars);

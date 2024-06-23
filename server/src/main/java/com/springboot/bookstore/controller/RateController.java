@@ -41,14 +41,6 @@ public class RateController {
         return ResponseEntity.ok(rateService.updateRate(id ,rate));
     }
 
-}
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Rate> getRateById(@PathVariable int id) {
-        Rate rate = rateService.getRateById(id);
-        return ResponseEntity.ok(rate);
-    }
-
     @PostMapping("/createRate")
     public ResponseEntity<Rate> createRate(@RequestBody RateRequestDto rateRequestDto) {
         Rate rate = rateService.createRate(rateRequestDto.getUserId(), rateRequestDto.getProductId(), rateRequestDto.getContent(), rateRequestDto.getStars(), rateRequestDto.getOrderDetailsId());
