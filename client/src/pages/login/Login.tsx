@@ -27,7 +27,7 @@ function Login() {
 
             if (response.status === 200){
                 const token = response.data
-                localStorage.setItem("token", JSON.stringify(token))
+                localStorage.setItem("token", response.data.token)
                 navigate('/')
             }
 

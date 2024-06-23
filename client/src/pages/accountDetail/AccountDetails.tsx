@@ -579,7 +579,6 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
                 handleEditAddress={e => handleEditAddress(e)}
                 ref={childRef}
                 user={user}/>
-        </div>
             <ToastContainer
                 position="top-center"
                 autoClose={5000}
@@ -592,6 +591,8 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
                 pauseOnHover
                 theme="light"
             />
+        </div>
+
         </>
     )
 };
