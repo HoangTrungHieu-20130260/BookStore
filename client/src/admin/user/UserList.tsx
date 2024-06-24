@@ -3,6 +3,9 @@ import {
     BooleanField,
     Datagrid,
     EditButton,
+    FilterList,
+    FilterListItem,
+    FilterLiveSearch,
     FunctionField,
     List,
     NumberField,
@@ -10,13 +13,14 @@ import {
     useDataProvider,
     useNotify, useRefresh
 } from "react-admin";
-import {Button} from "@mui/material";
+import {Button, Card, CardContent} from "@mui/material";
 
 export const UserList = () => {
     const notify = useNotify();
     const dataProvider = useDataProvider();
     const refresh = useRefresh();
-    const handleStatus= async (record: any) => {
+    const handleStatus= async (record: any, event: React.MouseEvent) => {
+        event.stopPropagation()
         try {
             // Gửi yêu cầu cập nhật trạng thái người dùng
             await dataProvider.update('user', {
@@ -28,20 +32,20 @@ export const UserList = () => {
             notify('Thay đổi trạng thái thành công', {type: 'success'});
             // Làm mới danh sách
             refresh();
-        } catch ({message}) {
+        } catch (error) {
             // Hiển thị thông báo lỗi
-            notify(`Error: ${message}`, {type: 'warning'});
+            notify(`Error: ` + error ,{type: 'warning'});
         }
     }
     return (
-        <List>
-            <Datagrid rowClick="show">
+        <List aside={<UserFilterSidebar/>}>
+            <Datagrid rowClick="edit">
                 <TextField source="username" label={"Tên tài khoản"}/>
                 {/*<TextField source="password" />*/}
                 <TextField source="role.name" label={"Quyền"}/>
                 <FunctionField label={"Trạng thái"} render={(record: any) => (
-                    <Button onClick={() => handleStatus(record)} color={record.status ? 'primary' : 'error'}>
-                        {record.status ? 'Hoạt động' : 'Đã khóa'}
+                    <Button onClick={(event) => handleStatus(record, event)} color={record.status ? 'primary' : 'error' }>
+                        {record.status ? 'Hoạt động' : 'Đã khóa' }
                     </Button>
                 )}/>
                 <EditButton/>
@@ -49,3 +53,16 @@ export const UserList = () => {
         </List>
     )
 };
+const UserFilterSidebar = () => {
+    return (
+        <Card sx={{order: -1, mr: 2, mt: 6, width: 200}}>
+            <CardContent>
+                <FilterLiveSearch label={'Tìm...'}/>
+                <FilterList label="Trạng thái" icon={null}>
+                    <FilterListItem label="Hoạt động" value={{status: true}}/>
+                    <FilterListItem label="Đã khóa" value={{status: false}}/>
+                </FilterList>
+            </CardContent>
+        </Card>
+    )
+}

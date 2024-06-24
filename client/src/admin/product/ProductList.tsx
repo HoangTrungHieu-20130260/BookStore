@@ -15,7 +15,8 @@ export const ProductList = () => {
     const notify = useNotify();
     const dataProvider = useDataProvider();
     const refresh = useRefresh();
-    const handleStatus= async (record: any) => {
+    const handleStatus= async (record: any, event: React.MouseEvent) => {
+        event.stopPropagation()
         try {
             // Gửi yêu cầu cập nhật trạng thái người dùng
             await dataProvider.update('product', {
@@ -43,7 +44,7 @@ export const ProductList = () => {
                 <NumberField source="quantity" label={"Số lượng"}/>
                 {/*<BooleanField source="active" />*/}
                 <FunctionField label={"Trạng thái"} render={(record: any) => (
-                    <Button onClick={() => handleStatus(record)} color={record.active ? 'primary' : 'error'}>
+                    <Button onClick={(event) => handleStatus(record, event)} color={record.active ? 'primary' : 'error'}>
                         {record.active ? 'Đang bán' : 'Dừng bán'}
                     </Button>
                 )}/>

@@ -16,7 +16,8 @@ export const DiscountList = () => {
     const notify = useNotify();
     const dataProvider = useDataProvider();
     const refresh = useRefresh();
-    const handleStatus= async (record: any) => {
+    const handleStatus= async (record: any,event: React.MouseEvent) => {
+        event.stopPropagation()
         try {
             // Gửi yêu cầu cập nhật trạng thái người dùng
             await dataProvider.update('discount', {
@@ -42,12 +43,11 @@ export const DiscountList = () => {
                 <DateField source="startDate" label={"Ngày bắt đầu"}/>
                 <DateField source="endDate" label={"Ngày kết thúc"}/>
                 <FunctionField label={"Trạng thái"} render={(record: any) => (
-                    <Button onClick={() => handleStatus(record)} color={record.status ? 'primary' : 'error'}>
+                    <Button onClick={(event) => handleStatus(record, event)} color={record.status ? 'primary' : 'error'}>
                         {record.status ? 'Chưa sử dụng' : 'Đã sử dụng'}
                     </Button>
                 )}/>
-                <EditButton/>
-                <DeleteButton/>
+                <DeleteButton label={""}/>
             </Datagrid>
         </List>
     )

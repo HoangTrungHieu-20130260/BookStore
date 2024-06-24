@@ -10,6 +10,7 @@ import com.springboot.bookstore.repository.*;
 import com.springboot.bookstore.service.OrderService;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,8 +22,10 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
+@Transactional
 public class OrderServiceImpl implements OrderService {
     private UserRepository userRepository;
     private ProductRepository productRepository;
@@ -30,16 +33,20 @@ public class OrderServiceImpl implements OrderService {
     private OrderDetailsRepository orderDetailsRepository;
     private OrderStatusRepository orderStatusRepository;
     private DiscountCodeRepository discountCodeRepository;
-
+    private RateRepository rateRepository;
     @Autowired
-    public OrderServiceImpl(UserRepository userRepository, ProductRepository productRepository, OrderRepository orderRepository, OrderDetailsRepository orderDetailsRepository, OrderStatusRepository orderStatusRepository, DiscountCodeRepository discountCodeRepository) {
+    public OrderServiceImpl(UserRepository userRepository, ProductRepository productRepository, OrderRepository orderRepository, OrderDetailsRepository orderDetailsRepository, OrderStatusRepository orderStatusRepository, DiscountCodeRepository discountCodeRepository, RateRepository rateRepository) {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
         this.orderDetailsRepository = orderDetailsRepository;
         this.orderStatusRepository = orderStatusRepository;
         this.discountCodeRepository = discountCodeRepository;
+        this.rateRepository = rateRepository;
     }
+
+
+
 
     @Override
     public Page<Order> findAll(int page, int size, String sortBy, String sortDir, String filter) {
@@ -86,6 +93,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(int id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
+        List<OrderDetails> orderDetailsList = order.getOrderDetails();
+        for (OrderDetails orderDetails : orderDetailsList) {
+            if (orderDetails.getReview() != null) {
+                rateRepository.deleteById(orderDetails.getReview().getId());
+            }
+        }
         orderRepository.deleteById(id);
     }
 

@@ -4,7 +4,7 @@ import {SvgIconProps, Card, CardContent, Typography, Box } from "@mui/material";
 interface InfoCardProps {
     icon: React.ReactElement<SvgIconProps>;
     title: string;
-    content: number;
+    content: any;
     iconColor?: string;
 }
 export const InfoCard = ({ icon, title, content, iconColor = 'inherit' } : InfoCardProps) => {

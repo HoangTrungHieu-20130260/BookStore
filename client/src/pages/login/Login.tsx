@@ -13,6 +13,8 @@ function Login() {
 
     const handleOnSubmit = async (e:any) =>{
         e.preventDefault()
+        console.log("Đăng nhập");
+        
         const data = {
             username: username,
             password: password

@@ -38,7 +38,7 @@ public class OrderDetails {
     @Column(name = "price")
     private double price;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "review_id")
     private Rate review;
 

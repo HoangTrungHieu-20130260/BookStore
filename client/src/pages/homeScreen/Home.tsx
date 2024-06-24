@@ -225,7 +225,8 @@ export const Home = () => {
             </div>
             <Blog />
             <div className="news-letter-subscription">
-                <div className="row">
+                <div className="row"> 
+                    
                     <div className="col-md-6">
                         <h3 className="news-letter-heading">
                             THEO DÕI BẢN TIN CỦA CHÚNG TÔI

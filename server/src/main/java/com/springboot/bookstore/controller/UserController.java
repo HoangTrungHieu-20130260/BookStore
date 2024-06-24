@@ -28,10 +28,11 @@ public class UserController {
     }
     @GetMapping("")
     public Page<User> findAll(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
-        return userService.findAll(page,size,sortBy,sortDir);
+                              @RequestParam(defaultValue = "5") int size,
+                              @RequestParam(defaultValue = "id") String sortBy,
+                              @RequestParam(defaultValue = "asc") String sortDir,
+                              @RequestParam(defaultValue = "") String filter)  {
+        return userService.findAll(page,size,sortBy,sortDir, filter);
     }
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody User user) {

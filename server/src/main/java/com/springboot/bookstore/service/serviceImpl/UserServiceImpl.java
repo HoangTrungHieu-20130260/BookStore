@@ -129,6 +129,7 @@ public class UserServiceImpl implements UserService {
         result.setFullName(user.getFullName());
         result.setAvatar(user.getAvatar());
         result.setStatus(user.isStatus());
+        result.setRole(user.getRole());
         result.setUpdatedAt(LocalDateTime.now());
         return ResponseEntity.ok(userRepository.save(result));
     }

@@ -21,14 +21,21 @@ export const PendingOrders = ({pendingOrders}: {pendingOrders: Order[]}) => {
                     <Typography variant="h6" align="center">Đơn hàng đang chờ</Typography>
                     <List>
                         {pendingOrders.map(order => (
-                            <ListItem key={order.id} component={Link} to={`/admin/orders/${order.id}`}>
+                            <ListItem key={order.id} 
+                                        component={Link} 
+                                        to={`/admin/order/${order.id}`}
+                                        sx={{ textDecoration: 'none', color: 'inherit' }}>
                                 <ListItemAvatar>
                                     <Avatar src={order.fullName} />
                                 </ListItemAvatar>
                                 <ListItemText primary={
                                     <>
                                         <Typography variant={"subtitle2"}>{order.fullName}</Typography>
-                                        <Typography variant={"caption"}>{order.createdAt}</Typography>
+                                        <Typography variant={"caption"}>{new Date(order.createdAt).toLocaleDateString('vi-VN', {
+                                                day: '2-digit',
+                                                month: '2-digit',
+                                                year: 'numeric'
+                                            })}</Typography>
                                     </>
                                 }/>
                             </ListItem>

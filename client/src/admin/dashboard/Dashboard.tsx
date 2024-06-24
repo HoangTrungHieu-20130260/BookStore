@@ -10,6 +10,7 @@ import {PendingOrders} from "./PendingOrders";
 import {InfoCard} from "./InfoCard";
 import {PendingReviews} from "./PendingReview";
 import {FaShoppingCart} from "react-icons/fa";
+import { log } from "console";
 
 const Dashboard = () => {
     const firstDayOfMonth  = startOfMonth(subMonths(new Date(), 1))
@@ -29,7 +30,9 @@ const Dashboard = () => {
         sort: { field: 'createdAt', order: 'DESC' },
         filter: {},
     });
-    console.log(reviews)
+    const formatToVNPrice = (price: any) => {
+        return price.toLocaleString('vi-VN') + 'đ';
+    }
     const currentMonth = new Date().getMonth() + 1;
     const useUsersByMonth = () => {
         return useMemo(() => {
@@ -54,9 +57,13 @@ const Dashboard = () => {
     const getRevenueOfDay = useMemo(()=> {
         if (!orders) return [];
         const revenueByDate = orders
-            .filter(order => order.orderStatus.id !== 7)
+            .filter(order => order.orderStatus.id !== 3)
             .reduce((accumulator, order) => {
-                const date = new Date(order.createdAt).toLocaleString()
+                const date = new Date(order.createdAt).toLocaleString('vi-VN', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                })
                 if (!accumulator[date]) {
                     accumulator[date] = {date, revenue: 0}
                 }
@@ -69,16 +76,29 @@ const Dashboard = () => {
         }));
     }, [orders, firstDayOfMonth, lastDayOfMonth])
 
-
+    const getRevenueOfPreviousMonth = useMemo(() => {
+        if (!orders) return 0;
+    
+        const previousMonth = new Date().getMonth();
+        const previousMonthYear = new Date().getFullYear();
+        const totalRevenue = orders
+            .filter(order => {
+                const orderDate = new Date(order.createdAt);
+                return orderDate.getMonth() + 1 === previousMonth && orderDate.getFullYear() === previousMonthYear && order.orderStatus.id !== 3;
+            })
+            .reduce((accumulator, order) => accumulator + order.total_amount, 0);
+            
+        return totalRevenue;
+    }, [orders]);
     return (
         <Grid container spacing={2}>
             <Grid item md={8}>
                 <Grid container spacing={1} style={{ padding: '20px' }}>
                     <Grid item md={6}>
                         <InfoCard icon={<Person/>}
-                                  title={"Người dùng mới"}
+                                  title={"Doanh thu tháng trước"}
                                   iconColor={"purple"}
-                                  content={useUsersByMonth().length}/>
+                                  content={formatToVNPrice(getRevenueOfPreviousMonth)}/>
                     </Grid>
                     <Grid item md={6}>
                         <InfoCard icon={<Person/>}
