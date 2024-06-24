@@ -11,6 +11,7 @@ import com.springboot.bookstore.repository.*;
 import com.springboot.bookstore.service.OrderService;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;
@@ -24,8 +25,10 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.List;
 
 @Service
+@Transactional
 public class OrderServiceImpl implements OrderService {
     private UserRepository userRepository;
     private ProductRepository productRepository;
@@ -34,9 +37,9 @@ public class OrderServiceImpl implements OrderService {
     private OrderStatusRepository orderStatusRepository;
     private DiscountCodeRepository discountCodeRepository;
     private JwtGenerator jwtGenerator;
-
+    private RateRepository rateRepository;
     @Autowired
-    public OrderServiceImpl(UserRepository userRepository, ProductRepository productRepository, OrderRepository orderRepository, OrderDetailsRepository orderDetailsRepository, OrderStatusRepository orderStatusRepository, DiscountCodeRepository discountCodeRepository, JwtGenerator jwtGenerator) {
+    public OrderServiceImpl(UserRepository userRepository, ProductRepository productRepository, OrderRepository orderRepository, OrderDetailsRepository orderDetailsRepository, OrderStatusRepository orderStatusRepository, DiscountCodeRepository discountCodeRepository, JwtGenerator jwtGenerator, RateRepository rateRepository) {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
@@ -44,7 +47,11 @@ public class OrderServiceImpl implements OrderService {
         this.orderStatusRepository = orderStatusRepository;
         this.discountCodeRepository = discountCodeRepository;
         this.jwtGenerator = jwtGenerator;
+        this.rateRepository = rateRepository;
     }
+
+
+
 
     @Override
     public ResponseEntity<?> loadOrderDataById(long id) {
@@ -97,6 +104,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(int id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
+        List<OrderDetails> orderDetailsList = order.getOrderDetails();
+        for (OrderDetails orderDetails : orderDetailsList) {
+            if (orderDetails.getReview() != null) {
+                rateRepository.deleteById(orderDetails.getReview().getId());
+            }
+        }
         orderRepository.deleteById(id);
     }
 

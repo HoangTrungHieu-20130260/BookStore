@@ -42,7 +42,7 @@ export const Header =()=> {
         if (getToken === null){
             // navigate("/sign-in")
         }
-        // localStorage.removeItem("token")
+
         console.log(getToken)
 
     }, [getToken]);

@@ -17,10 +17,11 @@ export const OrderList = () => {
     const notify = useNotify();
     const dataProvider = useDataProvider();
     const refresh = useRefresh();
-    const handleStatus= async (record: any, status: number) => {
+    const handleStatus= async (record: any, status: number, event: React.MouseEvent) => {
+        event.stopPropagation()
         try {
             // Gửi yêu cầu cập nhật trạng thái người dùng
-            await dataProvider.update('product', {
+            await dataProvider.update('order', {
                 id: record.id,
                 data: {...record, orderStatus: {id: status}},
                 previousData: record
@@ -49,17 +50,19 @@ export const OrderList = () => {
                 <TextField source="orderStatus.status" label={"Trạng thái"}/>
                 <FunctionField label={"Trạng thái"} render={(record: any) => (
                     <>
-                        <Button onClick={() => handleStatus(record, 2)}
+                        
+                        {record.orderStatus.id !== 3 ?
+                            <Button onClick={(event) => handleStatus(record, 2, event)}
                                 color={record.orderStatus.id === 1 ? 'info' : 'success'}>
-                            {record.orderStatus.id === 1 ? 'Đang chờ' : 'Đã duyệt'}
-                        </Button>
-                        <Button onClick={() => handleStatus(record, 3)}
+                                {record.orderStatus.id === 1 ? 'Đang chờ' : 'Đã duyệt'}
+                            </Button> : ""
+                        }
+                        <Button onClick={(event) => handleStatus(record, 3, event)}
                                 color={record.orderStatus.id === 3 ? 'error' : 'warning'}>
-                            {record.orderStatus.id === 1 ? 'Đã hủy' : 'Hủy'}
+                            {record.orderStatus.id === 3 ? 'Đã hủy' : 'Hủy'}
                         </Button>
                     </>
                 )}/>
-                <DeleteButton/>
             </Datagrid>
         </List>
     )
@@ -79,8 +82,8 @@ const OrderFilterSidebar = () => {
                 </FilterList>
                 <FilterList label="Trình trạng" icon={null}>
                     <FilterListItem label="Đang chờ" value={{order_status: 1}}/>
-                    <FilterListItem label="Đang giao" value={{order_status: 2}}/>
-                    <FilterListItem label="Đã giao" value={{order_status: 3}}/>
+                    <FilterListItem label="Đã xong" value={{order_status: 2}}/>
+                    <FilterListItem label="Đã hủy" value={{order_status: 3}}/>
                 </FilterList>
             </CardContent>
         </Card>

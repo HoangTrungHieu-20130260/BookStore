@@ -170,14 +170,23 @@ export const dataProvider: DataProvider = {
                 const avatarUrl = await imgUpload(params.data.avatar);
                 params.data.avatar = avatarUrl;
             }
+            if(params.data.role.id === 1) {
+                params.data.role = {id: 1, name: 'ADMIN'}
+            } else if(params.data.role.id === 2) {
+                params.data.role = {id: 2, name: 'USER'}
+            }
+            
             const { json } = await httpClient(`${apiUrl}/${resource}/${params.id}`, {
                 method: 'PUT',
                 headers: new Headers({
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
                 }),
-                body: JSON.stringify(params.data),
+                body: JSON.stringify(params.data)
+                
+                
             });
+            console.log(params.data);
             return { data: { ...json.data, id: json.id } };
         }
         if(resource==='blog') {
