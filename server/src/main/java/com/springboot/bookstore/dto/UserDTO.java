@@ -14,7 +14,7 @@ import java.io.File;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-    private long id;
+    private int id;
     private String username;
     private String password;
     private String newPassword;

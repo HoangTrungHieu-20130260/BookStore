@@ -21,21 +21,18 @@ function Forgot() {
         }
 
         try {
-            const response = await axios.post<ForgotDto>('http://localhost:8080/api/v1/auth/forgot', {
-                email
-            });
-
-            setSuccess("Gửi mã OTP thành công!");
-            setError(null);
-            navigate("/forgot-confirm");
-        } catch (err) {
-            if (axios.isAxiosError(err) && err.response) {
-                // Handle specific error response if needed
-                setError(err.response.data.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
+            console.log(email)
+            const data = await axios.post<ForgotDto>('http://localhost:8080/api/v1/auth/forgot', {email: email})
+            console.log(data)
+            if (data.status === 200) {
+                localStorage.setItem("emailForgot", email);
+                setSuccess("OTP xác nhận quên mật khẩu đã gửi về email của bạn");
+                navigate("/forgot-confirm");
             } else {
-                setError("Tên người dùng đã tồn tại");
+                setError('Email không tồn tại!')
             }
-            setSuccess(null);
+        } catch (err) {
+            console.error(err);
         }
     }
 

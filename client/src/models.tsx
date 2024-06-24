@@ -9,12 +9,14 @@ export interface User {
     createdAt: string,
     status: boolean
 }
-export interface CartState{
-    cartItems : Product[];
+
+export interface CartState {
+    cartItems: Product[];
     cartTotalQuantity: number;
     cartTotalAmount: number;
 
 }
+
 export interface Product {
     id: number;
     category: Category;
@@ -32,6 +34,7 @@ export interface Product {
     active: boolean;
     cartTotal: number;
 }
+
 export interface Order {
     id: number;
     user: User; // Assume User interface is defined elsewhere
@@ -58,10 +61,12 @@ export interface Rate {
     status: boolean;
     // orderDetails: OrderDetails;
 }
+
 export interface OrderStatus {
     id: number;
     status: string;
 }
+
 export interface Category {
     id: number;
     parentCategory: Category | null;
@@ -131,33 +136,37 @@ export interface ReviewsPage {
     numberOfElements: number;
     empty: boolean;
 }
+
 export interface ProductsWithCategoryResponse {
     category: Category;
     products: ProductsPage;
 }
 
-export interface UserDto{
+export interface UserDto {
     username: string;
     fullName: string;
     email: string;
     phone: string;
     avatarLink: string;
 }
+
 export interface RegisterDto {
     username: string;
     password: string;
     email: string;
 }
-export interface LoginDto{
+
+export interface LoginDto {
     username: string;
     password: string;
 }
 
-export interface ForgotDto{
+export interface ForgotDto {
     email: string;
 }
 
-export interface OrderDto{
+export interface OrderDto {
+    id: number;
     fullName: string;
     email: string;
     phone: string;
@@ -168,9 +177,10 @@ export interface OrderDto{
     shippingCost: number;
     totalAmount: number;
     products: Product[];
+    orderDetails: any[];
 }
 
-export interface AddressDto{
+export interface AddressDto {
     id: number;
     fullName: string;
     phone: string;
@@ -182,4 +192,12 @@ export interface AddressDto{
     provinceId: number;
     province: string;
     default: boolean;
+}
+
+export interface RateDto {
+    userId: number;
+    productId: number;
+    content: string;
+    stars: number;
+    orderDetailsId: number;
 }

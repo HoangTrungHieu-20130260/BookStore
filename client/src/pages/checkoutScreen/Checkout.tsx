@@ -11,9 +11,11 @@ import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState, store} from "../../redux/store";
 import {FaMinus, FaPlus, FaArrowLeft} from "react-icons/fa";
-import {CartState, OrderDto, Product} from "../../models";
+import {AddressDto, CartState, OrderDto, Product} from "../../models";
 import {addToCart, decreaseCart, getTotals, removeFromCart} from "../../redux/reducer/CartReducer";
 import axios from "axios";
+import moment from "moment/moment";
+import toast from "react-hot-toast";
 
 interface Province {
     ProvinceID: string;
@@ -30,10 +32,20 @@ interface Ward {
     WardName: string;
 }
 
+interface User {
+    fullName: string;
+    email: string;
+    phone: string;
+    avatar: string;
+    username: string;
+    address: AddressDto[];
+}
 
 const Checkout: React.FC = () => {
-    const [userLogged, setUserLogged] = useState(null)
-
+    const [userLogged, setUserLogged]:any = useState(null)
+    const [success, setSuccess] = useState<string | null>(null)
+    const [error, setError] = useState<string | null>(null)
+    const [checkoutError, setCheckoutError] = useState<string | null>(null)
     const [selectedMethod, setSelectedMethod] = useState('COD')
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
@@ -54,6 +66,7 @@ const Checkout: React.FC = () => {
     const [provisionalAmount, setProvisionalAmount] = useState(0)
     const [shippingCost, setShippingCost] = useState<number>(0);
     const [totalMoney, setTotalMoney] = useState(0)
+    const token = localStorage.getItem('token')
 
 
     useEffect(() => {
@@ -115,10 +128,53 @@ const Checkout: React.FC = () => {
         )
     };
 
+    const handleCheckDiscountCode = async () => {
+        try {
+            const res = await axios.get(`http://localhost:8080/api/v1/discount/check?code=${discountCode.toUpperCase()}`)
+            console.log('Res: ', res)
+            if (res.data === "DiscountCode invalid") {
+                setError('Mã giảm giá không hợp lệ !')
+                setSuccess('')
+            } else if (res.data === 'Out of stock') {
+                setError('Mã đã được sử dụng hết !')
+                setSuccess('')
+            } else {
+                setDiscountPrice((res.data.discountRate) * provisionalAmount)
+                setSuccess('Áp dụng mã giảm giá thành công')
+                setError('')
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    const handleOnClickCheckCode = async (e: any) => {
+        e.preventDefault()
+        await handleCheckDiscountCode()
+    }
+
+    useEffect(() => {
+        setDiscountPrice(0)
+    }, [discountCode]);
+
+    const fetchDataUser = async () => {
+        try {
+            const response: any = await axios.get<User>('http://localhost:8080/api/v1/user/get-data-user', { params: { token } });
+            // setUserLogged(response.data);
+            setUserLogged(response.data);
+            console.log(userLogged.id)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchDataUser();
+    }, [token]);
+
     const handleOnClickCheckout = async (e: any) => {
         e.preventDefault()
         const data = {
-            // "userId": userLogged && userLogged !== null ? userLogged.id : 0,
+            "userId": userLogged && userLogged !== null ? userLogged.id : 0,
             "fullName": fullName,
             "email": email,
             "phone": phone,
@@ -135,19 +191,43 @@ const Checkout: React.FC = () => {
                 quantity: item.cartTotal
             }))
         }
-        console.log(data)
-
-        switch (selectedMethod){
-            case 'COD':
-                try {
-                    const response = await axios.post<OrderDto>('http://localhost:8080/api/v1/order/cod', data)
-                    console.log(response)
-                } catch (e) {
-                    console.log(e)
+        if (fullName === '' || phone === '' || street === '' || ward?.WardName === '' || district?.DistrictName === '' || province?.ProvinceName === ''){
+            setCheckoutError('Vui lòng nhập đầy đủ các thông tin!')
+        } else {
+            setCheckoutError('')
+            console.log(data)
+            switch (selectedMethod) {
+                case 'COD':
+                    try {
+                        const response = await axios.post<OrderDto>('http://localhost:8080/api/v1/order/cod', data)
+                        console.log(response)
+                    } catch (e) {
+                        console.log(e)
+                    }
+                    break;
+                case "VNPay": {
+                    try {
+                        data.paymentStatus = true
+                        const response = await axios.post<OrderDto>('http://localhost:8080/api/v1/order/vnpay', data)
+                        console.log(response)
+                        const resPayment = await axios.post<OrderDto>('http://localhost:8080/api/payment/create_payment', {
+                            amount: totalMoney,
+                            orderInfo: 'Thanh toan'
+                        }).then(
+                            (response: any) => {
+                                window.location.href = response.data.url;
+                            }
+                        ).catch((error) => {
+                            console.log(error)
+                        })
+                    } catch (e) {
+                        console.log(e)
+                    }
                 }
-                break
 
+            }
         }
+
     }
 
     const dispatch = useDispatch();
@@ -169,7 +249,7 @@ const Checkout: React.FC = () => {
     useEffect(() => {
         // let totalAmount = 0
         // cart.cartItems.forEach((item, index) => {
-        //     totalAmount += item.currentPrice * item.quantity
+        //     totalAmount += item.currentPrice * item.gitquantity
         // })
         // console.log(totalAmount)
         setProvisionalAmount(cart.cartTotalAmount)
@@ -200,9 +280,13 @@ const Checkout: React.FC = () => {
                 </div>
                 <div className="coupon">
                     <input type="text" name="coupon_code" className="input-text" id="coupon_code"
-                           placeholder="Mã giảm giá"/>
-                    <input type="submit" className="button" name="apply_coupon" value="Nhập mã giảm giá"/>
+                           placeholder="Mã giảm giá" onChange={e => setDiscountCode(e.target.value)}/>
+                    <input onClick={handleOnClickCheckCode} type="submit" className="button" name="apply_coupon"
+                           value="Nhập mã giảm giá"/>
+                    {success && <div className="success_message">{success}</div>}
+                    {error && <div className="error_message">{error}</div>}
                 </div>
+
                 <div className="delivery_info">
                     <div className="main_info">
                         <h3>Thông tin giao hàng</h3>
@@ -374,28 +458,6 @@ const Checkout: React.FC = () => {
                             <h4>Số lượng</h4>
                             <h4 className={"total_price_title"}>Thành tiền</h4>
                         </div>
-
-                        {/*<div className="table_product">*/}
-                        {/*    <div className="product-items">*/}
-                        {/*        <div className="product">*/}
-                        {/*            <p className="book_name">The Book Of Love</p>*/}
-                        {/*            <p className="quantity_text">x 1</p>*/}
-                        {/*        </div>*/}
-                        {/*        <div className="product_price">*/}
-                        {/*            <p className="price">300.000</p>*/}
-                        {/*            <p className="currency">VND</p>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*    <div className={"shipping_fee"}>*/}
-                        {/*        <p>Phí giao hàng:</p>*/}
-                        {/*        {*/}
-                        {/*            (shippingCost && shippingCost > 0) ?*/}
-                        {/*                <p>{formatToVNPrice(shippingCost)}</p>*/}
-                        {/*                : <p>0đ</p>*/}
-                        {/*        }*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
-
                         {cart.cartItems.map(item =>
                             <div className="item_cart">
                                 <div className="row main align-items-center">
@@ -467,6 +529,7 @@ const Checkout: React.FC = () => {
                             />
                             <p>Thanh toán với VN Pay</p>
                         </div>
+                        {checkoutError && <div className="checkout_message">{checkoutError}</div>}
                     </div>
                     <div className="place_order">
                         <input onClick={handleOnClickCheckout} type="submit" className="order_button" value="Đặt hàng"/>

@@ -46,6 +46,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/discount/**").permitAll()
                         .requestMatchers("/api/v1/review/**").permitAll()
                         .requestMatchers("/api/v1/blog/**").permitAll()
+                        .requestMatchers("/api/payment/**").permitAll()
+                        .requestMatchers("/api/v1/rate/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors().configurationSource(new CorsConfigurationSource() {

@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 
 // Icons
 import { FaPen, FaRegUser } from "react-icons/fa";
@@ -16,19 +15,11 @@ import AccountDetails from "./AccountDetails";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {AddressDto, OrderDto} from "../../models";
-
-const useStyles = makeStyles({
-    root: {
-        '& .MuiInputLabel-root': {
-            fontSize: '14px',
-        },
-        '& .MuiInputBase-input': {
-            fontSize: '14px',
-        },
-    },
-});
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface User {
+    id: number;
     fullName: string;
     email: string;
     phone: string;
@@ -66,12 +57,8 @@ const AccountDetailScreen: React.FC = () => {
         fetchDataUser();
     }, [token, isShow]);
 
-    useEffect(() => {
-        // console.log('New user', user);
-        fetchDataUser()
-    }, [user]);
-
     return (
+        <>
         <div className='AccountDetailContainer'>
             <div className='AccountDetailWrapper'>
                 <div className='AccountDetailSideBar'>
@@ -95,21 +82,21 @@ const AccountDetailScreen: React.FC = () => {
                         <div className='options'>
                             <button
                                 className='profile'
-                                style={isShow === 'profile' ? { color: 'red' } : {}}
+                                style={isShow === 'profile' ? { color: '#27ae61' } : {}}
                                 onClick={() => handleSelectShow('profile')}
                             >
                                 Hồ sơ
                             </button>
                             <button
                                 className='address'
-                                style={isShow === 'address' ? { color: 'red' } : {}}
+                                style={isShow === 'address' ? { color: '#27ae61' } : {}}
                                 onClick={() => handleSelectShow('address')}
                             >
                                 Địa chỉ
                             </button>
                             <button
                                 className='changePass'
-                                style={isShow === 'changePassword' ? { color: 'red' } : {}}
+                                style={isShow === 'changePassword' ? { color: '#27ae61' } : {}}
                                 onClick={() => handleSelectShow('changePassword')}
                             >
                                 Đổi mật khẩu
@@ -118,7 +105,7 @@ const AccountDetailScreen: React.FC = () => {
                     </div>
                     <div
                         className='accountDetailItem purchaseOrder'
-                        style={isShow === 'purchaseOrder' ? { color: 'red' } : {}}
+                        style={isShow === 'purchaseOrder' ? { color: '#27ae61' } : {}}
                         onClick={() => handleSelectShow('purchaseOrder')}
                     >
                         <BiPurchaseTag className='icons' />
@@ -146,6 +133,19 @@ const AccountDetailScreen: React.FC = () => {
                 )}
             </div>
         </div>
+    <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+    />
+        </>
     );
 }
 

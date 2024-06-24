@@ -41,6 +41,11 @@
     border-top: 4px solid #27ae61;
 }
 
+.coupon_noti p{
+    margin-top: 15px;
+    margin-left: 10px;
+}
+
 .check-icon {
     color: #27ae61;
     margin-top: 20px;
@@ -294,4 +299,26 @@
 .col-2{
     margin-left: 20px;
 }
+
+.success_message{
+    text-align: left;
+    color: #27ae61;
+    padding-left: 40px;
+    font-size: 16px;
+}
+
+.error_message{
+    color: red;
+    text-align: left;
+    padding-left: 20px;
+    font-size: 16px;
+}
+
+.checkout_message{
+    color: red;
+    text-align: left;
+    padding-left: 20px;
+    font-size: 16px;
+}
+
 
