@@ -62,7 +62,7 @@ export const Header =()=> {
                                 <FaMapMarkerAlt className="top-bar-icon"/>
                                 Đại học Nông Lâm Thành phố Hồ Chí Minh
                                 <IoMdPhonePortrait className="top-bar-icon"/>
-                                0852995378
+                                08529954522
                             </div>
                             <div className="col-xs-12 col-sm-6 col-md-6 text-end">
                                 <ul className="menu mb-0">
