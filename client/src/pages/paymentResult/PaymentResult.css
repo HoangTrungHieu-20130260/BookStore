@@ -36,10 +36,10 @@
     font-size: 16px;
 }
 
-.content {
-    width: 30%;
-    height: 500px;
-    margin: 10px auto;
+.content_form {
+    margin: 20px auto;
+    width: 500px;
+    height: 400px;
 }
 
 .form{
@@ -84,7 +84,7 @@
 }
 
 .user_input{
-    width: 60%;
+    width: 100%;
     height: 40px;
     border-radius: 3px;
     border: 1px solid rgba(0, 0, 0, .3);
@@ -126,7 +126,7 @@
 }
 
 .password_input{
-    width: 60%;
+    width: 100%;
     height: 40px;
     border-radius: 3px;
     border: 1px solid rgba(0, 0, 0, .3);
@@ -164,9 +164,6 @@
     border-radius: 3px;
     border: none;
     cursor: pointer;
-    width: 120px;
-    height: 30px;
-    margin-left: 10px;
     text-align: center;
 }
 
@@ -175,9 +172,9 @@
 }
 
 .forgot .return_home {
-    margin-top: 50px;
+    margin: 10px 35%;
     display: inline-block;
-    padding: 5px 30px;
+    /*padding: 5px 30px;*/
     background-color: #27ae61;
     color: white;
     text-align: center;
@@ -194,10 +191,18 @@
     background-color: #31dc7b;
 }
 
-
-
 .error_message{
     color: red;
     margin-left: 20px;
     font-size: 16px;
 }
+
+.success_mess{
+    color: #27ae61;
+    font-weight: bold;
+}
+
+.text-inside{
+    padding-top: 20px;
+}
+

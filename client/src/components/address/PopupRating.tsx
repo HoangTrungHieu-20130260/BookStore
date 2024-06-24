@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Modal, Box, Typography, Button, Rating, TextField } from '@mui/material';
+import { Modal, Box, Typography, Rating, TextField } from '@mui/material';
 import './PopupRating.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import {AddressDto, RateDto} from "../../models";
-import { useNotify } from 'react-admin';
 
 const style = {
     position: 'absolute' as const,
@@ -20,15 +19,15 @@ const style = {
     p: 4,
 };
 
-const styleBtn = {
-    bgcolor: 'var(--color-black)',
-    p: 1,
-    mr: 2,
-    '&:hover': {
-        bgcolor: '#fff',
-        color: '#000'
-    }
-};
+// const styleBtn = {
+//     bgcolor: 'var(--color-black)',
+//     p: 1,
+//     mr: 2,
+//     '&:hover': {
+//         bgcolor: '#fff',
+//         color: '#000'
+//     }
+// };
 interface User {
     id: number;
     fullName: string;
@@ -70,44 +69,26 @@ const PopupRating: React.FC<PopupRatingProps> = ({ open, handleClose, detail, us
     const postReview = async () => {
         const postData = {
             userId: user.id,
-            orderDetailId: detail.id,
+            orderDetailsId: detail.id,
             productId: detail.product.id,
             stars: stars,
             content: reviewContent
         };
         try {
-            const response = await axios.post<RateDto>('http://localhost:8080/api/v1/rate/createRate', postData)
+            const response = await axios.post<RateDto>('http://localhost:8080/api/v1/review/createRate', postData)
             setReviewContent('')
             setStars(0)
-            toast.success('Đánh giá thành công!', {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-
+            console.log("success")
+            toast.success('Đánh giá thành công!');
             console.log(response);
         } catch (error) {
-            toast.error('Đánh giá thất bại!', {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            toast.error('Đánh giá thất bại!');
             console.error(error);
         }
     }
 
     return (
-        <>
+
         <Modal open={open} onClose={handleClose}>
             <Box sx={style}>
                 <Typography variant="h6" component="h2">
@@ -144,22 +125,25 @@ const PopupRating: React.FC<PopupRatingProps> = ({ open, handleClose, detail, us
                     <button className={"rate_button"} onClick={handleSubmit}>
                         Gửi đánh giá
                     </button>
+
                 </div>
+                <ToastContainer
+                    position="top-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
             </Box>
+
         </Modal>
-            <ToastContainer
-                position="top-center"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
-        </>
+
+
     );
 };
 

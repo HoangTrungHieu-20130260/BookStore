@@ -10,11 +10,11 @@ import '../../common/Common.css'
 import {useSelector} from "react-redux";
 import {RootState} from "../../redux/store";
 export const Header =()=> {
+    const navigate = useNavigate()
     const [showResults, setShowResults] = useState(false);
     const [search, setSearch] = useState("")
   const cart = useSelector( (state: RootState)=> state.carts)
     const getToken = localStorage.getItem("token")
-    const navigate = useNavigate()
     // const [isLogin, setIsLogin]
     const [categories, setCategories] = useState<CategoryResponse[]>([])
     const [products, setProducts] = useState<Product[]>([])
@@ -50,6 +50,7 @@ export const Header =()=> {
     const Logout = (e: any) => {
         e.preventDefault();
         localStorage.removeItem("token")
+        navigate("/")
     }
     return (
         <>
@@ -61,11 +62,11 @@ export const Header =()=> {
                                 <FaMapMarkerAlt className="top-bar-icon"/>
                                 Đại học Nông Lâm Thành phố Hồ Chí Minh
                                 <IoMdPhonePortrait className="top-bar-icon"/>
-                                0000000000
+                                0852995378
                             </div>
                             <div className="col-xs-12 col-sm-6 col-md-6 text-end">
                                 <ul className="menu mb-0">
-                                    <li className="menu-item"><a href="#">Yêu thích</a></li>
+                                    {/*<li className="menu-item"><a href="#">Yêu thích</a></li>*/}
                                     <li className="menu-item">
                                         {
                                             getToken === null ?
@@ -76,8 +77,8 @@ export const Header =()=> {
                                     <li className="menu-item"><Link to="/checkout">Thanh toán</Link></li>
                                     {
                                         getToken !== null &&
-                                        <li className="menu-item">
-                                            <button onClick={e => Logout(e)}>Đăng xuất</button>
+                                        <li className="menu-item" onClick={e=> Logout(e)}>
+                                            <Link to="/sign-in">Đăng xuất</Link>
                                         </li>
                                     }
                                 </ul>
@@ -145,35 +146,39 @@ export const Header =()=> {
                                 <li className="nav-item border-bottom">
                                     <Link className="nav-link active" aria-current="page" to={"/"}>Trang chủ</Link>
                                 </li>
+                                <li className="nav-item border-0">
+                                    <Link className="nav-link active" aria-current="page" to={"/admin"}>Quản lý</Link>
+                                </li>
                                 {categories.map((cat, index) =>
-                                    <li className="nav-item dropdown" key={index}>
-                                        <a className="nav-link dropdown-toggle" href="#" role="button"
-                                           data-bs-toggle="dropdown" aria-expanded="false">
+                                    <li className="nav-item dropdown border-0" key={index}>
+                                        <nav className="nav-link dropdown-toggle" role="button"
+                                             data-bs-toggle="dropdown" aria-expanded="false">
                                             {cat.category.name}
-                                        </a>
+                                        </nav>
                                         <ul className="dropdown-menu">
                                             {cat.categories.map((subCat, index) =>
                                                 <li key={index}>
-                                                    <Link className="dropdown-item" to={`/category/${subCat.id}`}>{subCat.name}</Link>
+                                                    <Link className="dropdown-item"
+                                                          to={`/category/${subCat.id}`}>{subCat.name}</Link>
                                                 </li>
                                             )}
                                         </ul>
                                     </li>
                                 )}
-                                <li className="nav-item dropdown">
-                                    <a className="nav-link dropdown-toggle" href="#" role="button"
-                                       data-bs-toggle="dropdown" aria-expanded="false">
-                                        Dropdown
-                                    </a>
-                                    <ul className="dropdown-menu">
-                                        <li><a className="dropdown-item" href="#">Action</a></li>
-                                        <li><a className="dropdown-item" href="#">Another action</a></li>
-                                        <li>
-                                            <hr className="dropdown-divider"/>
-                                        </li>
-                                        <li><a className="dropdown-item" href="#">Something else here</a></li>
-                                    </ul>
+                                <li className="nav-item border-0">
+                                    {
+                                        getToken === null ?
+                                            <Link className="nav-link active text-center" aria-current="page"
+                                                  to="/sign-in">Đăng nhập</Link> :
+                                            <Link className="nav-link active text-center" aria-current="page"
+                                                  to="/my-account">Tài khoản của tôi</Link>
+                                    }
                                 </li>
+                                {getToken !== null && <li className="nav-item border-0 " onClick={e => Logout(e)}>
+                                    <Link className="nav-link active text-center" aria-current="page" to="/sign-in">Đăng
+                                        xuất</Link>
+                                </li>}
+
                             </ul>
                         </div>
                     </div>
@@ -181,7 +186,9 @@ export const Header =()=> {
                 <nav className="main-menu">
                     <div className="container">
                         <ul className="menu drop-down">
-                            <li className="menu-item">Trang chủ</li>
+                            <li className="menu-item">
+                                <Link className={"fix-css"} to={"/"}>Trang chủ</Link>
+                            </li>
                             <li className="menu-item show-drop-down">
                                 <p>Thể loại</p>
                                 <div className="drop-down-content">
@@ -202,7 +209,14 @@ export const Header =()=> {
                                 </div>
 
                             </li>
-                            <li className="menu-item">Về chúng tôi</li>
+                            <li className="menu-item">
+                                <Link className={"fix-css"} to={"/about-us"}>Về chúng tôi</Link></li>
+                            {getToken && JSON.parse(getToken).role === 'ADMIN' ?
+                                <li className="menu-item">
+                                    <Link className={"fix-css"} to={"/admin"}>Quản lý</Link>
+                                </li> : ""}
+
+
                         </ul>
                     </div>
                 </nav>
