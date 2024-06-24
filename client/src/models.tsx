@@ -83,6 +83,7 @@ export interface CategoryResponse {
 }
 export interface Review {
     id: number,
+    user: User;
     rating: number,
     comment: string,
     createAt: string,

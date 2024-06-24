@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface OrderDetailsRepository extends JpaRepository<OrderDetails, Integer> {
@@ -17,4 +18,6 @@ public interface OrderDetailsRepository extends JpaRepository<OrderDetails, Inte
             "GROUP BY od.product.id " +
             "ORDER BY totalQuantity DESC")
     Page<Object[]> findBestSellingProducts(Pageable pageable);
+
+    Optional<OrderDetails> findById (int id);
 }

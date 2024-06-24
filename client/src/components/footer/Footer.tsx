@@ -34,32 +34,32 @@ export const Footer = () => {
                         <div className="col-lg-3 col-md-3 col-sm-6">
                             <div className="widget-nav-menu">
                                 <h2 className="widget-title">
-                                    SHOPPING GUIDE
+                                    Mẹo mua sắm
                                 </h2>
                                 <ul className="menu-footer-container">
                                     <li className="menu-item">
                                         <FaRegCircle className="menu-item-icon"/>
-                                        <a href="">How to buy</a>
+                                        <a href=""> Cách thức mua</a>
                                     </li>
                                     <li className="menu-item">
                                         <FaRegCircle className="menu-item-icon"/>
-                                        <a href="">Fag</a>
+                                        <a href=""> Hỏi đáp</a>
                                     </li>
                                     <li className="menu-item">
                                         <FaRegCircle className="menu-item-icon"/>
-                                        <a href="">Store Locations</a>
+                                        <a href=""> Vị trí cửa hàng</a>
                                     </li>
                                     <li className="menu-item">
                                         <FaRegCircle className="menu-item-icon"/>
-                                        <a href="">Return Policy</a>
+                                        <a href=""> Điều khoản đổi trả</a>
                                     </li>
                                     <li className="menu-item">
                                         <FaRegCircle className="menu-item-icon"/>
-                                        <a href="">Payment</a>
+                                        <a href=""> Phương thức thanh toán</a>
                                     </li>
                                     <li className="menu-item">
                                         <FaRegCircle className="menu-item-icon"/>
-                                        <a href="">Shipment</a>
+                                        <a href=""> Dịch vụ vận chuyển</a>
                                     </li>
                                 </ul>
                             </div>
@@ -67,32 +67,32 @@ export const Footer = () => {
                         <div className="col-lg-3 col-md-3 col-sm-6">
                             <div className="widget-nav-menu">
                                 <h2 className="widget-title">
-                                    information
+                                    Thông tin
                                 </h2>
                                 <ul className="menu-footer-container">
                                     <li className="menu-item">
                                         <FaRegCircle className="menu-item-icon"/>
-                                        <a href="">About Us</a>
+                                        <a href="">Về chúng tôi</a>
                                     </li>
                                     <li className="menu-item">
                                         <FaRegCircle className="menu-item-icon"/>
-                                        <a href="">Delivery information</a>
+                                        <a href=""> Thông tin giao hàng</a>
                                     </li>
                                     <li className="menu-item">
                                         <FaRegCircle className="menu-item-icon"/>
-                                        <a href="">Primary policy</a>
+                                        <a href=""> Điều khoản riêng tư</a>
                                     </li>
                                     <li className="menu-item">
                                         <FaRegCircle className="menu-item-icon"/>
-                                        <a href="">Discount</a>
+                                        <a href=""> Chính sách giảm giá</a>
                                     </li>
                                     <li className="menu-item">
                                         <FaRegCircle className="menu-item-icon"/>
-                                        <a href="">Customer service</a>
+                                        <a href=""> Chăm sóc khách hàng</a>
                                     </li>
                                     <li className="menu-item">
                                         <FaRegCircle className="menu-item-icon"/>
-                                        <a href="">Terms & condition</a>
+                                        <a href=""> Điều khoản dịch vụ</a>
                                     </li>
                                 </ul>
                             </div>
@@ -100,7 +100,7 @@ export const Footer = () => {
                         <div className="col-lg-3 col-md-3 col-sm-6">
                             <div className="widget-nav-menu">
                                 <h2 className="widget-title">
-                                    store locations
+                                    Vị trí cửa hàng
                                 </h2>
                                 <div className="text-widget">
                                     <img src="http://wp.acmeedesign.com/bookstore/wp-content/uploads/2016/02/worldmap.png" alt="store locations"/>

@@ -15,6 +15,9 @@ import ForgotConfirm from "./pages/forgotConfirm/ForgotConfirm";
 import AccountDetailScreen from "./pages/accountDetail/AccountDetailsScreen";
 import Checkout from "./pages/checkoutScreen/Checkout";
 import PaymentResult from "./pages/paymentResult/PaymentResult";
+import RegisterGetOtp from "./pages/registerGetOtp/RegisterGetOtp";
+import About from "./pages/aboutUs/About";
+import Contact from "./pages/contact/Contact";
 
 function App() {
     return (
@@ -32,6 +35,9 @@ function App() {
                 <Route path={"forgot-confirm"} element={<ForgotConfirm/>}/>
                 <Route path={"my-account"} element={<AccountDetailScreen/>}/>
                 <Route path={"payment-result"} element={<PaymentResult />} />
+                <Route path={"register-otp"} element={<RegisterGetOtp />} />
+                <Route path={"about-us"} element={<About/>}/>
+                <Route path={"contact"} element={<Contact/>}/>
             </Route>
             <Route path={"/admin/*"} element={<Manager/>}>
             </Route>

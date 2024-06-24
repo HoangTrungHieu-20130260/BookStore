@@ -12,6 +12,9 @@ function Cart() {
     const dispatch = useDispatch();
     const cart = useSelector( (state: RootState)=> state.carts)
     // const cartItems = useSelector( (state: RootState)=> state.carts.cartItems)
+    const formatToVNPrice = (price: any) => {
+        return price.toLocaleString('vi-VN') + 'VNĐ';
+    }
     const handleRemoveFromCart = (cartItem: Product)=> {
         dispatch(removeFromCart(cartItem))
     }
@@ -29,7 +32,7 @@ function Cart() {
         <div className="Cart_container pb-5">
             <div className="page-header text-center">
                 <div className="container">
-                    <h1>Đăng nhập</h1>
+                    <h1>Giỏ hàng</h1>
                     <ul className="breadcrumb clearfix">
                         <li className="bc-item">
                             <Link to={"/home"} className={"bc-home"}>Home</Link>
@@ -65,7 +68,7 @@ function Cart() {
                                         <div className="row">{item.title}</div>
                                     </div>
                                     <div className="col text-center">
-                                        {item.currentPrice}₫
+                                        {formatToVNPrice(item.currentPrice)}
                                     </div>
                                     <div className="col">
                                         <FaMinus onClick={()=> handleDecreaseCart(item)}/>
@@ -74,7 +77,7 @@ function Cart() {
                                         </a>
                                         <FaPlus onClick={()=> handleIncreaseCart(item)}/>
                                     </div>
-                                    <div className="col"> {item.cartTotal * item.currentPrice}₫
+                                    <div className="col"> {formatToVNPrice(item.cartTotal * item.currentPrice)}
                                         <span className="close float-end" onClick={()=> handleRemoveFromCart(item)}>
                                             &#10005;
                                         </span>
@@ -107,7 +110,7 @@ function Cart() {
                         <div className="row"
                         >
                             <div className="col">Tổng tiền giỏ hàng:</div>
-                            <div className="col text-right">{cart.cartTotalAmount}₫</div>
+                            <div className="col text-right">{formatToVNPrice(cart.cartTotalAmount)}</div>
                         </div>
                         <Link to={"/checkout"}>
                             <button className="btn">Thanh toán</button>

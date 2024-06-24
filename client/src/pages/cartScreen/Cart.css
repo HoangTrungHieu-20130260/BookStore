@@ -205,3 +205,21 @@
 .product-subtotal{
     margin-top: 10px;
 }
+
+.btn{
+    background-color: #27ae61;
+    margin-left: 20px;
+    width: 135px;
+    color: white;
+    text-decoration-color: white;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover{
+    background-color: #2fd074;
+}

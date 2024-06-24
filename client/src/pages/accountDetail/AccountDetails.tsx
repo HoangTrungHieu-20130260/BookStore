@@ -1,10 +1,8 @@
-import React, {useState, ChangeEvent, FC, useEffect, useRef} from "react";
+import React, {useState, FC, useEffect, useRef} from "react";
 import './AccountDetails.css';
-import IMG from '../../images/Avatar/up fb.jpg';
-import PRODUCT from '../../images/Product Images/book17.png';
+import IMG from '../../images/Avatar/avatarClone.png';
 import {FaEye, FaEyeSlash, FaPlus} from "react-icons/fa";
 import {IoSearchSharp} from "react-icons/io5";
-import {LiaShippingFastSolid} from "react-icons/lia";
 import axios from "axios";
 import {AddressDto, OrderDto, UserDto} from "../../models";
 import {useNavigate} from "react-router-dom";
@@ -80,7 +78,7 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
                     setAvatarLink(result.data.url);
                     setTimeout(() => {
                         setupLoadAvatarLoaded(true)
-                    }, 1000)
+                    }, 0)
                 } else {
                     console.error("Error uploading image to ImgBB", result);
                 }
@@ -88,7 +86,6 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
                 console.error("Error uploading image to ImgBB", error);
             }
         }
-        console.log('AvatarLink: ', avatarLink)
     }
 
     const handleEditDataUser = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -100,7 +97,6 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
             phone: phone,
             avatarLink: avatarLink
         };
-        console.log(userData)
         try {
 
             if (userData.fullName === '' || userData.email === '' || userData.phone === ''){
@@ -133,7 +129,6 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
             const res = await axios.post<AddressDto>(`http://localhost:8080/api/v1/user/user-details/add-new-address?username=${user.username}`, data);
             toast.success('Thêm địa chỉ thành công');
             setError('')
-            // console.log(res)
             setIsHiddenPopup(true);
             setIsChanged(!isChanged);
         } catch (error) {
@@ -228,7 +223,7 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
         const fetchDataOrdersUser = async () => {
             if (token !== null) {
                 try {
-                    await axios.get<User>(`http://localhost:8080/api/v1/order/find-by-user?token=${token}`).then((response: any) => {
+                    await axios.get<User>(`http://localhost:8080/api/v1/order/find-by-user?token=${JSON.parse(token).token}`).then((response: any) => {
                         setOrders(response.data)
                         localStorage.setItem('user_id', response.data[0].id)
                         console.log("fetched a")
@@ -243,16 +238,17 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
 
         const fetchDataUser = async () => {
             try {
-                const response = await axios.get<User>('http://localhost:8080/api/v1/user/get-data-user', {params: {token}});
-                const userData = response.data;
-                console.log(response.data)
-                setUsername(userData.username);
-                setFullName(userData.fullName);
-                setEmail(userData.email);
-                setPhone(userData.phone);
-                setAvatarLink(userData.avatar);
-                setAddresses(userData.address || []);
-                console.log("fetched")
+                if (token) {
+                    const response = await axios.get<User>('http://localhost:8080/api/v1/user/get-data-user', {params: {token : JSON.parse(token).token}});
+                    const userData = response.data;
+                    setUsername(userData.username);
+                    setFullName(userData.fullName);
+                    setEmail(userData.email);
+                    setPhone(userData.phone);
+                    setAvatarLink(userData.avatar);
+                    setAddresses(userData.address || []);
+                    console.log("fetched")
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -342,7 +338,7 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
             }
             {nameShow === 'address' &&
                 <div className={'addressContainer'}>
-                    <div className={'title headerAddress'}>
+                    <div className={'headerAddress'}>
                         <h3>Địa chỉ của tôi</h3>
                         <button className={'addAddressBtn'}
                             // onClick={handleShowPopup}
@@ -388,18 +384,6 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
                                                 onClick={e => handleShowPopup('update', address)}
                                             >Cập nhật
                                             </button>
-
-                                            {address.default ?
-                                                <button className={'setDefaultAddress defaulted'} disabled={true}
-                                                >
-                                                    Thiết lập mặc định
-                                                </button>
-                                                :
-                                                <button className={'setDefaultAddress'}
-                                                    // onClick={e => handleSetDefaultAddress(address.id)}
-                                                >Thiết lập mặc định</button>
-
-                                            }
                                         </div>
                                     </div>
                                 ))
@@ -513,7 +497,6 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
                         </div>}
                         {orders.map((item: OrderDto) => {
                             const products = item.orderDetails
-                            console.log(item)
                             return (
                                 <div className={'orderUserWrapper'}>
                                     <div className={'orderHeader'}>
@@ -524,7 +507,6 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
                                     </div>
                                     <div className={'orderProducts'}>
                                         {products.map((pro: any) => {
-                                            console.log(products)
                                             return (
                                                 <div className={'orderProduct'}>
                                                     <div className={'info'}>
@@ -542,12 +524,14 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className={'ratingButtonContainer'}>
-                                                        <button className={'ratingButton'}
-                                                            onClick={() => handleOpenRatingPopup(pro)}
-                                                        >Đánh giá
-                                                        </button>
-                                                    </div>
+                                                    {pro.rate === null ?
+                                                        <div className={'ratingButtonContainer'}>
+                                                            <button className={'ratingButton'}
+                                                                    onClick={() => handleOpenRatingPopup(pro)}
+                                                            >Đánh giá
+                                                            </button>
+                                                        </div> : "Đã đánh giá"}
+
                                                 </div>
                                             )
                                         })}
@@ -579,7 +563,6 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
                 handleEditAddress={e => handleEditAddress(e)}
                 ref={childRef}
                 user={user}/>
-        </div>
             <ToastContainer
                 position="top-center"
                 autoClose={5000}
@@ -592,6 +575,8 @@ const AccountDetails: FC<AccountDetailContentComponentProps> = ({nameShow, user}
                 pauseOnHover
                 theme="light"
             />
+        </div>
+
         </>
     )
 };

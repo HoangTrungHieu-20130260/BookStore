@@ -1,11 +1,5 @@
-
-/*.container {*/
-/*    background-color: #20d275;*/
-/*}*/
-
 .contain {
-    width: 100%;
-    background: none !important;
+    background-color: #20d275;
 }
 
 .login_label {
@@ -18,7 +12,6 @@
     font-size: 30px;
     text-align: center;
 }
-
 
 .login_page {
     display: flex;
@@ -35,9 +28,8 @@
     margin-left: 10px;
     font-size: 16px;
 }
-
 .content {
-    /*width: 50%;*/
+    /*width: 40%;*/
     height: max-content !important;
     margin: 10px auto;
 }
@@ -52,10 +44,10 @@
     }
 }
 
-.form_login{
-    width: 500px;
+.form{
+    width: 800px;
     background-color: white;
-    padding: 40px 20px;
+    padding: 50px 30px;
     border-radius: 10px;
     box-sizing: border-box;
     box-shadow: 0px 0px 10px 0px #666;
@@ -117,56 +109,8 @@
     background-color: #fff;
 }
 
-.label_password{
-    font-size: 15px;
-    font-weight: 500;
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    padding: 0px 5px;
-    color: #666;
-    transition: 0.3s;
-    pointer-events: none;
-}
 
-.password {
-    margin-left: 10px;
-    margin-bottom: 15px;
-    position: relative;
-}
-
-.password_input{
-    width: 60%;
-    height: 40px;
-    border-radius: 3px;
-    border: 1px solid rgba(0, 0, 0, .3);
-    background-color: white;
-    box-sizing: border-box;
-    outline: none;
-    padding-left: 5px;
-}
-
-.password_input:focus,
-.password_input:not(:placeholder-shown).password_input:not(:focus){
-    border: 1px solid #27ae61;
-}
-
-
-.password_input:focus + .label_password,
-.password_input:not(:placeholder-shown).password_input:not(:focus) + .label_password
-{
-    top: -10px;
-    color: #27ae61;
-    background-color: #fff;
-}
-
-
-.remember{
-    display: flex;
-    margin-left: 15px;
-}
-
-.login_button {
+.confirm_button {
     background-color: #27ae61;
     color: white;
     text-transform: uppercase;
@@ -175,29 +119,4 @@
     border: none;
     cursor: pointer;
     text-align: center;
-}
-
-.forgot{
-    margin-left: 10px;
-    width: 30%;
-}
-
-.link_forgot{
-    cursor: pointer;
-}
-
-.link_forgot:hover{
-    text-decoration: underline;
-    color: dodgerblue;
-}
-
-.remember_title{
-    margin-top: 15px;
-    margin-left: 8px;
-}
-
-.error_message{
-    color: red;
-    margin-left: 20px;
-    font-size: 16px;
 }
